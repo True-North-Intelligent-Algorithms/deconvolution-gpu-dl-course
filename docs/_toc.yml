@@ -1,0 +1,22 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+
+options: # The options key will be applied to all chapters, but not sub-sections
+  numbered: False
+
+parts:
+- caption: Exploring the Intersection of Deconvolution, GPU Computing, and Deep Learning
+  chapters:
+  - file: 10_intro/10_Module1
+    sections:
+    - file: 10_intro/20_Libraries
+  - file: 20_deep_learning/10_Introduction
+    sections:
+    - file: 20_deep_learning/20_Care
+  - file: 90_notes/10_notes
+    sections:
+    - file: 90_notes/20_notes
+
