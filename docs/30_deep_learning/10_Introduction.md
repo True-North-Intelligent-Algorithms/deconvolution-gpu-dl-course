@@ -1,4 +1,4 @@
-# Introduction to Data Wrangling 
+# Introduction to Deep Learning
 
 ## What is data Wrangling??
 [From Wikipedia](https://en.wikipedia.org/wiki/Data_wrangling)
