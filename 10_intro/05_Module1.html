@@ -160,22 +160,22 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Module 1 Course preparation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
-<li class="toctree-l2"><a class="reference internal" href="20_Libraries.html">Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="30_Test_deep_learning_libs.html">Test deep learning libraries</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../20_deconvolution/0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/10_test_libs.html">Setup environment</a></li>
-
-
-
-
-
+<li class="toctree-l1 has-children"><a class="reference internal" href="../20_deconvolution/0_intro_to_decon.html">Intro to Deconvolution</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
 
 
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../30_deep_learning/10_Introduction.html">Introduction to Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../30_deep_learning/10_Introduction.html">Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/20_Care.html">CARE</a></li>
 </ul>
 </li>
@@ -353,7 +353,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -369,6 +371,15 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-tools-and-dependencies">Setting up tools and dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-examples">Getting the examples</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -380,11 +391,43 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="module-1-course-preparation">
 <h1>Module 1 Course preparation<a class="headerlink" href="#module-1-course-preparation" title="Permalink to this heading">#</a></h1>
+<section id="setting-up-tools-and-dependencies">
+<h2>Setting up tools and dependencies<a class="headerlink" href="#setting-up-tools-and-dependencies" title="Permalink to this heading">#</a></h2>
 <p>Perform the instructions in the following sections to prepare your machine for the course.  You should then have a Python environment setup for GPU computing, Deconvolution and Deep Learning with the following tools</p>
 <ul class="simple">
 <li><p>Mambaforge: An efficient package and environment manager for scientific computing.</p></li>
 <li><p>Napari and devbio-napari: A 5D image viewer plus a bundle of plugins for processing microscopy images.</p></li>
+<li><p>OpenCl, CLIJ, and Clesperanto for GPU computing with OpenCl</p></li>
+<li><p>CuPy for GPU computing with Cuda (note Mac m1 does not support Cuda)</p></li>
+<li><p>TNIA-Python for projections and helper functions</p></li>
+<li><p>Clij2-fft for non-circulant Richardson Lucy Deconvolution with Total Variation Regularization</p></li>
+<li><p>Tensorflow, Stardist and CSBDeep for deep learning segmentation and restoration</p></li>
+<li><p>Raster-Geometry to create simple simulated objects</p></li>
 </ul>
+</section>
+<section id="getting-the-examples">
+<h2>Getting the examples<a class="headerlink" href="#getting-the-examples" title="Permalink to this heading">#</a></h2>
+<p>The examples for this course are organized into a jupyter-book.  To get the most out of the course</p>
+<ol class="arabic simple">
+<li><p>Open the online book in a web browser and study the example notebooks.  The online version of the course can be found <a class="reference external" href="https://true-north-intelligent-algorithms.github.io/deconvolution-gpu-dl-course/intro.html">here</a>.  The code examples are a rendering of code that has been run previously.  This view shows the expected outputs of the examples.  (We assume if you are reading this you have already found the online version of the course).</p></li>
+<li><p>Also download the code to your personal device or a cloud VM and make sure you can run it successfully.  You can get the code on github at <a class="github reference external" href="https://github.com/True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course">True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course</a>.</p></li>
+</ol>
+<p>You can use the green ‘code’ button to either get the url of the code (to clone using git) or download the code as a .zip.</p>
+<p><img alt="github" src="../_images/fromgithub.jpg" /></p>
+<p>To run the code locally browse into the folder where the code resides.  IE if the code is on your desktop</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">Desktop</span><span class="o">/</span><span class="n">deconvolution</span><span class="o">-</span><span class="n">gpu</span><span class="o">-</span><span class="n">dl</span><span class="o">-</span><span class="n">course</span>
+</pre></div>
+</div>
+<p>Then start your preferred jupyter notebook development tool.</p>
+<p>For example if you use jupyter lab simply type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">lab</span>
+</pre></div>
+</div>
+<p>Or if you use Visual Studio Code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">code</span> <span class="o">.</span>
+</pre></div>
+</div>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -447,6 +490,21 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-tools-and-dependencies">Setting up tools and dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-examples">Getting the examples</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

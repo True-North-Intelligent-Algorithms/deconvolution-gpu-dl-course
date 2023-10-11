@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Libraries &#8212; My Jupyter Book</title>
+    <title>Dependencies &#8212; My Jupyter Book</title>
   
   
   
@@ -61,10 +61,10 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '10_intro/20_Libraries';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '10_intro/15_Dependencies';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Intro to Deconvolution and Restoration" href="../20_deconvolution/0_intro_to_decon.html" />
+    <link rel="next" title="Test deconvolution imports" href="20_Test_deconvolution_libs.html" />
     <link rel="prev" title="Mambaforge and devbio-napari" href="10_Mambaforge_devbio.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -160,22 +160,22 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="05_Module1.html">Module 1 Course preparation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Libraries</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="30_Test_deep_learning_libs.html">Test deep learning libraries</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../20_deconvolution/0_intro_to_decon.html">Intro to Deconvolution and Restoration</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/10_test_libs.html">Setup environment</a></li>
-
-
-
-
-
+<li class="toctree-l1 has-children"><a class="reference internal" href="../20_deconvolution/0_intro_to_decon.html">Intro to Deconvolution</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
 
 
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../30_deep_learning/10_Introduction.html">Introduction to Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../30_deep_learning/10_Introduction.html">Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/20_Care.html">CARE</a></li>
 </ul>
 </li>
@@ -254,7 +254,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course/issues/new?title=Issue%20on%20page%20%2F10_intro/20_Libraries.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course/issues/new?title=Issue%20on%20page%20%2F10_intro/15_Dependencies.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -284,7 +284,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/10_intro/20_Libraries.md" target="_blank"
+      <li><a href="../_sources/10_intro/15_Dependencies.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -353,7 +353,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -364,11 +366,23 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Libraries</h1>
+    <h1>Dependencies</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda-and-cupy">Cuda and Cupy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tnia-python-and-clij2-fft">tnia-python and clij2-fft</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stardist-and-csb-deep">Stardist and CSB Deep</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#raster-geometry">raster-geometry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-for-mac-and-linux-users">Additional for Mac and Linux users</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -378,9 +392,58 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="libraries">
-<h1>Libraries<a class="headerlink" href="#libraries" title="Permalink to this heading">#</a></h1>
-<p>Test to see if the libraries are installed correctly</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="dependencies">
+<h1>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h1>
+<p>Before installing the rest of the dependencies make sure you are in the new devbio-napari based environment you created in the last section.  Type the following.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">activate</span> <span class="n">decon</span><span class="o">-</span><span class="n">dl</span><span class="o">-</span><span class="n">env</span>
+</pre></div>
+</div>
+<section id="cuda-and-cupy">
+<h2>Cuda and Cupy<a class="headerlink" href="#cuda-and-cupy" title="Permalink to this heading">#</a></h2>
+<p>Note: You can probably use a version different than 11, just make sure cudatookkit and cupy versions are compatible.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.2</span> <span class="n">cudnn</span><span class="o">=</span><span class="mf">8.1.0</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">cupy</span><span class="o">-</span><span class="n">cuda11x</span>
+</pre></div>
+</div>
+</section>
+<section id="tnia-python-and-clij2-fft">
+<h2>tnia-python and clij2-fft<a class="headerlink" href="#tnia-python-and-clij2-fft" title="Permalink to this heading">#</a></h2>
+<p>The tnia-python library is used for projections and some helper functions, clij2-fft is used for deconvolution, and psfmodels is used for diffractions based PSFs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">tnia</span><span class="o">-</span><span class="n">python</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">clij2</span><span class="o">-</span><span class="n">fft</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">psfmodels</span>
+</pre></div>
+</div>
+</section>
+<section id="stardist-and-csb-deep">
+<h2>Stardist and CSB Deep<a class="headerlink" href="#stardist-and-csb-deep" title="Permalink to this heading">#</a></h2>
+<p>These libraries are used for deep learning and require Tensorflow.  For Windows we need to install tensorflow&lt;2.11.  The tensorflow version (&lt;2.11) is not required for Mac or Linux.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="s2">&quot;tensorflow&lt;2.11&quot;</span>
+</pre></div>
+</div>
+<p>Then install stardist which should also install CSBDeep</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">stardist</span>
+</pre></div>
+</div>
+</section>
+<section id="raster-geometry">
+<h2>raster-geometry<a class="headerlink" href="#raster-geometry" title="Permalink to this heading">#</a></h2>
+<p>Raster-Geometry is used to generate simulate images for deconvolution testing and deep learning training.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">raster</span><span class="o">-</span><span class="n">geometry</span>
+</pre></div>
+</div>
+</section>
+<section id="additional-for-mac-and-linux-users">
+<h2>Additional for Mac and Linux users<a class="headerlink" href="#additional-for-mac-and-linux-users" title="Permalink to this heading">#</a></h2>
+<p>Mac-users may also need to install this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">ocl_icd_wrapper_apple</span>
+</pre></div>
+</div>
+<p>Linux users may also need to install this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">ocl</span><span class="o">-</span><span class="n">icd</span><span class="o">-</span><span class="n">system</span>
+</pre></div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -424,11 +487,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="../20_deconvolution/0_intro_to_decon.html"
+       href="20_Test_deconvolution_libs.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Intro to Deconvolution and Restoration</p>
+        <p class="prev-next-title">Test deconvolution imports</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -441,6 +504,24 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda-and-cupy">Cuda and Cupy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tnia-python-and-clij2-fft">tnia-python and clij2-fft</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stardist-and-csb-deep">Stardist and CSB Deep</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#raster-geometry">raster-geometry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-for-mac-and-linux-users">Additional for Mac and Linux users</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
