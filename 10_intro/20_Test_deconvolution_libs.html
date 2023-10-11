@@ -166,6 +166,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="30_Test_deep_learning_libs.html">Test deep learning libraries</a></li>
 </ul>
 </li>
@@ -379,7 +383,11 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Test deconvolution imports</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#get-and-open-test-images">Get and open test images</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#view-3d-data-in-notebook">View 3D Data in notebook</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-stackview-to-explore-data">Use stackview to explore data</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-deconvolution-libraries">Import deconvolution libraries</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-clij2">Deconvolve with clij2</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-the-deconvolution-result-with-stackview">Look at the deconvolution result with stackview</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-redlionfish">Deconvolve with redlionfish</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#view-data-in-napari-and-ask-questions">View data in Napari and ask questions</a></li>
 </ul>
 
@@ -486,7 +494,7 @@ cupy found
 </section>
 <section id="view-3d-data-in-notebook">
 <h1>View 3D Data in notebook<a class="headerlink" href="#view-3d-data-in-notebook" title="Permalink to this heading">#</a></h1>
-<p>View the data using xy, xz, and zy max projections.</p>
+<p>View the data using the xy, xz, and zy max projections from tnia-python.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xyz_slice_center</span> 
@@ -503,6 +511,10 @@ cupy found
 <img alt="../_images/121691ad5ae451764b7302c356b509c1acffaf21f86fc19b3601a82862fcb703.png" src="../_images/121691ad5ae451764b7302c356b509c1acffaf21f86fc19b3601a82862fcb703.png" />
 </div>
 </div>
+</section>
+<section id="use-stackview-to-explore-data">
+<h1>Use stackview to explore data<a class="headerlink" href="#use-stackview-to-explore-data" title="Permalink to this heading">#</a></h1>
+<p>Alternatively we can use the <a class="reference external" href="https://github.com/haesleinhuepf/stackview">stackview</a> library to explore the data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">stackview</span>
@@ -518,7 +530,7 @@ cupy found
 </section>
 <section id="import-deconvolution-libraries">
 <h1>Import deconvolution libraries<a class="headerlink" href="#import-deconvolution-libraries" title="Permalink to this heading">#</a></h1>
-<p>Try imnporting the clij2 and redlionfish implementations of Richardson Lucy.  If they are found perform a deconvolution with each library</p>
+<p>Try importing the clij2 and redlionfish implementations of Richardson Lucy.  If they are found perform a deconvolution with each library</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
@@ -545,6 +557,9 @@ redlionfish rl found True
 </div>
 </div>
 </div>
+</section>
+<section id="deconvolve-with-clij2">
+<h1>Deconvolve with clij2<a class="headerlink" href="#deconvolve-with-clij2" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">clij2_rl_found</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
@@ -567,6 +582,9 @@ Richardson Lucy Finished
 <img alt="../_images/a54d6f20ac356ea9c370bbd2c6cc95b1a7fc0e1231b9d6a86c8a380e8ae48119.png" src="../_images/a54d6f20ac356ea9c370bbd2c6cc95b1a7fc0e1231b9d6a86c8a380e8ae48119.png" />
 </div>
 </div>
+</section>
+<section id="look-at-the-deconvolution-result-with-stackview">
+<h1>Look at the deconvolution result with stackview<a class="headerlink" href="#look-at-the-deconvolution-result-with-stackview" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stackview</span><span class="o">.</span><span class="n">orthogonal</span><span class="p">(</span><span class="n">decon_clij2</span><span class="p">,</span> <span class="n">continuous_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -576,6 +594,9 @@ Richardson Lucy Finished
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">{"model_id": "39a5e70e9e804335b74500e64a1f39fd", "version_major": 2, "version_minor": 0}</script></div>
 </div>
+</section>
+<section id="deconvolve-with-redlionfish">
+<h1>Deconvolve with redlionfish<a class="headerlink" href="#deconvolve-with-redlionfish" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">redlionfish_rl_found</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
@@ -691,7 +712,11 @@ Richardson Lucy Finished
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Test deconvolution imports</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#get-and-open-test-images">Get and open test images</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#view-3d-data-in-notebook">View 3D Data in notebook</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-stackview-to-explore-data">Use stackview to explore data</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-deconvolution-libraries">Import deconvolution libraries</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-clij2">Deconvolve with clij2</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-the-deconvolution-result-with-stackview">Look at the deconvolution result with stackview</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-redlionfish">Deconvolve with redlionfish</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#view-data-in-napari-and-ask-questions">View data in Napari and ask questions</a></li>
 </ul>
 
