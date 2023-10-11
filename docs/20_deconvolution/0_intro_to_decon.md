@@ -1,4 +1,4 @@
-# Intro to Deconvolution and Restoration
+# Intro to Deconvolution
 
 ## What is Deconvolution?
 

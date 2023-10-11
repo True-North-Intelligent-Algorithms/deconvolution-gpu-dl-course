@@ -13,10 +13,11 @@ parts:
   - file: 10_intro/05_Module1
     sections:
     - file: 10_intro/10_Mambaforge_devbio
-    - file: 10_intro/20_Libraries
+    - file: 10_intro/15_Dependencies
+    - file: 10_intro/20_Test_deconvolution_libs
+    - file: 10_intro/30_Test_deep_learning_libs
   - file: 20_deconvolution/0_intro_to_decon
     sections:
-    - file: 20_deconvolution/10_test_libs.ipynb
     - file: 20_deconvolution/20_cupy_forward.ipynb
   - file: 30_deep_learning/10_Introduction
     sections:
