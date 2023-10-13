@@ -1,4 +1,4 @@
-#  Deep Learning
+#  Module3: Deep Learning
 
 Deep learning is a type of machine learning, loosely inspired by biological neural networks, that uses multiple layers of artificial neurons to perform a task.  
 
