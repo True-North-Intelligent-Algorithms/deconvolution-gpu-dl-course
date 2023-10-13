@@ -414,8 +414,9 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span>
-<span class="kn">from</span> <span class="nn">decon_helper</span> <span class="kn">import</span> <span class="n">image_path</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
+<span class="n">image_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;../../data/deconvolution/&#39;</span><span class="p">)</span>
 <span class="n">image_name</span><span class="o">=</span><span class="s1">&#39;nuclei4_out_c90_dr10_image.tif&#39;</span>
 <span class="n">truth_name</span><span class="o">=</span><span class="s1">&#39;out_c90_dr10_label.tif&#39;</span>
 
@@ -427,9 +428,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tnia available
-stackview available
-(100, 258, 258) (161, 258, 258)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(100, 258, 258) (161, 258, 258)
 </pre></div>
 </div>
 </div>
@@ -526,13 +525,9 @@ stackview available
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>get lib
-
-Richardson Lucy Started
-0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150 160 170 180 190 
-Richardson Lucy Finished
 </pre></div>
 </div>
-<img alt="../_images/2f9ab7806365dd4b28ef96cc39d61472062ba16f5a53c614e60cd6aaeaf08d52.png" src="../_images/2f9ab7806365dd4b28ef96cc39d61472062ba16f5a53c614e60cd6aaeaf08d52.png" />
+<img alt="../_images/3a49bf8d5ac316c76f3b105e1945222bae3d2536c2409aacfd93441aeddc8232.png" src="../_images/3a49bf8d5ac316c76f3b105e1945222bae3d2536c2409aacfd93441aeddc8232.png" />
 </div>
 </div>
 </section>

@@ -407,12 +407,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tnia available
-stackview available
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="load-an-input-image">
@@ -420,13 +414,14 @@ stackview available
 <p>In this cell we load an input image.  Note that the image is bigger than the patch size we trained on.  The CSBDeep framework will take care of applying the network in chunks.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="s1">&#39;../../data/deconvolution/simulation/im_no_aberration.tif&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#input = imread(&#39;../../data/deconvolution/nuclei4_out_c90_dr10_image.tif&#39;)</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="s1">&#39;../../data/deconvolution/simulation/im_no_aberration_3.tif&#39;</span><span class="p">)</span>
 <span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2a0d4bca33edaa30e1e4642bddc289829176803d3ddd620528439d6afd2c43b2.png" src="../_images/2a0d4bca33edaa30e1e4642bddc289829176803d3ddd620528439d6afd2c43b2.png" />
+<img alt="../_images/ad7932f87d366f382ee42993e2b6a6847462c0c6d4684be386f46d797e023497.png" src="../_images/ad7932f87d366f382ee42993e2b6a6847462c0c6d4684be386f46d797e023497.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -445,7 +440,7 @@ stackview available
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the model using the name of the model and the path to the model</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">CARE</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;big_small_noisy_notnoisy_model&#39;</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;../../models&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CARE</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;big_small_noisy_notnoisy_model_2&#39;</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;../../models&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -465,28 +460,28 @@ stackview available
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 351ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 417ms/step
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 92ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 100ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:00&lt;00:00,  2.75it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 66ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:01&lt;00:00,  2.08it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:05&lt;00:05,  2.83s/it]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 88ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:02&lt;00:00,  1.95it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:11&lt;00:04,  4.15s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 89ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:19&lt;00:00,  4.75s/it]
 </pre></div>
 </div>
 </div>
@@ -498,17 +493,22 @@ stackview available
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9b7869d9748ba015a170376d8a12ae91361d901a068f8262ee9e40311a146551.png" src="../_images/9b7869d9748ba015a170376d8a12ae91361d901a068f8262ee9e40311a146551.png" />
+<img alt="../_images/4d256ee19a992593d62b42f1309616812ccf3d765b7bb8721e69d0b95720d5d8.png" src="../_images/4d256ee19a992593d62b42f1309616812ccf3d765b7bb8721e69d0b95720d5d8.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">restored</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">restored</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;restored&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ce58e20274c3408b4256778d4484e088e5abdea7ac19f2498c71d1e916570122.png" src="../_images/ce58e20274c3408b4256778d4484e088e5abdea7ac19f2498c71d1e916570122.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;restored&#39; at 0x1ca0b0466a0&gt;
+</pre></div>
+</div>
 </div>
 </div>
 </section>
