@@ -1,0 +1,999 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Creating training data &#8212; My Jupyter Book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '30_deep_learning/15_training_data';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.jpeg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploring the Intersection of Deconvolution, GPU Computing, and Deep Learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1 Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/30_Test_deep_learning_libs.html">Test deep learning libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../20_deconvolution/0_intro_to_decon.html">Intro to Deconvolution</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
+
+
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="10_Introduction.html">Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../90_notes/10_notes.html">Notes</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../90_notes/20_notes.html">Second set of notes</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course/issues/new?title=Issue%20on%20page%20%2F30_deep_learning/15_training_data.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/30_deep_learning/15_training_data.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Creating training data</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-ground-truth-phantoms">Create ground truth (phantoms)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-more-general-and-realistic-bio-image-training-sets">A note on more general and realistic bio-image training sets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#point-spread-function-psf-generation-and-image-simulation">Point Spread Function (PSF) generation and Image Simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-dependant-libraries">Import dependant libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-psf-used-for-simulation">Create PSF used for simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-phantom-and-applying-imaging-system">Create phantom and applying imaging system</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="creating-training-data">
+<h1>Creating training data<a class="headerlink" href="#creating-training-data" title="Permalink to this heading">#</a></h1>
+<p>In this notebook we create training data for deep learning by first creating phantom images (to use as ground truth images) then applying blur and noise operators (to create corrupted input images)</p>
+<section id="create-ground-truth-phantoms">
+<h2>Create ground truth (phantoms)<a class="headerlink" href="#create-ground-truth-phantoms" title="Permalink to this heading">#</a></h2>
+<p>We will populate a 3D array with randomly distributed spheres of varying sizes and positions.  Note we do not expect networks trained on these spheres to perform well on other types of content.</p>
+</section>
+<section id="a-note-on-more-general-and-realistic-bio-image-training-sets">
+<h2>A note on more general and realistic bio-image training sets<a class="headerlink" href="#a-note-on-more-general-and-realistic-bio-image-training-sets" title="Permalink to this heading">#</a></h2>
+<p>A more realistic training set for biological images could be generated using tools such as <a class="reference external" href="https://cbia.fi.muni.cz/research/simulations/cytopacq.html">cytopaqc</a>.  In the future generative AI may be used in the future to develop more robust training sets.  For the purposes of this tutorial we are mostly looking at a limited content domain of spherical objects.  Even within this limited domain there are some interesting experiments that can be done (for example looking at the variety of training data needed to teach the network to handle combinations of small to large spheres and dim to bright signal levels)</p>
+</section>
+<section id="point-spread-function-psf-generation-and-image-simulation">
+<h2>Point Spread Function (PSF) generation and Image Simulation<a class="headerlink" href="#point-spread-function-psf-generation-and-image-simulation" title="Permalink to this heading">#</a></h2>
+<p>We will calculate the PSF, which represents the blurring effect caused by the microscope’s optical system. The PSF will be computed based on the microscope’s parameters such as magnification, numerical aperture, and focal length.</p>
+<p>Convolution with the PSF: The generated 3D image will be convolved with the PSF to simulate the blurring effect of the microscope on the true signal.</p>
+<p>Photon shot noise addition: Photon shot noise arises due to the discrete nature of light and affects the number of photons detected by the camera. We will introduce photon shot noise into the convolved image to mimic this stochastic effect.</p>
+<p>Cavaets: Please note that this example focuses on the generation of a 3D image, PSF calculation, convolution with the PSF, and addition of photon shot noise. Other aspects, such as optical aberrations, sample interactions, camera characteristics, sensor noise, and post-processing steps, are not considered in this simplified simulation. These additional factors can significantly impact the image quality and should be taken into account for comprehensive microscopy simulations.</p>
+</section>
+<section id="import-dependant-libraries">
+<h2>Import dependant libraries<a class="headerlink" href="#import-dependant-libraries" title="Permalink to this heading">#</a></h2>
+<p>… and define location to put ground truths and images</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.simulation.phantoms</span> <span class="kn">import</span> <span class="n">add_sphere3d</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_zy_max</span><span class="p">,</span> <span class="n">show_xy_zy_slice</span>
+<span class="kn">from</span> <span class="nn">tnia.simulation.phantoms</span> <span class="kn">import</span> <span class="n">add_small_to_large</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">raster_geometry</span> <span class="k">as</span> <span class="nn">rg</span>
+<span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imsave</span>
+<span class="kn">from</span> <span class="nn">tnia.deconvolution.forward</span> <span class="kn">import</span> <span class="n">forward</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">dl_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;../../models&#39;</span>
+
+<span class="c1"># can be big, small, or big_small</span>
+<span class="n">spheres</span> <span class="o">=</span> <span class="s1">&#39;big_small&#39;</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="s1">&#39;high&#39;</span>
+<span class="n">na</span> <span class="o">=</span> <span class="s1">&#39;high&#39;</span>
+
+<span class="n">set_name</span> <span class="o">=</span> <span class="s1">&#39;spheres_&#39;</span><span class="o">+</span><span class="n">spheres</span><span class="o">+</span><span class="s1">&#39;_noise_&#39;</span><span class="o">+</span><span class="n">noise</span><span class="o">+</span><span class="s1">&#39;_na_&#39;</span><span class="o">+</span><span class="n">na</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">set_name</span><span class="p">)</span>
+<span class="c1"># path to put training data</span>
+<span class="n">truth_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dl_path</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;ground truth0&#39;</span><span class="p">)</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dl_path</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;input0&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">truth_path</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">truth_path</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">image_path</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>spheres_big_small_noise_high_na_high
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="create-psf-used-for-simulation">
+<h2>Create PSF used for simulation<a class="headerlink" href="#create-psf-used-for-simulation" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.deconvolution.psfs</span> <span class="kn">import</span> <span class="n">gibson_lanni_3D</span>
+
+<span class="c1"># scope parameters</span>
+<span class="k">if</span> <span class="n">na</span> <span class="o">==</span> <span class="s1">&#39;high&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;high NA&#39;</span><span class="p">)</span>
+    <span class="n">ni</span><span class="o">=</span><span class="mf">1.5</span>
+    <span class="n">ns</span>  <span class="o">=</span> <span class="mf">1.33</span>
+    <span class="n">NA</span><span class="o">=</span><span class="mf">1.4</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;low NA&#39;</span><span class="p">)</span>
+    <span class="n">ni</span><span class="o">=</span><span class="mi">1</span>
+    <span class="n">ns</span><span class="o">=</span> <span class="mi">1</span>
+    <span class="n">NA</span><span class="o">=</span><span class="mf">0.7</span>
+<span class="n">w</span><span class="o">=</span><span class="mf">0.530</span>
+
+<span class="c1"># spacings</span>
+<span class="n">xy_spacing</span> <span class="o">=</span> <span class="mf">.1</span>
+<span class="n">z_spacing</span><span class="o">=</span> <span class="mf">.1</span>
+
+<span class="c1">#depth to compute PSF this can be used to compute a PSF that has aberrations</span>
+<span class="c1">#note stil need to confirm the sign of the depth, the negative sign is used to reproduce the experimental PSF</span>
+<span class="n">d</span><span class="o">=</span><span class="mi">0</span>
+
+<span class="n">xy_psf_dim</span><span class="o">=</span><span class="mi">255</span>
+<span class="n">z_psf_dim</span><span class="o">=</span><span class="mi">151</span>
+
+<span class="n">psf</span>  <span class="o">=</span> <span class="n">gibson_lanni_3D</span><span class="p">(</span><span class="n">NA</span><span class="p">,</span> <span class="n">ni</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">xy_spacing</span><span class="p">,</span> <span class="n">z_spacing</span><span class="p">,</span> <span class="n">xy_psf_dim</span><span class="p">,</span> <span class="n">z_psf_dim</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">use_psfm</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">psf</span> <span class="o">=</span> <span class="n">psf</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+
+<span class="n">psf</span><span class="o">=</span><span class="n">psf</span><span class="o">/</span><span class="n">psf</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">psf</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">psf</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">psf</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>high NA
+1.0
+</pre></div>
+</div>
+<img alt="../_images/99c82ab9d8125b21f6608000d9036d95ce66e55ca7c8378d3e03a87e9456fe7a.png" src="../_images/99c82ab9d8125b21f6608000d9036d95ce66e55ca7c8378d3e03a87e9456fe7a.png" />
+</div>
+</div>
+</section>
+<section id="create-phantom-and-applying-imaging-system">
+<h2>Create phantom and applying imaging system<a class="headerlink" href="#create-phantom-and-applying-imaging-system" title="Permalink to this heading">#</a></h2>
+<p>In this block we create a set of phantoms, populate them with random spheres, apply the imaging model to them (convolution + Poisson noise), then save them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xdim</span><span class="o">=</span><span class="mi">128</span>
+<span class="n">ydim</span><span class="o">=</span><span class="mi">128</span>
+<span class="n">zdim</span><span class="o">=</span><span class="mi">128</span>
+
+<span class="n">number_images</span><span class="o">=</span><span class="mi">25</span>
+<span class="n">number_spheres</span><span class="o">=</span><span class="mi">50</span>
+<span class="n">number_spheres_added</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">if</span> <span class="n">noise</span> <span class="o">==</span> <span class="s1">&#39;low&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;low noise&#39;</span><span class="p">)</span>
+    <span class="n">gain</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;high noise&#39;</span><span class="p">)</span>
+    <span class="n">gain</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="k">if</span> <span class="n">spheres</span> <span class="o">==</span> <span class="s1">&#39;big&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;big spheres&#39;</span><span class="p">)</span>
+    <span class="n">min_radius</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">max_radius</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="k">elif</span> <span class="n">spheres</span> <span class="o">==</span> <span class="s1">&#39;small&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;small spheres&#39;</span><span class="p">)</span>
+    <span class="n">min_radius</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">max_radius</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;big and small spheres&#39;</span><span class="p">)</span>
+    <span class="n">min_radius</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">max_radius</span> <span class="o">=</span> <span class="mi">80</span>
+
+<span class="n">gpu</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">number_images</span><span class="p">):</span>
+
+    <span class="n">phantom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">zdim</span><span class="p">,</span><span class="n">xdim</span><span class="p">,</span><span class="n">ydim</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">number_spheres</span><span class="p">):</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">xdim</span><span class="p">)</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">ydim</span><span class="p">)</span>
+        <span class="n">z</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">zdim</span><span class="p">)</span>
+        <span class="n">intensity</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">800</span><span class="p">)</span> 
+
+        <span class="c1">#print(i,x,y,z)</span>
+
+        <span class="n">r</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">min_radius</span><span class="p">,</span><span class="n">max_radius</span><span class="p">)</span>
+
+        <span class="n">size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">]</span>
+        <span class="n">sphere</span> <span class="o">=</span> <span class="n">rg</span><span class="o">.</span><span class="n">sphere</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">sphere</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">*</span><span class="n">intensity</span>
+        <span class="c1">#add_sphere3d(phantom, 20, x, y, z, intensity, 2)</span>
+        <span class="k">if</span> <span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">sphere</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">number_spheres_added</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;number_spheres_added&#39;</span><span class="p">,</span> <span class="n">number_spheres_added</span><span class="p">)</span>
+
+    <span class="n">phantom</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">*</span><span class="n">gain</span>
+    <span class="n">phantom_forward</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">psf</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="n">gpu</span><span class="p">)</span>
+    <span class="n">sub_sample</span> <span class="o">=</span> <span class="mi">4</span> 
+    <span class="n">phantom_sub</span> <span class="o">=</span> <span class="n">phantom</span><span class="p">[::</span><span class="n">sub_sample</span><span class="p">,:,:]</span>
+    <span class="n">phantom_forward_sub</span> <span class="o">=</span> <span class="n">phantom_forward</span><span class="p">[::</span><span class="n">sub_sample</span><span class="p">,:,:]</span>
+
+    <span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">phantom_forward</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">phantom_sub</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">phantom_forward_sub</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+    <span class="n">imsave</span><span class="p">(</span><span class="n">truth_path</span> <span class="o">+</span> <span class="s1">&#39;\phantom_sub&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.tif&#39;</span><span class="p">,</span> <span class="n">phantom_sub</span><span class="p">)</span>
+    <span class="n">imsave</span><span class="p">(</span><span class="n">image_path</span> <span class="o">+</span> <span class="s1">&#39;\phantom_forward_sub&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.tif&#39;</span><span class="p">,</span> <span class="n">phantom_forward_sub</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>high noise
+big and small spheres
+number_spheres_added 6
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub0.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 10
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub1.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 17
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub2.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 25
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub3.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 35
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub4.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 41
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\users\bnort\work\imagej2022\tnia\tnia-python\tnia\plotting\projections.py:228: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+  fig=plt.figure(figsize=figsize)
+C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub5.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 47
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub6.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 58
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub7.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 70
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub8.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 80
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub9.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 87
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub10.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 92
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub11.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 106
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub12.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 115
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub13.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 120
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub14.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 127
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub15.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 137
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub16.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 146
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub17.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 159
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub18.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 166
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub19.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 177
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub20.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 181
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub21.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 188
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub22.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 197
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub23.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 206
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub24.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<img alt="../_images/4daa0e73b7525dac9612dc08953f6720a71475169dcc58fd5974a87edca68624.png" src="../_images/4daa0e73b7525dac9612dc08953f6720a71475169dcc58fd5974a87edca68624.png" />
+<img alt="../_images/164bca481260b3f3be28c3ffd24c4f71e64df221b7c478820d30f3a775176cc2.png" src="../_images/164bca481260b3f3be28c3ffd24c4f71e64df221b7c478820d30f3a775176cc2.png" />
+<img alt="../_images/697ed4bbe63ee46058047810afa133f9da8d3b32d2da5a1a292fc80dfaeb3504.png" src="../_images/697ed4bbe63ee46058047810afa133f9da8d3b32d2da5a1a292fc80dfaeb3504.png" />
+<img alt="../_images/85f09de1bdbcdfef0685bff05cab87edd8f5a48346fd06f9f9ced3a3b349fc58.png" src="../_images/85f09de1bdbcdfef0685bff05cab87edd8f5a48346fd06f9f9ced3a3b349fc58.png" />
+<img alt="../_images/04101a1c815c8793ffc4b48ed8400f241dfcf8ce48e7105df02bcb4db22c036e.png" src="../_images/04101a1c815c8793ffc4b48ed8400f241dfcf8ce48e7105df02bcb4db22c036e.png" />
+<img alt="../_images/0f0a55359b7578eeb9a52fb18187d7d15f6e955382362051303da36429269f07.png" src="../_images/0f0a55359b7578eeb9a52fb18187d7d15f6e955382362051303da36429269f07.png" />
+<img alt="../_images/af6041195008cf5dbbed7ee7621c7d345f1cf0fabcdb2a9710e80f9c382b0e0e.png" src="../_images/af6041195008cf5dbbed7ee7621c7d345f1cf0fabcdb2a9710e80f9c382b0e0e.png" />
+<img alt="../_images/400e77bb2fcfd60164b919c041142f77c783d28e005bbc1ebdfa9946fa6dfb41.png" src="../_images/400e77bb2fcfd60164b919c041142f77c783d28e005bbc1ebdfa9946fa6dfb41.png" />
+<img alt="../_images/00ec8957e81efc70045b5bbf0f039e335105872154451a738fc9c98ffe4884cf.png" src="../_images/00ec8957e81efc70045b5bbf0f039e335105872154451a738fc9c98ffe4884cf.png" />
+<img alt="../_images/cbe1d8a694e85c35a23a596d432095b3d73d4a4d4dfc09742f992fbd53c56a13.png" src="../_images/cbe1d8a694e85c35a23a596d432095b3d73d4a4d4dfc09742f992fbd53c56a13.png" />
+<img alt="../_images/a3612ea200f65775e30b5d64918000e29b0fa86fdd5a7b5056d787b3d2cb793f.png" src="../_images/a3612ea200f65775e30b5d64918000e29b0fa86fdd5a7b5056d787b3d2cb793f.png" />
+<img alt="../_images/86a28f5a6388ff62097e300d72898134e5c55372d00e975a8ecc49ba0decb772.png" src="../_images/86a28f5a6388ff62097e300d72898134e5c55372d00e975a8ecc49ba0decb772.png" />
+<img alt="../_images/d34f56388b5b4b97b5087b1e00bcad6a98329a3fe345faa81505dd8658ef3a25.png" src="../_images/d34f56388b5b4b97b5087b1e00bcad6a98329a3fe345faa81505dd8658ef3a25.png" />
+<img alt="../_images/a28e6d114951bf9fa272e277ad32b1934dde8586108d2bd3ce362fd9fa30ad9a.png" src="../_images/a28e6d114951bf9fa272e277ad32b1934dde8586108d2bd3ce362fd9fa30ad9a.png" />
+<img alt="../_images/a5d76b7f59a281bec56ca5e09bea822a6301832eeec1a53449dda80f2a67d2e1.png" src="../_images/a5d76b7f59a281bec56ca5e09bea822a6301832eeec1a53449dda80f2a67d2e1.png" />
+<img alt="../_images/2100dc5cf7399892738fe0cbb3237f709159215dc804f986b7161c3d703a20e1.png" src="../_images/2100dc5cf7399892738fe0cbb3237f709159215dc804f986b7161c3d703a20e1.png" />
+<img alt="../_images/a71ebdfab8df707a4c9d7d96402479e8c27a2509ae154d66aea9f99bb427d94d.png" src="../_images/a71ebdfab8df707a4c9d7d96402479e8c27a2509ae154d66aea9f99bb427d94d.png" />
+<img alt="../_images/40e68195f4bdebee13cae8082ccd2d0ff4ef1d3dd8ec26d4213547675e15c381.png" src="../_images/40e68195f4bdebee13cae8082ccd2d0ff4ef1d3dd8ec26d4213547675e15c381.png" />
+<img alt="../_images/242a963c3a47e1d6c64dc551e3481d542dfd03fea4965e0f27a473e387a0f886.png" src="../_images/242a963c3a47e1d6c64dc551e3481d542dfd03fea4965e0f27a473e387a0f886.png" />
+<img alt="../_images/0b375cd47e3ffbc7c600ab49d03c951d6a3dda4ed55bc8dae8cad60b6243d786.png" src="../_images/0b375cd47e3ffbc7c600ab49d03c951d6a3dda4ed55bc8dae8cad60b6243d786.png" />
+<img alt="../_images/7526fc29ef75ad42f2a80ccf51b4d6d401b944be44b4abacc039f0478f267d51.png" src="../_images/7526fc29ef75ad42f2a80ccf51b4d6d401b944be44b4abacc039f0478f267d51.png" />
+<img alt="../_images/74e514b8a6cf5c9e257be254326855beffa5f8d427c93ba533a9e26bbb6adcda.png" src="../_images/74e514b8a6cf5c9e257be254326855beffa5f8d427c93ba533a9e26bbb6adcda.png" />
+<img alt="../_images/7b79351eb800e2f6418de6aef3c7a8e69e594bd25b8fdfc5627c979a161aaaf7.png" src="../_images/7b79351eb800e2f6418de6aef3c7a8e69e594bd25b8fdfc5627c979a161aaaf7.png" />
+<img alt="../_images/79e24f45eb97f0969f30db6ac04a2d9cdf9e3a7729ca6c8a16a8e10b486ed756.png" src="../_images/79e24f45eb97f0969f30db6ac04a2d9cdf9e3a7729ca6c8a16a8e10b486ed756.png" />
+<img alt="../_images/eb5ddceef20703aae8d00ab3d9d773563575746d8dd6b397e095eac748532558.png" src="../_images/eb5ddceef20703aae8d00ab3d9d773563575746d8dd6b397e095eac748532558.png" />
+<img alt="../_images/2af8ec6c1de9189f96512a157284c27f5a01cba86510354073c71ce50bc086aa.png" src="../_images/2af8ec6c1de9189f96512a157284c27f5a01cba86510354073c71ce50bc086aa.png" />
+<img alt="../_images/7bec57c2b2aeaf09484e2cf46661b820c8546dd96b1f228a977706e0b847baa7.png" src="../_images/7bec57c2b2aeaf09484e2cf46661b820c8546dd96b1f228a977706e0b847baa7.png" />
+<img alt="../_images/119510e029d3d30673e2e200a1054d0932dd6a6ae9ff04fc6266a04e8ae85485.png" src="../_images/119510e029d3d30673e2e200a1054d0932dd6a6ae9ff04fc6266a04e8ae85485.png" />
+<img alt="../_images/695b2d6b41b66b6bf094722b69369e60be7e485e5e9a32ae1f33c22a7688931c.png" src="../_images/695b2d6b41b66b6bf094722b69369e60be7e485e5e9a32ae1f33c22a7688931c.png" />
+<img alt="../_images/0e8fc650cf6efd51050a9a8720b5b7449b015f52b475bda05f49c72b93360d69.png" src="../_images/0e8fc650cf6efd51050a9a8720b5b7449b015f52b475bda05f49c72b93360d69.png" />
+<img alt="../_images/5873044ddbe1a0dedada09d08366ebb119f75c7a02b8391deab726d600e2f997.png" src="../_images/5873044ddbe1a0dedada09d08366ebb119f75c7a02b8391deab726d600e2f997.png" />
+<img alt="../_images/1117d27a4492ed48c853521c4efb4837910671e5ff14a66ea48592d73be9031a.png" src="../_images/1117d27a4492ed48c853521c4efb4837910671e5ff14a66ea48592d73be9031a.png" />
+<img alt="../_images/2f49ca80da63f0f2cfde0a9ffe2c37b8f8e7fb765a3bbae200bbb5dadd200f5e.png" src="../_images/2f49ca80da63f0f2cfde0a9ffe2c37b8f8e7fb765a3bbae200bbb5dadd200f5e.png" />
+<img alt="../_images/5a6d66dfc66856e1e96e91bed8580f493134e09146ddce1ace8a4b106226771c.png" src="../_images/5a6d66dfc66856e1e96e91bed8580f493134e09146ddce1ace8a4b106226771c.png" />
+<img alt="../_images/20cd78521d715b91a9f41b4cd7efc23daf9a194f618c4d44b1a963b1695de201.png" src="../_images/20cd78521d715b91a9f41b4cd7efc23daf9a194f618c4d44b1a963b1695de201.png" />
+<img alt="../_images/d1d97f646daca23c1617ba0a5ea9e5d4ac9af821a0619a011f432fb15ad2391a.png" src="../_images/d1d97f646daca23c1617ba0a5ea9e5d4ac9af821a0619a011f432fb15ad2391a.png" />
+<img alt="../_images/1a7f169a2a1f43e487d770899b9032627419927c301da402933257e9f6ba98e7.png" src="../_images/1a7f169a2a1f43e487d770899b9032627419927c301da402933257e9f6ba98e7.png" />
+<img alt="../_images/9f11c8896581cd686654974dc0ace90567d5e33abf3acf225d88a8e7be9d8245.png" src="../_images/9f11c8896581cd686654974dc0ace90567d5e33abf3acf225d88a8e7be9d8245.png" />
+<img alt="../_images/911781fa06ef56fb6db4a1b7ce3e8c4330c06d74b671330babc25c9972b3b65d.png" src="../_images/911781fa06ef56fb6db4a1b7ce3e8c4330c06d74b671330babc25c9972b3b65d.png" />
+<img alt="../_images/e71a45add11d22b205df59735bba681ac943ea6bb1e9a450669dfc4148abbedb.png" src="../_images/e71a45add11d22b205df59735bba681ac943ea6bb1e9a450669dfc4148abbedb.png" />
+<img alt="../_images/7169baea76985fdab167ca6169e6011f711e396411817087bad0f7329c94096e.png" src="../_images/7169baea76985fdab167ca6169e6011f711e396411817087bad0f7329c94096e.png" />
+<img alt="../_images/1eb8de1c70b43344c8c1290c1d78c93fbca065384ce11e315d64b37bef19341d.png" src="../_images/1eb8de1c70b43344c8c1290c1d78c93fbca065384ce11e315d64b37bef19341d.png" />
+<img alt="../_images/fc10126dd8b027895fb0128cf7042b7efa5c656f517626f577aac10e2434dd41.png" src="../_images/fc10126dd8b027895fb0128cf7042b7efa5c656f517626f577aac10e2434dd41.png" />
+<img alt="../_images/a9fbe640011edec89b3ae7bc96beba380f90fedeed8685968991274dc8b02b51.png" src="../_images/a9fbe640011edec89b3ae7bc96beba380f90fedeed8685968991274dc8b02b51.png" />
+<img alt="../_images/6174becde2c16457fe9b891437a9d469ec43575b5b37e821f17b92f84347e432.png" src="../_images/6174becde2c16457fe9b891437a9d469ec43575b5b37e821f17b92f84347e432.png" />
+<img alt="../_images/cd1ddd660d874295c74be451f93d0673a578122cd4bb871daea6086060ab90de.png" src="../_images/cd1ddd660d874295c74be451f93d0673a578122cd4bb871daea6086060ab90de.png" />
+<img alt="../_images/15f4ee0dd395bdf202c749dbc3acf345388bff90af1efa8f436d17b4a24b1d1a.png" src="../_images/15f4ee0dd395bdf202c749dbc3acf345388bff90af1efa8f436d17b4a24b1d1a.png" />
+<img alt="../_images/ec4912065caec3b2494936ca0dd0459bc2ce892273ec210e4d5910e3afeab4fd.png" src="../_images/ec4912065caec3b2494936ca0dd0459bc2ce892273ec210e4d5910e3afeab4fd.png" />
+<img alt="../_images/e4924d8fb66f550992e9bb8fe29dc4f13dcf296e3d22f0173668eabc40f87ae3.png" src="../_images/e4924d8fb66f550992e9bb8fe29dc4f13dcf296e3d22f0173668eabc40f87ae3.png" />
+<img alt="../_images/3f8ad02d48bee5249009ac1cc8732eda7e1946055bf799d25b92b38b63204be7.png" src="../_images/3f8ad02d48bee5249009ac1cc8732eda7e1946055bf799d25b92b38b63204be7.png" />
+<img alt="../_images/d16f70c5b02ef003be763e631241cdd2635e2217d630362e5711dfea16648716.png" src="../_images/d16f70c5b02ef003be763e631241cdd2635e2217d630362e5711dfea16648716.png" />
+<img alt="../_images/29a76f65daf595fdedd663aba153be5544e835b63dad84f24c58113e79c6b6c1.png" src="../_images/29a76f65daf595fdedd663aba153be5544e835b63dad84f24c58113e79c6b6c1.png" />
+<img alt="../_images/43f8fbb68a78b60d7c5f835ab2bc235b3926f38b3ada41951d377c862ce191be.png" src="../_images/43f8fbb68a78b60d7c5f835ab2bc235b3926f38b3ada41951d377c862ce191be.png" />
+<img alt="../_images/c953cfbad1fec07ed3b7d88ede5af6f500c6ce8c1f7942d45613dc5c7dc8c32e.png" src="../_images/c953cfbad1fec07ed3b7d88ede5af6f500c6ce8c1f7942d45613dc5c7dc8c32e.png" />
+<img alt="../_images/ad9f6a875c93e1882e44569d1420b26107790706032148fe4cc44f64065533bd.png" src="../_images/ad9f6a875c93e1882e44569d1420b26107790706032148fe4cc44f64065533bd.png" />
+<img alt="../_images/06e09341ec4eb42761321cf2e6a9d29234b416867fd82abf9e61e989d11bd04c.png" src="../_images/06e09341ec4eb42761321cf2e6a9d29234b416867fd82abf9e61e989d11bd04c.png" />
+<img alt="../_images/239c81defd7ec55811f6a8a551c786acc1456a817036e0320d6c1f237caae385.png" src="../_images/239c81defd7ec55811f6a8a551c786acc1456a817036e0320d6c1f237caae385.png" />
+<img alt="../_images/98abf15ae577f4f73237df1b2b70ef8a20bedc00457095cd0dc2c3390d5e27ee.png" src="../_images/98abf15ae577f4f73237df1b2b70ef8a20bedc00457095cd0dc2c3390d5e27ee.png" />
+<img alt="../_images/1a33c549c2572e08665fbd6ecbe43a8a31af4de2a44009420c9cb4c7cc7c3430.png" src="../_images/1a33c549c2572e08665fbd6ecbe43a8a31af4de2a44009420c9cb4c7cc7c3430.png" />
+<img alt="../_images/aa09fdde478423f177fc06ad394a904a831504d7eea8486e2b357f9d09612eac.png" src="../_images/aa09fdde478423f177fc06ad394a904a831504d7eea8486e2b357f9d09612eac.png" />
+<img alt="../_images/2c09e0f359e1374f639965fcc8c12839d6bcc4eed9b233b07ec3d2f02fa63d8d.png" src="../_images/2c09e0f359e1374f639965fcc8c12839d6bcc4eed9b233b07ec3d2f02fa63d8d.png" />
+<img alt="../_images/bf79872909475003ded61ddaf71aae38d104918dc98ac4716f5615cf36d4f5ce.png" src="../_images/bf79872909475003ded61ddaf71aae38d104918dc98ac4716f5615cf36d4f5ce.png" />
+<img alt="../_images/f1c70ea0e9ed782eca2964106ed340748a60ff0f153d39ae3040b6ad589a5f86.png" src="../_images/f1c70ea0e9ed782eca2964106ed340748a60ff0f153d39ae3040b6ad589a5f86.png" />
+<img alt="../_images/1023f810e98005f14ed0cd0ac75634604deed1cf1acfa79ab58b34367bf33ab9.png" src="../_images/1023f810e98005f14ed0cd0ac75634604deed1cf1acfa79ab58b34367bf33ab9.png" />
+<img alt="../_images/a390e389e70260c0d2426acd2ddc0a55673f1811a791855772038331a1513409.png" src="../_images/a390e389e70260c0d2426acd2ddc0a55673f1811a791855772038331a1513409.png" />
+<img alt="../_images/7e2354095ca657ef941a246183869a03e11c32f4a9da4346daab9cdae988f1b5.png" src="../_images/7e2354095ca657ef941a246183869a03e11c32f4a9da4346daab9cdae988f1b5.png" />
+<img alt="../_images/48c171dd2f6d8a7958616baa4ec5f98919597daaa11788f6e3a3811f3bb37482.png" src="../_images/48c171dd2f6d8a7958616baa4ec5f98919597daaa11788f6e3a3811f3bb37482.png" />
+<img alt="../_images/cdc02694a5b1f687049e646797fc006f21baa161f5eabc6f5a19f49c2cd0bbea.png" src="../_images/cdc02694a5b1f687049e646797fc006f21baa161f5eabc6f5a19f49c2cd0bbea.png" />
+<img alt="../_images/4d7682a1120e6ee4bcc6c5577ab07ec9262611a0300d420c5dcfca6413348e7b.png" src="../_images/4d7682a1120e6ee4bcc6c5577ab07ec9262611a0300d420c5dcfca6413348e7b.png" />
+<img alt="../_images/b9c5e3b0b15974390cfafd48fc191668238abb49e600b6ae5346dd0ccd5a4322.png" src="../_images/b9c5e3b0b15974390cfafd48fc191668238abb49e600b6ae5346dd0ccd5a4322.png" />
+<img alt="../_images/40d22c6f31b87d568130dd5d1a2bc766f8a6f382ff5dff96d779aab7fa008346.png" src="../_images/40d22c6f31b87d568130dd5d1a2bc766f8a6f382ff5dff96d779aab7fa008346.png" />
+<img alt="../_images/fe343bdd5002d18571f458d90f6ab4fb942d7491c08de9680df7834bc1eba020.png" src="../_images/fe343bdd5002d18571f458d90f6ab4fb942d7491c08de9680df7834bc1eba020.png" />
+<img alt="../_images/da9f8c4d0cb86dda013863c0c07a9eab91b231498e0e9b6458e0feed552d4e75.png" src="../_images/da9f8c4d0cb86dda013863c0c07a9eab91b231498e0e9b6458e0feed552d4e75.png" />
+<img alt="../_images/d307839d41769150c5fd8bd2b25aef84964332715c5c37cbd4d9bcdd28d2d10a.png" src="../_images/d307839d41769150c5fd8bd2b25aef84964332715c5c37cbd4d9bcdd28d2d10a.png" />
+<img alt="../_images/5e1a1fe6c6434b8497111b5782f84fd5c6b9d07022dcecc2789ef4cd67fc920d.png" src="../_images/5e1a1fe6c6434b8497111b5782f84fd5c6b9d07022dcecc2789ef4cd67fc920d.png" />
+<img alt="../_images/e695e2a394f6fde76424d51cf26ef1afdbd230bc6ae50d538512652825912026.png" src="../_images/e695e2a394f6fde76424d51cf26ef1afdbd230bc6ae50d538512652825912026.png" />
+<img alt="../_images/ed330b726446d8d50b7a546f01f636135cc6b0147a2771771684871e67ffc40d.png" src="../_images/ed330b726446d8d50b7a546f01f636135cc6b0147a2771771684871e67ffc40d.png" />
+<img alt="../_images/b478d5f356b24801809ec9f4abd1dc05ebe0eb3a39ff01f7d299dc761e2a2913.png" src="../_images/b478d5f356b24801809ec9f4abd1dc05ebe0eb3a39ff01f7d299dc761e2a2913.png" />
+<img alt="../_images/5ce9784c784a9031dc3187d39f954088de790a2518c78c3b04f6e7c8d5a340f3.png" src="../_images/5ce9784c784a9031dc3187d39f954088de790a2518c78c3b04f6e7c8d5a340f3.png" />
+<img alt="../_images/5c6f06fe473accb96cd4c5ff8b79fedc65f6e805de0000c4a448d32e46304c59.png" src="../_images/5c6f06fe473accb96cd4c5ff8b79fedc65f6e805de0000c4a448d32e46304c59.png" />
+<img alt="../_images/417476f7d1e22e39b99c5ef46635ace12f7ffd51f8201cd172cd19dfa01767da.png" src="../_images/417476f7d1e22e39b99c5ef46635ace12f7ffd51f8201cd172cd19dfa01767da.png" />
+<img alt="../_images/968f64decb91bfe024f0eb5d2c032c17951a694202207f3e460e8d5261a6bb4a.png" src="../_images/968f64decb91bfe024f0eb5d2c032c17951a694202207f3e460e8d5261a6bb4a.png" />
+<img alt="../_images/f6c83cc71bd4e13c73137e21da426d4239335cb4841028a0f2a1556c74612fa7.png" src="../_images/f6c83cc71bd4e13c73137e21da426d4239335cb4841028a0f2a1556c74612fa7.png" />
+<img alt="../_images/0569fc4db0d2366d2fcfd109c6db46885b295c403008778450a52dfcaa4adbdc.png" src="../_images/0569fc4db0d2366d2fcfd109c6db46885b295c403008778450a52dfcaa4adbdc.png" />
+<img alt="../_images/ad763303f5e37730287a51c66679723cd8019e9bb45f4ed07c78235c8375663c.png" src="../_images/ad763303f5e37730287a51c66679723cd8019e9bb45f4ed07c78235c8375663c.png" />
+<img alt="../_images/b8355c264a97967feede72a1f4e37ea7fba9852fcc30286cea40e8ee455b1d1e.png" src="../_images/b8355c264a97967feede72a1f4e37ea7fba9852fcc30286cea40e8ee455b1d1e.png" />
+<img alt="../_images/96b4bcc16906ec891c6f849e53c0a87578c1c570fb408236387b46e044a856cb.png" src="../_images/96b4bcc16906ec891c6f849e53c0a87578c1c570fb408236387b46e044a856cb.png" />
+<img alt="../_images/d7eb1c2b452a15d83d17007f4d42ce40cbde1f5590867939187eed5a812b0075.png" src="../_images/d7eb1c2b452a15d83d17007f4d42ce40cbde1f5590867939187eed5a812b0075.png" />
+<img alt="../_images/038820b4e5c2b102d7e948e09f42e0c0dcd2789921d08eceec2de40d46ac67e4.png" src="../_images/038820b4e5c2b102d7e948e09f42e0c0dcd2789921d08eceec2de40d46ac67e4.png" />
+<img alt="../_images/cccb123da693f30458715d109732eee8915de9cf1d91b49086ba0aeb800e88c7.png" src="../_images/cccb123da693f30458715d109732eee8915de9cf1d91b49086ba0aeb800e88c7.png" />
+<img alt="../_images/53ba5fa8f34db536a385f124df4ef29610226b0bdfcf7320fc29b4b136a3d066.png" src="../_images/53ba5fa8f34db536a385f124df4ef29610226b0bdfcf7320fc29b4b136a3d066.png" />
+<img alt="../_images/88c3221577b9fd79afcd62b01491399349f7ca74e5597fb0b0592f5af58b60f5.png" src="../_images/88c3221577b9fd79afcd62b01491399349f7ca74e5597fb0b0592f5af58b60f5.png" />
+<img alt="../_images/b3dcd9320dcf297aebc2b733183c2bfeb6cc1422dc0d91320ddd319a7bd757b0.png" src="../_images/b3dcd9320dcf297aebc2b733183c2bfeb6cc1422dc0d91320ddd319a7bd757b0.png" />
+<img alt="../_images/65c8aa86d1aba49cfbf38908066ae6d873019fa3e009fb027c6943405baccedd.png" src="../_images/65c8aa86d1aba49cfbf38908066ae6d873019fa3e009fb027c6943405baccedd.png" />
+<img alt="../_images/2f60f76c296a35034584880bded64ffc29fb53f907ce0160f3478af45e828e97.png" src="../_images/2f60f76c296a35034584880bded64ffc29fb53f907ce0160f3478af45e828e97.png" />
+<img alt="../_images/31be33c7945b993ee9fcf435c8feb2686ca2a1198fd715e8f2f869734d01a698.png" src="../_images/31be33c7945b993ee9fcf435c8feb2686ca2a1198fd715e8f2f869734d01a698.png" />
+<img alt="../_images/a3843c660acee259d84984e9abd90c1ab79c299b3d2d7e0cfbb80bdbc39b51e7.png" src="../_images/a3843c660acee259d84984e9abd90c1ab79c299b3d2d7e0cfbb80bdbc39b51e7.png" />
+<img alt="../_images/973a79ff9e3fa68ac589c06dcf29018719907768522a745dd613cda47a8d6044.png" src="../_images/973a79ff9e3fa68ac589c06dcf29018719907768522a745dd613cda47a8d6044.png" />
+<img alt="../_images/3544308467a3d7a62b6aef33ed8d842308e2688adf7c0779647576b8ad92a8ec.png" src="../_images/3544308467a3d7a62b6aef33ed8d842308e2688adf7c0779647576b8ad92a8ec.png" />
+<img alt="../_images/23738cbdfad52d521307593c595b0af158201a2d9ad852ef65f42306c26bb9cb.png" src="../_images/23738cbdfad52d521307593c595b0af158201a2d9ad852ef65f42306c26bb9cb.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">phantom</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">phantom_forward</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;phantom_forward&#39; at 0x19240dba700&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phantom_forward_sub</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(86, 256, 256)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./30_deep_learning"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-ground-truth-phantoms">Create ground truth (phantoms)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-more-general-and-realistic-bio-image-training-sets">A note on more general and realistic bio-image training sets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#point-spread-function-psf-generation-and-image-simulation">Point Spread Function (PSF) generation and Image Simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-dependant-libraries">Import dependant libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-psf-used-for-simulation">Create PSF used for simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-phantom-and-applying-imaging-system">Create phantom and applying imaging system</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: This work can be reused under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> license unless mentioned otherwise.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

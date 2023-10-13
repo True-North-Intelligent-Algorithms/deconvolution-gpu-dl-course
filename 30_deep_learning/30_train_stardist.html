@@ -1,0 +1,929 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Train a stardist neural network for segmentation &#8212; My Jupyter Book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '30_deep_learning/30_train_stardist';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.jpeg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploring the Intersection of Deconvolution, GPU Computing, and Deep Learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1 Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/30_Test_deep_learning_libs.html">Test deep learning libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../20_deconvolution/0_intro_to_decon.html">Intro to Deconvolution</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
+
+
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="10_Introduction.html">Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../90_notes/10_notes.html">Notes</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../90_notes/20_notes.html">Second set of notes</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course/issues/new?title=Issue%20on%20page%20%2F30_deep_learning/30_train_stardist.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/30_deep_learning/30_train_stardist.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Train a stardist neural network for segmentation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Train a stardist neural network for segmentation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#get-the-list-of-visible-devices-and-confirm-that-gpu-is-available">Get the list of visible devices and confirm that GPU is available</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-model-path">Define model path</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-corrupted-images-and-ground-truth-images">Load the corrupted images and ground truth images</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-stardist">Import Stardist</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="train-a-stardist-neural-network-for-segmentation">
+<h1>Train a stardist neural network for segmentation<a class="headerlink" href="#train-a-stardist-neural-network-for-segmentation" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span><span class="p">,</span> <span class="n">imsave</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xyz_slice</span><span class="p">,</span> <span class="n">show_xyz_max</span><span class="p">,</span> <span class="n">show_xy_zy_max</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">label</span>
+<span class="kn">from</span> <span class="nn">stardist</span> <span class="kn">import</span> <span class="n">calculate_extents</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="get-the-list-of-visible-devices-and-confirm-that-gpu-is-available">
+<h1>Get the list of visible devices and confirm that GPU is available<a class="headerlink" href="#get-the-list-of-visible-devices-and-confirm-that-gpu-is-available" title="Permalink to this heading">#</a></h1>
+<p>… or else training will take a long time</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="n">visible_devices</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">visible_devices</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[PhysicalDevice(name=&#39;/physical_device:CPU:0&#39;, device_type=&#39;CPU&#39;), PhysicalDevice(name=&#39;/physical_device:GPU:0&#39;, device_type=&#39;GPU&#39;)]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="define-model-path">
+<h2>Define model path<a class="headerlink" href="#define-model-path" title="Permalink to this heading">#</a></h2>
+<p>This is the path where the model will be saved, change to be local to your machine</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parent_dl_path</span><span class="o">=</span><span class="n">get_parent_dl_path</span><span class="p">()</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dl_path</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;models&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+<span class="n">patches_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dl_path</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;patches&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">patches_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">c</span>:\Users\bnort\work\ImageJ2022\tnia\deconvolution-gpu-dl-course\docs\30_deep_learning\30_stardist.ipynb Cell 6 line 1
+<span class="o">----&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/30_deep_learning/30_stardist.ipynb#W5sZmlsZQ%3D%3D?line=0&#39;</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">parent_dl_path</span><span class="o">=</span><span class="n">get_parent_dl_path</span><span class="p">()</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/30_deep_learning/30_stardist.ipynb#W5sZmlsZQ%3D%3D?line=1&#39;</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dl_path</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;models&#39;</span><span class="p">)</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/30_deep_learning/30_stardist.ipynb#W5sZmlsZQ%3D%3D?line=2&#39;</span><span class="o">&gt;</span><span class="mi">3</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;get_parent_dl_path&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="load-the-corrupted-images-and-ground-truth-images">
+<h1>Load the corrupted images and ground truth images<a class="headerlink" href="#load-the-corrupted-images-and-ground-truth-images" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corrupted_dir</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;D:\images\deep-learning\big_spheres\train\images&quot;</span>
+<span class="n">ground_truth_dir</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;D:\images\deep-learning\big_spheres\train\ground truth&quot;</span>
+<span class="n">corrupted_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">corrupted_dir</span><span class="p">)</span>
+<span class="n">ground_truth_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">ground_truth_dir</span><span class="p">)</span>
+
+<span class="c1"># Preprocess the images</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">corrupted_files</span><span class="p">)):</span>
+    <span class="c1"># Load the corrupted image and ground truth image</span>
+    <span class="n">corrupted_img</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">corrupted_dir</span><span class="p">,</span> <span class="n">corrupted_files</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">plugin</span><span class="o">=</span><span class="s1">&#39;tifffile&#39;</span><span class="p">)</span>
+    <span class="n">ground_truth_img</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ground_truth_dir</span><span class="p">,</span> <span class="n">ground_truth_files</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">plugin</span><span class="o">=</span><span class="s1">&#39;tifffile&#39;</span><span class="p">)</span>
+    <span class="c1"># Resize the images to the desired size</span>
+    <span class="c1">#corrupted_img = np.reshape(corrupted_img, (256, 256, 100, 1))</span>
+    <span class="c1">#ground_truth_img = np.reshape(ground_truth_img, (256, 256, 100, 1))</span>
+    
+    <span class="n">corrupted_img</span> <span class="o">=</span> <span class="n">corrupted_img</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">ground_truth_img</span> <span class="o">=</span> <span class="n">ground_truth_img</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="n">corrupted_img</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">corrupted_img</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ground_truth_img</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">ground_truth_img</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+    <span class="c1"># Normalize the pixel values to [0, 1]</span>
+    <span class="n">corrupted_img</span> <span class="o">=</span> <span class="p">(</span><span class="n">corrupted_img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span><span class="o">-</span><span class="n">corrupted_img</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">corrupted_img</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">corrupted_img</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="c1">#ground_truth_img = (ground_truth_img.astype(&#39;float32&#39;)-ground_truth_img.min()) / (ground_truth_img.max() - ground_truth_img.min()) </span>
+    
+    <span class="c1"># Append the preprocessed images to the training set</span>
+    <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corrupted_img</span><span class="p">)</span>
+    <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ground_truth_img</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint16&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">Y</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5 1117
+0.0 4914.01
+1 798
+0.0 2284.8398
+17 2265
+0.0 4970.25
+3 1231
+0.0 5314.4097
+2 2100
+0.0 5520.4897
+3 1226
+0.0 4774.81
+5 1924
+0.0 5184.0
+3 1588
+0.0 6384.01
+4 892
+0.0 1874.89
+2 643
+0.0 2007.0399
+10 1676
+0.0 3819.24
+5 2043
+0.0 4529.29
+7 1663
+0.0 4096.0
+4 926
+0.0 2070.25
+13 924
+0.0 1962.49
+12 1902
+0.0 4970.25
+0 155
+0.0 249.64
+10 2291
+0.0 5358.2397
+1 145
+0.0 576.0
+15 2720
+0.0 6384.01
+(20, 16, 128, 128) (20, 16, 128, 128)
+float32 uint16
+</pre></div>
+</div>
+<img alt="../_images/b5f8258406de3bd87f6ba81da51a17d65781e89a784aa32729a9993efa351f44.png" src="../_images/b5f8258406de3bd87f6ba81da51a17d65781e89a784aa32729a9993efa351f44.png" />
+<img alt="../_images/7f055d12b3605299cb086efa335ce32274a5c3f9e8fb43c0dc5c1092697f382b.png" src="../_images/7f055d12b3605299cb086efa335ce32274a5c3f9e8fb43c0dc5c1092697f382b.png" />
+</div>
+</div>
+<section id="import-stardist">
+<h2>Import Stardist<a class="headerlink" href="#import-stardist" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.deeplearning.stardist_helper</span> <span class="kn">import</span> <span class="n">get_stardist_configuration</span>
+<span class="kn">from</span> <span class="nn">stardist.models</span> <span class="kn">import</span> <span class="n">Config3D</span><span class="p">,</span> <span class="n">StarDist3D</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">extents</span> <span class="o">=</span> <span class="n">calculate_extents</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint16&#39;</span><span class="p">))</span>
+<span class="n">anisotropy</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">extents</span><span class="p">)</span> <span class="o">/</span> <span class="n">extents</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;extents&#39;</span><span class="p">,</span> <span class="n">extents</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;anisotropy&#39;</span><span class="p">,</span> <span class="n">anisotropy</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>extents [14.25 74.   66.5 ]
+anisotropy (5.192982456140351, 1.0, 1.112781954887218)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Y</span><span class="o">.</span><span class="n">dtype</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dtype(&#39;uint16&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stardist</span> <span class="kn">import</span> <span class="n">Rays_GoldenSpiral</span>
+
+<span class="n">n_channel_in</span> <span class="o">=</span><span class="mi">1</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="s1">&#39;ZYX&#39;</span>
+
+<span class="n">n_rays</span> <span class="o">=</span> <span class="mi">96</span> 
+
+<span class="c1"># Use rays on a Fibonacci lattice adjusted for measured anisotropy of the training data</span>
+<span class="n">rays</span> <span class="o">=</span> <span class="n">Rays_GoldenSpiral</span><span class="p">(</span><span class="n">n_rays</span><span class="p">,</span> <span class="n">anisotropy</span><span class="o">=</span><span class="n">anisotropy</span><span class="p">)</span>
+
+<span class="c1"># create a csbdeep config</span>
+<span class="c1"># we mostly use the default settings except in this case unet_n_depth=4, so we downsampling 4 times and can use low level features</span>
+<span class="c1"># consider changing the number of filters (unet_n_first) to save memory</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config3D</span> <span class="p">(</span><span class="n">rays</span><span class="o">=</span><span class="n">rays</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span><span class="n">n_channel_in</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">train_patch_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">),</span> <span class="n">anisotropy</span><span class="o">=</span><span class="n">anisotropy</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">unet_n_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1">#config = Config(axes, n_channel_in, n_channel_out, train_steps_per_epoch=20, train_epochs=50, unet_n_depth=4)</span>
+<span class="c1">#print(config)</span>
+<span class="n">new_model</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">if</span> <span class="n">new_model</span><span class="p">:</span>
+    <span class="c1">#model = StarDist3D(config, name=&#39;stardist_model_48ray_combined&#39;, basedir=model_path)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;initializing new model&#39;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">StarDist3D</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;stardist_big&#39;</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">bnort</span><span class="se">\\</span><span class="s1">work</span><span class="se">\\</span><span class="s1">ImageJ2022</span><span class="se">\\</span><span class="s1">tnia</span><span class="se">\\</span><span class="s1">models363&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">StarDist3D</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;stardist_model_Sep_22_new_labels&#39;</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">bnort</span><span class="se">\\</span><span class="s1">work</span><span class="se">\\</span><span class="s1">ImageJ2022</span><span class="se">\\</span><span class="s1">tnia</span><span class="se">\\</span><span class="s1">models363&#39;</span><span class="p">)</span>
+<span class="nb">vars</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initializing new model
+Using default values: prob_thresh=0.5, nms_thresh=0.4.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_dim&#39;: 3,
+ &#39;axes&#39;: &#39;ZYXC&#39;,
+ &#39;n_channel_in&#39;: 1,
+ &#39;n_channel_out&#39;: 97,
+ &#39;train_checkpoint&#39;: &#39;weights_best.h5&#39;,
+ &#39;train_checkpoint_last&#39;: &#39;weights_last.h5&#39;,
+ &#39;train_checkpoint_epoch&#39;: &#39;weights_now.h5&#39;,
+ &#39;n_rays&#39;: 96,
+ &#39;grid&#39;: (1, 4, 4),
+ &#39;anisotropy&#39;: (5.192982456140351, 1.0, 1.112781954887218),
+ &#39;backbone&#39;: &#39;unet&#39;,
+ &#39;rays_json&#39;: {&#39;name&#39;: &#39;Rays_GoldenSpiral&#39;,
+  &#39;kwargs&#39;: {&#39;n&#39;: 96,
+   &#39;anisotropy&#39;: (5.192982456140351, 1.0, 1.112781954887218)}},
+ &#39;n_classes&#39;: None,
+ &#39;unet_n_depth&#39;: 3,
+ &#39;unet_kernel_size&#39;: (3, 3, 3),
+ &#39;unet_n_filter_base&#39;: 32,
+ &#39;unet_n_conv_per_depth&#39;: 2,
+ &#39;unet_pool&#39;: (2, 2, 2),
+ &#39;unet_activation&#39;: &#39;relu&#39;,
+ &#39;unet_last_activation&#39;: &#39;relu&#39;,
+ &#39;unet_batch_norm&#39;: False,
+ &#39;unet_dropout&#39;: 0.0,
+ &#39;unet_prefix&#39;: &#39;&#39;,
+ &#39;net_conv_after_unet&#39;: 128,
+ &#39;net_input_shape&#39;: (None, None, None, 1),
+ &#39;net_mask_shape&#39;: (None, None, None, 1),
+ &#39;train_patch_size&#39;: (16, 128, 128),
+ &#39;train_background_reg&#39;: 0.0001,
+ &#39;train_foreground_only&#39;: 0.9,
+ &#39;train_sample_cache&#39;: True,
+ &#39;train_dist_loss&#39;: &#39;mae&#39;,
+ &#39;train_loss_weights&#39;: (1, 0.2),
+ &#39;train_class_weights&#39;: (1, 1),
+ &#39;train_epochs&#39;: 400,
+ &#39;train_steps_per_epoch&#39;: 100,
+ &#39;train_learning_rate&#39;: 0.0003,
+ &#39;train_batch_size&#39;: 1,
+ &#39;train_n_val_patches&#39;: None,
+ &#39;train_tensorboard&#39;: True,
+ &#39;train_reduce_lr&#39;: {&#39;factor&#39;: 0.5, &#39;patience&#39;: 40, &#39;min_delta&#39;: 0},
+ &#39;use_gpu&#39;: False}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="o">.</span><span class="n">anisotropy</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">grid</span>
+<span class="n">median_size</span> <span class="o">=</span> <span class="n">calculate_extents</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">)</span>
+<span class="n">fov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_axes_tile_overlap</span><span class="p">(</span><span class="s1">&#39;ZYX&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;median object size:      </span><span class="si">{</span><span class="n">median_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;network field of view :  </span><span class="si">{</span><span class="n">fov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">median_size</span> <span class="o">&gt;</span> <span class="n">fov</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: median object size larger than field of view of the neural network.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>median object size:      [14. 74. 58.]
+network field of view :  [ 32 128 128]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="o">=</span><span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+<span class="n">Y_train</span><span class="o">=</span><span class="n">Y</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+<span class="n">X_val</span><span class="o">=</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">Y_val</span><span class="o">=</span><span class="n">Y</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span><span class="n">Y_val</span><span class="p">),</span><span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">steps_per_epoch</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/10
+ 6/50 [==&gt;...........................] - ETA: 46s - loss: 6.7903 - prob_loss: 0.6615 - dist_loss: 30.6438 - prob_kld: 0.3886 - dist_relevant_mae: 30.6438 - dist_relevant_mse: 1467.8043 - dist_dist_iou_metric: 8.2207e-06WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.4762s vs `on_train_batch_end` time: 0.6243s). Check your callbacks.
+3/3 [==============================] - 1s 473ms/steposs: 6.1917 - prob_loss: 0.5402 - dist_loss: 28.2578 - prob_kld: 0.2712 - dist_relevant_mae: 28.2578 - dist_relevant_mse: 1252.0479 - dist_dist_iou_metric: 4.82
+50/50 [==============================] - 52s 988ms/step - loss: 6.1917 - prob_loss: 0.5402 - dist_loss: 28.2578 - prob_kld: 0.2712 - dist_relevant_mae: 28.2578 - dist_relevant_mse: 1252.0479 - dist_dist_iou_metric: 4.8221e-04 - val_loss: 6.3097 - val_prob_loss: 0.5252 - val_dist_loss: 28.9225 - val_prob_kld: 0.2323 - val_dist_relevant_mae: 28.9223 - val_dist_relevant_mse: 1341.1978 - val_dist_dist_iou_metric: 0.0060 - lr: 3.0000e-04
+Epoch 2/10
+3/3 [==============================] - 1s 492ms/steposs: 4.7368 - prob_loss: 0.5639 - dist_loss: 20.8646 - prob_kld: 0.2926 - dist_relevant_mae: 20.8635 - dist_relevant_mse: 821.8854 - dist_dist_iou_metric: 
+50/50 [==============================] - 62s 1s/step - loss: 4.7368 - prob_loss: 0.5639 - dist_loss: 20.8646 - prob_kld: 0.2926 - dist_relevant_mae: 20.8635 - dist_relevant_mse: 821.8854 - dist_dist_iou_metric: 0.1652 - val_loss: 4.1756 - val_prob_loss: 0.5490 - val_dist_loss: 18.1332 - val_prob_kld: 0.2561 - val_dist_relevant_mae: 18.1320 - val_dist_relevant_mse: 669.7757 - val_dist_dist_iou_metric: 0.2020 - lr: 3.0000e-04
+Epoch 3/10
+3/3 [==============================] - 1s 572ms/steposs: 3.5330 - prob_loss: 0.5102 - dist_loss: 15.1137 - prob_kld: 0.2412 - dist_relevant_mae: 15.1121 - dist_relevant_mse: 465.6276 - dist_dist_iou_metric: 
+50/50 [==============================] - 58s 1s/step - loss: 3.5330 - prob_loss: 0.5102 - dist_loss: 15.1137 - prob_kld: 0.2412 - dist_relevant_mae: 15.1121 - dist_relevant_mse: 465.6276 - dist_dist_iou_metric: 0.2963 - val_loss: 3.5145 - val_prob_loss: 0.5433 - val_dist_loss: 14.8561 - val_prob_kld: 0.2504 - val_dist_relevant_mae: 14.8545 - val_dist_relevant_mse: 464.0417 - val_dist_dist_iou_metric: 0.3069 - lr: 3.0000e-04
+Epoch 4/10
+3/3 [==============================] - 1s 456ms/steposs: 3.3371 - prob_loss: 0.5061 - dist_loss: 14.1550 - prob_kld: 0.2351 - dist_relevant_mae: 14.1532 - dist_relevant_mse: 410.9774 - dist_dist_iou_metric: 
+50/50 [==============================] - 62s 1s/step - loss: 3.3371 - prob_loss: 0.5061 - dist_loss: 14.1550 - prob_kld: 0.2351 - dist_relevant_mae: 14.1532 - dist_relevant_mse: 410.9774 - dist_dist_iou_metric: 0.3207 - val_loss: 3.2797 - val_prob_loss: 0.5048 - val_dist_loss: 13.8745 - val_prob_kld: 0.2118 - val_dist_relevant_mae: 13.8725 - val_dist_relevant_mse: 383.2743 - val_dist_dist_iou_metric: 0.3657 - lr: 3.0000e-04
+Epoch 5/10
+3/3 [==============================] - 1s 298ms/steposs: 3.1826 - prob_loss: 0.5049 - dist_loss: 13.3884 - prob_kld: 0.2311 - dist_relevant_mae: 13.3866 - dist_relevant_mse: 372.7035 - dist_dist_iou_metric: 
+50/50 [==============================] - 55s 1s/step - loss: 3.1826 - prob_loss: 0.5049 - dist_loss: 13.3884 - prob_kld: 0.2311 - dist_relevant_mae: 13.3866 - dist_relevant_mse: 372.7035 - dist_dist_iou_metric: 0.3501 - val_loss: 3.1760 - val_prob_loss: 0.5146 - val_dist_loss: 13.3068 - val_prob_kld: 0.2217 - val_dist_relevant_mae: 13.3050 - val_dist_relevant_mse: 390.4666 - val_dist_dist_iou_metric: 0.3481 - lr: 3.0000e-04
+Epoch 6/10
+3/3 [==============================] - 1s 333ms/steposs: 2.9888 - prob_loss: 0.5176 - dist_loss: 12.3562 - prob_kld: 0.2539 - dist_relevant_mae: 12.3543 - dist_relevant_mse: 328.5089 - dist_dist_iou_metric: 
+50/50 [==============================] - 59s 1s/step - loss: 2.9888 - prob_loss: 0.5176 - dist_loss: 12.3562 - prob_kld: 0.2539 - dist_relevant_mae: 12.3543 - dist_relevant_mse: 328.5089 - dist_dist_iou_metric: 0.3738 - val_loss: 3.2633 - val_prob_loss: 0.5173 - val_dist_loss: 13.7304 - val_prob_kld: 0.2243 - val_dist_relevant_mae: 13.7288 - val_dist_relevant_mse: 429.3690 - val_dist_dist_iou_metric: 0.3149 - lr: 3.0000e-04
+Epoch 7/10
+3/3 [==============================] - 1s 284ms/steposs: 2.9158 - prob_loss: 0.5026 - dist_loss: 12.0661 - prob_kld: 0.2309 - dist_relevant_mae: 12.0642 - dist_relevant_mse: 321.4571 - dist_dist_iou_metric: 
+50/50 [==============================] - 55s 1s/step - loss: 2.9158 - prob_loss: 0.5026 - dist_loss: 12.0661 - prob_kld: 0.2309 - dist_relevant_mae: 12.0642 - dist_relevant_mse: 321.4571 - dist_dist_iou_metric: 0.3944 - val_loss: 2.8882 - val_prob_loss: 0.5148 - val_dist_loss: 11.8672 - val_prob_kld: 0.2219 - val_dist_relevant_mae: 11.8651 - val_dist_relevant_mse: 307.1732 - val_dist_dist_iou_metric: 0.4176 - lr: 3.0000e-04
+Epoch 8/10
+3/3 [==============================] - 1s 466ms/steposs: 2.7608 - prob_loss: 0.5199 - dist_loss: 11.2043 - prob_kld: 0.2476 - dist_relevant_mae: 11.2024 - dist_relevant_mse: 277.6218 - dist_dist_iou_metric: 
+50/50 [==============================] - 58s 1s/step - loss: 2.7608 - prob_loss: 0.5199 - dist_loss: 11.2043 - prob_kld: 0.2476 - dist_relevant_mae: 11.2024 - dist_relevant_mse: 277.6218 - dist_dist_iou_metric: 0.4252 - val_loss: 2.8738 - val_prob_loss: 0.5176 - val_dist_loss: 11.7809 - val_prob_kld: 0.2247 - val_dist_relevant_mae: 11.7788 - val_dist_relevant_mse: 280.6311 - val_dist_dist_iou_metric: 0.4518 - lr: 3.0000e-04
+Epoch 9/10
+3/3 [==============================] - 1s 390ms/steposs: 2.6343 - prob_loss: 0.5086 - dist_loss: 10.6283 - prob_kld: 0.2407 - dist_relevant_mae: 10.6263 - dist_relevant_mse: 251.3277 - dist_dist_iou_metric: 
+50/50 [==============================] - 55s 1s/step - loss: 2.6343 - prob_loss: 0.5086 - dist_loss: 10.6283 - prob_kld: 0.2407 - dist_relevant_mae: 10.6263 - dist_relevant_mse: 251.3277 - dist_dist_iou_metric: 0.4426 - val_loss: 2.8915 - val_prob_loss: 0.5561 - val_dist_loss: 11.6771 - val_prob_kld: 0.2631 - val_dist_relevant_mae: 11.6753 - val_dist_relevant_mse: 313.5869 - val_dist_dist_iou_metric: 0.4028 - lr: 3.0000e-04
+Epoch 10/10
+3/3 [==============================] - 1s 554ms/steposs: 2.5851 - prob_loss: 0.5377 - dist_loss: 10.2367 - prob_kld: 0.2695 - dist_relevant_mae: 10.2348 - dist_relevant_mse: 236.5063 - dist_dist_iou_metric: 
+50/50 [==============================] - 50s 1s/step - loss: 2.5851 - prob_loss: 0.5377 - dist_loss: 10.2367 - prob_kld: 0.2695 - dist_relevant_mae: 10.2348 - dist_relevant_mse: 236.5063 - dist_dist_iou_metric: 0.4655 - val_loss: 2.9223 - val_prob_loss: 0.5255 - val_dist_loss: 11.9841 - val_prob_kld: 0.2326 - val_dist_relevant_mae: 11.9824 - val_dist_relevant_mse: 319.2395 - val_dist_dist_iou_metric: 0.3860 - lr: 3.0000e-04
+
+Loading network weights from &#39;weights_best.h5&#39;.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;keras.callbacks.History at 0x1ad62abe520&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">Y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">X_val</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">Y_val</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((17, 16, 128, 128), (17, 16, 128, 128), (3, 16, 128, 128), (3, 16, 128, 128))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5148696899414062
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">labels</span><span class="p">,</span> <span class="n">details</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_instances</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">prob_thresh</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">nms_thresh</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">Y_train</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">Y_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">Y_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span><span class="mf">1.4</span><span class="p">,</span><span class="mf">1.4</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span><span class="mf">1.4</span><span class="p">,</span><span class="mf">1.4</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span><span class="mf">1.4</span><span class="p">,</span><span class="mf">1.4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/fac639962feff01a69001e99306766de0e97b584e9ffff940d68b692d27c8995.png" src="../_images/fac639962feff01a69001e99306766de0e97b584e9ffff940d68b692d27c8995.png" />
+<img alt="../_images/bc0cf91563d0edca4280ba4e5190f496871774357373996d2adab280ff253350.png" src="../_images/bc0cf91563d0edca4280ba4e5190f496871774357373996d2adab280ff253350.png" />
+<img alt="../_images/77deb06dca8dda4ae04ae0c519f96d49a2d21a4131361b33b94976cf5c3b9a75.png" src="../_images/77deb06dca8dda4ae04ae0c519f96d49a2d21a4131361b33b94976cf5c3b9a75.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">Y_train</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>napari.manifest -&gt; &#39;napari-hello&#39; could not be imported: Cannot find module &#39;napari_plugins&#39; declared in entrypoint: &#39;napari_plugins:napari.yaml&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./30_deep_learning"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Train a stardist neural network for segmentation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#get-the-list-of-visible-devices-and-confirm-that-gpu-is-available">Get the list of visible devices and confirm that GPU is available</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-model-path">Define model path</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-corrupted-images-and-ground-truth-images">Load the corrupted images and ground truth images</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-stardist">Import Stardist</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: This work can be reused under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> license unless mentioned otherwise.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
