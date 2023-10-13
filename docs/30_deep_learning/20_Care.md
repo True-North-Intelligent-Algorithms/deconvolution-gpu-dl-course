@@ -1,3 +1,0 @@
-# CARE
-
-Explain CARE Network
