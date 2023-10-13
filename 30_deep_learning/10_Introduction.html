@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Deep Learning &#8212; My Jupyter Book</title>
+    <title>Module3: Deep Learning &#8212; My Jupyter Book</title>
   
   
   
@@ -64,8 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '30_deep_learning/10_Introduction';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Notes" href="../90_notes/10_notes.html" />
-    <link rel="prev" title="Forward modelling" href="../20_deconvolution/20_cupy_forward.html" />
+    <link rel="next" title="Train and restore with trivial conv net" href="20_restore_trivial.html" />
+    <link rel="prev" title="Deconvolution Systems Design" href="../20_deconvolution/90_decon_systems_design.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -158,7 +158,7 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploring the Intersection of Deconvolution, GPU Computing, and Deep Learning</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1 Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
@@ -173,13 +173,39 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/30_Test_deep_learning_libs.html">Test deep learning libraries</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../20_deconvolution/0_intro_to_decon.html">Intro to Deconvolution</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../20_deconvolution/0_intro_to_decon.html">Module 2: Deconvolution</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/40_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/80_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/90_decon_systems_design.html">Deconvolution Systems Design</a></li>
 
 
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Deep Learning</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Module3: Deep Learning</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="20_restore_trivial.html">Train and restore with trivial conv net</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="25_train_care.html">Train a CARE conv net</a></li>
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="28_restore_care.html">Care restoration (prediction)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="30_train_stardist.html">Train a stardist neural network for segmentation</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="35_segment_stardist.html">Segment with stardist model</a></li>
+
+
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../90_notes/10_notes.html">Notes</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -369,7 +395,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Deep Learning</h1>
+    <h1>Module3: Deep Learning</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -395,8 +421,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="deep-learning">
-<h1>Deep Learning<a class="headerlink" href="#deep-learning" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="module3-deep-learning">
+<h1>Module3: Deep Learning<a class="headerlink" href="#module3-deep-learning" title="Permalink to this heading">#</a></h1>
 <p>Deep learning is a type of machine learning, loosely inspired by biological neural networks, that uses multiple layers of artificial neurons to perform a task.</p>
 <section id="convolutional-neural-networks">
 <h2>Convolutional Neural Networks<a class="headerlink" href="#convolutional-neural-networks" title="Permalink to this heading">#</a></h2>
@@ -472,20 +498,20 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../20_deconvolution/20_cupy_forward.html"
+       href="../20_deconvolution/90_decon_systems_design.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Forward modelling</p>
+        <p class="prev-next-title">Deconvolution Systems Design</p>
       </div>
     </a>
     <a class="right-next"
-       href="../90_notes/10_notes.html"
+       href="20_restore_trivial.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Notes</p>
+        <p class="prev-next-title">Train and restore with trivial conv net</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

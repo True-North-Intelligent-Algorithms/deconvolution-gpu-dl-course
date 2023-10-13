@@ -1,4 +1,4 @@
-# Intro to Deconvolution
+# Module 2: Deconvolution
 
 ## What is Deconvolution?
 

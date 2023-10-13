@@ -1,5 +1,5 @@
 
-# Module 1 Course preparation
+# Module 1: Course preparation
 
 ## Setting up tools and dependencies
 
