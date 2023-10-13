@@ -1,3 +1,4 @@
 docs/_build
 data
+models
 **/__pycache__/
