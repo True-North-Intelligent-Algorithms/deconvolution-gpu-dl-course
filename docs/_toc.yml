@@ -14,17 +14,19 @@ parts:
     sections:
     - file: 10_intro/10_Mambaforge_devbio
     - file: 10_intro/15_Dependencies
+    - file: 10_intro/18_Get_data
     - file: 10_intro/20_Test_deconvolution_libs
     - file: 10_intro/30_Test_deep_learning_libs
   - file: 20_deconvolution/0_intro_to_decon
     sections:
     - file: 20_deconvolution/20_cupy_forward.ipynb
-    - file: 20_deconvolution/40_Nuclei_Deconvolution_Segmentation.ipynb
+    - file: 20_deconvolution/30_Nuclei_Deconvolution_Compare_to_Truth.ipynb
     - file: 20_deconvolution/80_extract_psf.ipynb
     - file: 20_deconvolution/90_decon_systems_design.ipynb
   - file: 30_deep_learning/10_Introduction
     sections:
-    - file: 30_deep_learning/15_training_data.ipyng
+    - file: 30_deep_learning/15_training_data.ipynb
+    - file: 30_deep_learning/17_training_data_cytopacq.ipynb
     - file: 30_deep_learning/20_restore_trivial.ipynb
     - file: 30_deep_learning/25_train_care.ipynb
     - file: 30_deep_learning/28_restore_care.ipynb
