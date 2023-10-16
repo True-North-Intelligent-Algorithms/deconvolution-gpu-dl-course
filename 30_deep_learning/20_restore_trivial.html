@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Train a CARE conv net" href="25_train_care.html" />
-    <link rel="prev" title="Module3: Deep Learning" href="10_Introduction.html" />
+    <link rel="prev" title="Creating training data from cytopacq simulated nuclei images" href="17_training_data_cytopacq.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -161,7 +161,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/18_Get_data.html">Get test data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
 
 
 
@@ -177,7 +179,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/40_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/30_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/80_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/90_decon_systems_design.html">Deconvolution Systems Design</a></li>
 
@@ -185,6 +187,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="10_Introduction.html">Module3: Deep Learning</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="15_training_data.html">Creating training data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_training_data_cytopacq.html">Creating training data from cytopacq simulated nuclei images</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Train and restore with trivial conv net</a></li>
 
 
@@ -411,7 +415,7 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-corrupted-images-and-ground-truth-images">Load the corrupted images and ground truth images</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-and-compile-a-model-perform-training-and-save">Define and compile a model, perform training and save</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#try-with-more-epochs">Try with more epochs</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paste-example-result">Paste example result</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-example-result">Generate example result</a></li>
 </ul>
 </li>
 </ul>
@@ -436,7 +440,6 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span>
 </pre></div>
 </div>
@@ -491,7 +494,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\Users\bnort\miniconda3\envs\dresden-decon-test1\lib\site-packages\keras\optimizers\optimizer_v2\adam.py:114: UserWarning: The `lr` argument is deprecated, use `learning_rate` instead.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\Users\bnort\miniconda3\envs\decon-dl-env\lib\site-packages\keras\optimizers\optimizer_v2\adam.py:114: UserWarning: The `lr` argument is deprecated, use `learning_rate` instead.
   super().__init__(name, **kwargs)
 </pre></div>
 </div>
@@ -503,8 +506,10 @@ document.write(`
 <p>… add a trivial channel, normalize the intensities and form an array of training images</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corrupted_dir</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;D:\images\deep-learning\small_spheres\train\images&quot;</span>
-<span class="n">ground_truth_dir</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;D:\images\deep-learning\small_spheres\train\ground truth&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">data_dir</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;../../data/deep learning training/&#39;</span>
+<span class="n">corrupted_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span><span class="s1">&#39;spheres_big_small_noise_high_na_high/train/input0&#39;</span><span class="p">)</span>
+<span class="n">ground_truth_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span><span class="s1">&#39;spheres_big_small_noise_high_na_high/train/ground truth0&#39;</span><span class="p">)</span>
 <span class="n">corrupted_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">corrupted_dir</span><span class="p">)</span>
 <span class="n">ground_truth_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">ground_truth_dir</span><span class="p">)</span>
 
@@ -537,46 +542,56 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 601
-0.0 6272.6396
-5 579
-0.0 6272.6396
-3 474
-0.0 6130.8896
-4 593
-0.0 6193.69
-4 579
-0.0 6115.2397
-4 687
-0.0 6304.36
-3 570
-0.0 6209.44
-2 590
-0.0 6336.1597
-5 639
-0.0 6256.81
-2 448
-0.0 6115.2397
-3 626
-0.0 6130.8896
-5 668
-0.0 6115.2397
-7 583
-0.0 6193.69
-8 573
-0.0 5944.4097
-6 659
-0.0 6225.21
-4 548
-0.0 6352.09
-3 522
-0.0 6400.0
-5 527
-0.0 5329.0
-4 675
-0.0 6162.25
-6 545
-0.0 6400.0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5 198
+0.0 281.5
+2 74
+0.0 161.0
+2 142
+0.0 366.0
+3 141
+0.0 287.5
+4 198
+0.0 395.0
+3 160
+0.0 394.0
+5 257
+0.0 354.5
+2 214
+0.0 364.0
+1 126
+0.0 343.0
+1 138
+0.0 352.0
+0 95
+0.0 281.0
+5 247
+0.0 342.5
+2 136
+0.0 357.5
+2 96
+0.0 378.0
+1 89
+0.0 354.0
+2 157
+0.0 391.5
+5 214
+0.0 392.5
+2 154
+0.0 364.5
+4 214
+0.0 394.5
+3 197
+0.0 396.0
+3 233
+0.0 365.5
+2 227
+0.0 308.5
+2 152
+0.0 375.0
+1 144
+0.0 362.0
+4 291
+0.0 399.0
 </pre></div>
 </div>
 </div>
@@ -588,7 +603,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(20, 16, 128, 128, 1)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(25, 32, 128, 128, 1)
 </pre></div>
 </div>
 </div>
@@ -616,15 +631,15 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/5
-1/1 [==============================] - 16s 16s/step - loss: 0.0152 - val_loss: 0.0125
+2/2 [==============================] - 9s 2s/step - loss: 0.1246 - val_loss: 0.0814
 Epoch 2/5
-1/1 [==============================] - 1s 678ms/step - loss: 0.0123 - val_loss: 0.0121
+2/2 [==============================] - 2s 437ms/step - loss: 0.0793 - val_loss: 0.0946
 Epoch 3/5
-1/1 [==============================] - 1s 653ms/step - loss: 0.0119 - val_loss: 0.0108
+2/2 [==============================] - 2s 445ms/step - loss: 0.0787 - val_loss: 0.0704
 Epoch 4/5
-1/1 [==============================] - 1s 679ms/step - loss: 0.0105 - val_loss: 0.0118
+2/2 [==============================] - 2s 452ms/step - loss: 0.0684 - val_loss: 0.0832
 Epoch 5/5
-1/1 [==============================] - 1s 687ms/step - loss: 0.0114 - val_loss: 0.0098
+2/2 [==============================] - 2s 468ms/step - loss: 0.0669 - val_loss: 0.0788
 </pre></div>
 </div>
 </div>
@@ -634,20 +649,24 @@ Epoch 5/5
 <h2>Try with more epochs<a class="headerlink" href="#try-with-more-epochs" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">steps_per_epoch</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">steps_per_epoch</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/150
- 10/200 [&gt;.............................] - ETA: 28:02 - loss: 0.0057
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/15
+ 30/200 [===&gt;..........................] - ETA: 2:04 - loss: 0.0569WARNING:tensorflow:Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches (in this case, 3000 batches). You may need to use the repeat() function when building your dataset.
+200/200 [==============================] - 24s 111ms/step - loss: 0.0569 - val_loss: 0.0569
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;keras.callbacks.History at 0x1401b39c190&gt;
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="paste-example-result">
-<h2>Paste example result<a class="headerlink" href="#paste-example-result" title="Permalink to this heading">#</a></h2>
+<section id="generate-example-result">
+<h2>Generate example result<a class="headerlink" href="#generate-example-result" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_zy_max</span>
@@ -662,12 +681,12 @@ Epoch 5/5
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(16, 128, 128, 1) 0.0 1.0
-(16, 128, 128, 1) 0.0 1.0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(32, 128, 128, 1) 0.0 1.0
+(32, 128, 128, 1) 0.0 1.0
 </pre></div>
 </div>
-<img alt="../_images/57825c6956b75b6284bc27ddfcb08c97048bc4af5fe57e2ab4e16d179ea9c3d2.png" src="../_images/57825c6956b75b6284bc27ddfcb08c97048bc4af5fe57e2ab4e16d179ea9c3d2.png" />
-<img alt="../_images/71dd13c65a0ca8eaa7887c9ac8f2db0a07313471b3b0e0ee389b96602d174dbf.png" src="../_images/71dd13c65a0ca8eaa7887c9ac8f2db0a07313471b3b0e0ee389b96602d174dbf.png" />
+<img alt="../_images/d0aca037aeb2cb36b876783dac2aacddac7e9b18757154d7e23d25e850b58567.png" src="../_images/d0aca037aeb2cb36b876783dac2aacddac7e9b18757154d7e23d25e850b58567.png" />
+<img alt="../_images/00122d1be4142afc596d60f55a3ea229da610b9100943cd06e7796619c3569ca.png" src="../_images/00122d1be4142afc596d60f55a3ea229da610b9100943cd06e7796619c3569ca.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -677,7 +696,7 @@ Epoch 5/5
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(16, 128, 128, 1)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(32, 128, 128, 1)
 </pre></div>
 </div>
 </div>
@@ -687,21 +706,24 @@ Epoch 5/5
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">10</span>
 
 <span class="c1">#output = model.predict(X_train[0])</span>
-<span class="nb">input</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">truth</span> <span class="o">=</span> <span class="n">Y_train</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">truth</span><span class="p">))</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 1s 601ms/step
-(1, 16, 128, 128, 1)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 26ms/step
+(1, 32, 128, 128, 1)
 </pre></div>
 </div>
-<img alt="../_images/0e0fb9c809bf8b95fcd1bfff0f47475ecd089b40037ba3181e571a8b76e95bc0.png" src="../_images/0e0fb9c809bf8b95fcd1bfff0f47475ecd089b40037ba3181e571a8b76e95bc0.png" />
-<img alt="../_images/6e9ef85f70fa655929ceff9676ea2cd0303c6ab2de0f1919814b58c8132bc5dd.png" src="../_images/6e9ef85f70fa655929ceff9676ea2cd0303c6ab2de0f1919814b58c8132bc5dd.png" />
+<img alt="../_images/1f9bd555f169f260ceb79eec38abc39b006b98c79005e91339d55f47cc930117.png" src="../_images/1f9bd555f169f260ceb79eec38abc39b006b98c79005e91339d55f47cc930117.png" />
+<img alt="../_images/371ecd62743975b05ab1d7142073216f3629f2fa63614b8c1fd1d507d2d2c7ec.png" src="../_images/371ecd62743975b05ab1d7142073216f3629f2fa63614b8c1fd1d507d2d2c7ec.png" />
+<img alt="../_images/033a3fedfc0ff814e2e0d2fe4401995cae0590c6309efcbbd4f58a08810d0ebb.png" src="../_images/033a3fedfc0ff814e2e0d2fe4401995cae0590c6309efcbbd4f58a08810d0ebb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -717,13 +739,13 @@ Epoch 5/5
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(86, 256, 256, 1) 0.0 1.0
--0.054212343 0.051616944
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(32, 128, 128, 1) 0.0 1.0
+-0.068902574 1.647787
 </pre></div>
 </div>
-<img alt="../_images/517450af813e1fd915ef870deb94100b1f5fda42557bd8ea4b41eb4451cd890e.png" src="../_images/517450af813e1fd915ef870deb94100b1f5fda42557bd8ea4b41eb4451cd890e.png" />
-<img alt="../_images/ecb437232b79475374835260703f1beb20fc57ad676d6a043feabd28c5c808c6.png" src="../_images/ecb437232b79475374835260703f1beb20fc57ad676d6a043feabd28c5c808c6.png" />
-<img alt="../_images/ce2a08d93ff273c2437241831f89a3f5df964b9a5839a268bdaee1d25287fa9e.png" src="../_images/ce2a08d93ff273c2437241831f89a3f5df964b9a5839a268bdaee1d25287fa9e.png" />
+<img alt="../_images/371ecd62743975b05ab1d7142073216f3629f2fa63614b8c1fd1d507d2d2c7ec.png" src="../_images/371ecd62743975b05ab1d7142073216f3629f2fa63614b8c1fd1d507d2d2c7ec.png" />
+<img alt="../_images/1f9bd555f169f260ceb79eec38abc39b006b98c79005e91339d55f47cc930117.png" src="../_images/1f9bd555f169f260ceb79eec38abc39b006b98c79005e91339d55f47cc930117.png" />
+<img alt="../_images/033a3fedfc0ff814e2e0d2fe4401995cae0590c6309efcbbd4f58a08810d0ebb.png" src="../_images/033a3fedfc0ff814e2e0d2fe4401995cae0590c6309efcbbd4f58a08810d0ebb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -825,12 +847,12 @@ Epoch 5/5
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="10_Introduction.html"
+       href="17_training_data_cytopacq.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Module3: Deep Learning</p>
+        <p class="prev-next-title">Creating training data from cytopacq simulated nuclei images</p>
       </div>
     </a>
     <a class="right-next"
@@ -866,7 +888,7 @@ Epoch 5/5
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-corrupted-images-and-ground-truth-images">Load the corrupted images and ground truth images</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-and-compile-a-model-perform-training-and-save">Define and compile a model, perform training and save</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#try-with-more-epochs">Try with more epochs</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paste-example-result">Paste example result</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-example-result">Generate example result</a></li>
 </ul>
 </li>
 </ul>

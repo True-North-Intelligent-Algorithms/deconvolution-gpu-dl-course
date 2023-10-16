@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Deconvolution Systems Design" href="90_decon_systems_design.html" />
-    <link rel="prev" title="Nuclei Deconvolution and Segmentation" href="40_Nuclei_Deconvolution_Segmentation.html" />
+    <link rel="prev" title="Nuclei Deconvolution and Compare intensities to ground truth" href="30_Nuclei_Deconvolution_Compare_to_Truth.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -161,7 +161,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/18_Get_data.html">Get test data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
 
 
 
@@ -177,7 +179,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="20_cupy_forward.html">Forward modelling</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="40_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="90_decon_systems_design.html">Deconvolution Systems Design</a></li>
 
@@ -185,6 +187,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../30_deep_learning/10_Introduction.html">Module3: Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/15_training_data.html">Creating training data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/17_training_data_cytopacq.html">Creating training data from cytopacq simulated nuclei images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/20_restore_trivial.html">Train and restore with trivial conv net</a></li>
 
 
@@ -502,9 +506,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tnia available
-stackview available
-Loading ..\..\data\deconvolution\beads\SP8_175nm_LaurentBeads_Montage_left.tif
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading ..\..\data\deconvolution\beads\SP8_175nm_LaurentBeads_Montage_left.tif
 axial stretch 10
 </pre></div>
 </div>
@@ -581,7 +583,7 @@ axial stretch 10
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/afb62f266e81900fcb2e587d10cd462280a63ee2739c042ae064f71e6ce3b362.png" src="../_images/afb62f266e81900fcb2e587d10cd462280a63ee2739c042ae064f71e6ce3b362.png" />
+<img alt="../_images/d8407662d3e98bfa37b448083927362d5233fed4c7c90f0235edb1ce3a9e606f.png" src="../_images/d8407662d3e98bfa37b448083927362d5233fed4c7c90f0235edb1ce3a9e606f.png" />
 </div>
 </div>
 </section>
@@ -596,7 +598,7 @@ axial stretch 10
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8b79853e584fc2daec5a4057b524b28bac67aee1f3176f61c095152b8f073b0f.png" src="../_images/8b79853e584fc2daec5a4057b524b28bac67aee1f3176f61c095152b8f073b0f.png" />
+<img alt="../_images/ff4be85af2ab32b69bbfdb9caee92e309c6c159453a9c7cbef89df8a32d9ba06.png" src="../_images/ff4be85af2ab32b69bbfdb9caee92e309c6c159453a9c7cbef89df8a32d9ba06.png" />
 </div>
 </div>
 </section>
@@ -624,7 +626,7 @@ axial stretch 10
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6772e99e3898b5b343a0dd2581fcb1d9766b4f83c6f4eaba6912f2031d1dc27d.png" src="../_images/6772e99e3898b5b343a0dd2581fcb1d9766b4f83c6f4eaba6912f2031d1dc27d.png" />
+<img alt="../_images/dec14f9fe518dc5a3df35dfa3f0ee3d055a29a7e30ad1e5effe8014051b4468e.png" src="../_images/dec14f9fe518dc5a3df35dfa3f0ee3d055a29a7e30ad1e5effe8014051b4468e.png" />
 </div>
 </div>
 </section>
@@ -673,8 +675,8 @@ axial stretch 10
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;PSF intensity enhanced&#39;)
 </pre></div>
 </div>
-<img alt="../_images/5e37e071b2e08e96e12d406dd1e04db6297d184dea10bdd22f9b9d933e369f3a.png" src="../_images/5e37e071b2e08e96e12d406dd1e04db6297d184dea10bdd22f9b9d933e369f3a.png" />
-<img alt="../_images/718a19ba0dfb9301cfb342b5c2b840d909493763652e7213529d033ee8dff820.png" src="../_images/718a19ba0dfb9301cfb342b5c2b840d909493763652e7213529d033ee8dff820.png" />
+<img alt="../_images/5ef8e829a4f997a8b8449de5e14daa7a1b1ab300748ca384acb990d7b4ce3292.png" src="../_images/5ef8e829a4f997a8b8449de5e14daa7a1b1ab300748ca384acb990d7b4ce3292.png" />
+<img alt="../_images/0ad7b9f87164a17d63c053d712023f80d108e18ff4e0604522fbcaab44679d9f.png" src="../_images/0ad7b9f87164a17d63c053d712023f80d108e18ff4e0604522fbcaab44679d9f.png" />
 </div>
 </div>
 </section>
@@ -712,9 +714,9 @@ axial stretch 10
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;PSF background subtracted and normalized&#39;)
 </pre></div>
 </div>
-<img alt="../_images/16fb31ceb28d161ef55fa53072520092ee0ffbda90a1c945d661fab4b895dc7a.png" src="../_images/16fb31ceb28d161ef55fa53072520092ee0ffbda90a1c945d661fab4b895dc7a.png" />
-<img alt="../_images/dd350767481ea9a9aeb9698cd20ce7cb093ebd9398fb101b15426f7dd8f26370.png" src="../_images/dd350767481ea9a9aeb9698cd20ce7cb093ebd9398fb101b15426f7dd8f26370.png" />
-<img alt="../_images/fc221a5bfb94e9716b7b47abbe7c2f1b2bba190c500fc1f92b40b86de4c4cd90.png" src="../_images/fc221a5bfb94e9716b7b47abbe7c2f1b2bba190c500fc1f92b40b86de4c4cd90.png" />
+<img alt="../_images/d771a3be25e5212551707d9edcb5482bc30a3bd81ab8c17d0e91b7925a52a4c9.png" src="../_images/d771a3be25e5212551707d9edcb5482bc30a3bd81ab8c17d0e91b7925a52a4c9.png" />
+<img alt="../_images/e124dcc7b9445b07a70b6c97dd1141fa44f41ab9801f97243d58c1c492d60c50.png" src="../_images/e124dcc7b9445b07a70b6c97dd1141fa44f41ab9801f97243d58c1c492d60c50.png" />
+<img alt="../_images/469eb3bfa9651ec50e0cbbd54c5cadd52ccc715dc3760924ed3b9db802af8292.png" src="../_images/469eb3bfa9651ec50e0cbbd54c5cadd52ccc715dc3760924ed3b9db802af8292.png" />
 </div>
 </div>
 </section>
@@ -857,12 +859,12 @@ axial stretch 10
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="40_Nuclei_Deconvolution_Segmentation.html"
+       href="30_Nuclei_Deconvolution_Compare_to_Truth.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Nuclei Deconvolution and Segmentation</p>
+        <p class="prev-next-title">Nuclei Deconvolution and Compare intensities to ground truth</p>
       </div>
     </a>
     <a class="right-next"

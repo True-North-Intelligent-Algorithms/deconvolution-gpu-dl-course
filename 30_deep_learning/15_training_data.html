@@ -64,6 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '30_deep_learning/15_training_data';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Creating training data from cytopacq simulated nuclei images" href="17_training_data_cytopacq.html" />
+    <link rel="prev" title="Module3: Deep Learning" href="10_Introduction.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -155,11 +157,13 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploring the Intersection of Deconvolution, GPU Computing, and Deep Learning</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/18_Get_data.html">Get test data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
 
 
 
@@ -175,14 +179,16 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/40_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/30_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/80_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/90_decon_systems_design.html">Deconvolution Systems Design</a></li>
 
 
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="10_Introduction.html">Module3: Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="10_Introduction.html">Module3: Deep Learning</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Creating training data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_training_data_cytopacq.html">Creating training data from cytopacq simulated nuclei images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="20_restore_trivial.html">Train and restore with trivial conv net</a></li>
 
 
@@ -453,18 +459,18 @@ document.write(`
 <span class="kn">from</span> <span class="nn">tnia.deconvolution.forward</span> <span class="kn">import</span> <span class="n">forward</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="n">dl_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;../../models&#39;</span>
+<span class="n">data_path</span> <span class="o">=</span><span class="sa">r</span><span class="s1">&#39;../../data/deep learning training&#39;</span>
 
 <span class="c1"># can be big, small, or big_small</span>
-<span class="n">spheres</span> <span class="o">=</span> <span class="s1">&#39;big_small&#39;</span>
+<span class="n">spheres</span> <span class="o">=</span> <span class="s1">&#39;small&#39;</span>
 <span class="n">noise</span> <span class="o">=</span> <span class="s1">&#39;high&#39;</span>
 <span class="n">na</span> <span class="o">=</span> <span class="s1">&#39;high&#39;</span>
 
 <span class="n">set_name</span> <span class="o">=</span> <span class="s1">&#39;spheres_&#39;</span><span class="o">+</span><span class="n">spheres</span><span class="o">+</span><span class="s1">&#39;_noise_&#39;</span><span class="o">+</span><span class="n">noise</span><span class="o">+</span><span class="s1">&#39;_na_&#39;</span><span class="o">+</span><span class="n">na</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">set_name</span><span class="p">)</span>
 <span class="c1"># path to put training data</span>
-<span class="n">truth_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dl_path</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;ground truth0&#39;</span><span class="p">)</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dl_path</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;input0&#39;</span><span class="p">)</span>
+<span class="n">truth_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;ground truth0&#39;</span><span class="p">)</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;input0&#39;</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">truth_path</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">truth_path</span><span class="p">)</span>
@@ -474,7 +480,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>spheres_big_small_noise_high_na_high
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>spheres_small_noise_high_na_high
 </pre></div>
 </div>
 </div>
@@ -605,284 +611,282 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>high noise
-big and small spheres
-number_spheres_added 6
+small spheres
+number_spheres_added 38
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub0.tif is a low contrast image
-  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 10
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub1.tif is a low contrast image
-  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 17
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub2.tif is a low contrast image
-  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 25
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub3.tif is a low contrast image
-  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 35
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub4.tif is a low contrast image
-  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 41
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\users\bnort\work\imagej2022\tnia\tnia-python\tnia\plotting\projections.py:228: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
-  fig=plt.figure(figsize=figsize)
-C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub5.tif is a low contrast image
-  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 47
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub6.tif is a low contrast image
-  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 58
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub7.tif is a low contrast image
-  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 70
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub8.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub0.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 80
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub9.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub1.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 87
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 116
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub10.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub2.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 92
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 156
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub11.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub3.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 106
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 192
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub12.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub4.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 115
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 230
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub13.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub5.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 120
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 268
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub14.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub6.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 127
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 304
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub15.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub7.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 137
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 340
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub16.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub8.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 146
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 377
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub17.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub9.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 159
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 417
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub18.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub10.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 166
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 455
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub19.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub11.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 177
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 496
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub20.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub12.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 181
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 535
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub21.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub13.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 188
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 573
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub22.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub14.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 197
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 614
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub23.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub15.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 206
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 649
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning: ../../models\spheres_big_small_noise_high_na_high\train\input0\phantom_forward_sub24.tif is a low contrast image
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub16.tif is a low contrast image
   imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
 </pre></div>
 </div>
-<img alt="../_images/4daa0e73b7525dac9612dc08953f6720a71475169dcc58fd5974a87edca68624.png" src="../_images/4daa0e73b7525dac9612dc08953f6720a71475169dcc58fd5974a87edca68624.png" />
-<img alt="../_images/164bca481260b3f3be28c3ffd24c4f71e64df221b7c478820d30f3a775176cc2.png" src="../_images/164bca481260b3f3be28c3ffd24c4f71e64df221b7c478820d30f3a775176cc2.png" />
-<img alt="../_images/697ed4bbe63ee46058047810afa133f9da8d3b32d2da5a1a292fc80dfaeb3504.png" src="../_images/697ed4bbe63ee46058047810afa133f9da8d3b32d2da5a1a292fc80dfaeb3504.png" />
-<img alt="../_images/85f09de1bdbcdfef0685bff05cab87edd8f5a48346fd06f9f9ced3a3b349fc58.png" src="../_images/85f09de1bdbcdfef0685bff05cab87edd8f5a48346fd06f9f9ced3a3b349fc58.png" />
-<img alt="../_images/04101a1c815c8793ffc4b48ed8400f241dfcf8ce48e7105df02bcb4db22c036e.png" src="../_images/04101a1c815c8793ffc4b48ed8400f241dfcf8ce48e7105df02bcb4db22c036e.png" />
-<img alt="../_images/0f0a55359b7578eeb9a52fb18187d7d15f6e955382362051303da36429269f07.png" src="../_images/0f0a55359b7578eeb9a52fb18187d7d15f6e955382362051303da36429269f07.png" />
-<img alt="../_images/af6041195008cf5dbbed7ee7621c7d345f1cf0fabcdb2a9710e80f9c382b0e0e.png" src="../_images/af6041195008cf5dbbed7ee7621c7d345f1cf0fabcdb2a9710e80f9c382b0e0e.png" />
-<img alt="../_images/400e77bb2fcfd60164b919c041142f77c783d28e005bbc1ebdfa9946fa6dfb41.png" src="../_images/400e77bb2fcfd60164b919c041142f77c783d28e005bbc1ebdfa9946fa6dfb41.png" />
-<img alt="../_images/00ec8957e81efc70045b5bbf0f039e335105872154451a738fc9c98ffe4884cf.png" src="../_images/00ec8957e81efc70045b5bbf0f039e335105872154451a738fc9c98ffe4884cf.png" />
-<img alt="../_images/cbe1d8a694e85c35a23a596d432095b3d73d4a4d4dfc09742f992fbd53c56a13.png" src="../_images/cbe1d8a694e85c35a23a596d432095b3d73d4a4d4dfc09742f992fbd53c56a13.png" />
-<img alt="../_images/a3612ea200f65775e30b5d64918000e29b0fa86fdd5a7b5056d787b3d2cb793f.png" src="../_images/a3612ea200f65775e30b5d64918000e29b0fa86fdd5a7b5056d787b3d2cb793f.png" />
-<img alt="../_images/86a28f5a6388ff62097e300d72898134e5c55372d00e975a8ecc49ba0decb772.png" src="../_images/86a28f5a6388ff62097e300d72898134e5c55372d00e975a8ecc49ba0decb772.png" />
-<img alt="../_images/d34f56388b5b4b97b5087b1e00bcad6a98329a3fe345faa81505dd8658ef3a25.png" src="../_images/d34f56388b5b4b97b5087b1e00bcad6a98329a3fe345faa81505dd8658ef3a25.png" />
-<img alt="../_images/a28e6d114951bf9fa272e277ad32b1934dde8586108d2bd3ce362fd9fa30ad9a.png" src="../_images/a28e6d114951bf9fa272e277ad32b1934dde8586108d2bd3ce362fd9fa30ad9a.png" />
-<img alt="../_images/a5d76b7f59a281bec56ca5e09bea822a6301832eeec1a53449dda80f2a67d2e1.png" src="../_images/a5d76b7f59a281bec56ca5e09bea822a6301832eeec1a53449dda80f2a67d2e1.png" />
-<img alt="../_images/2100dc5cf7399892738fe0cbb3237f709159215dc804f986b7161c3d703a20e1.png" src="../_images/2100dc5cf7399892738fe0cbb3237f709159215dc804f986b7161c3d703a20e1.png" />
-<img alt="../_images/a71ebdfab8df707a4c9d7d96402479e8c27a2509ae154d66aea9f99bb427d94d.png" src="../_images/a71ebdfab8df707a4c9d7d96402479e8c27a2509ae154d66aea9f99bb427d94d.png" />
-<img alt="../_images/40e68195f4bdebee13cae8082ccd2d0ff4ef1d3dd8ec26d4213547675e15c381.png" src="../_images/40e68195f4bdebee13cae8082ccd2d0ff4ef1d3dd8ec26d4213547675e15c381.png" />
-<img alt="../_images/242a963c3a47e1d6c64dc551e3481d542dfd03fea4965e0f27a473e387a0f886.png" src="../_images/242a963c3a47e1d6c64dc551e3481d542dfd03fea4965e0f27a473e387a0f886.png" />
-<img alt="../_images/0b375cd47e3ffbc7c600ab49d03c951d6a3dda4ed55bc8dae8cad60b6243d786.png" src="../_images/0b375cd47e3ffbc7c600ab49d03c951d6a3dda4ed55bc8dae8cad60b6243d786.png" />
-<img alt="../_images/7526fc29ef75ad42f2a80ccf51b4d6d401b944be44b4abacc039f0478f267d51.png" src="../_images/7526fc29ef75ad42f2a80ccf51b4d6d401b944be44b4abacc039f0478f267d51.png" />
-<img alt="../_images/74e514b8a6cf5c9e257be254326855beffa5f8d427c93ba533a9e26bbb6adcda.png" src="../_images/74e514b8a6cf5c9e257be254326855beffa5f8d427c93ba533a9e26bbb6adcda.png" />
-<img alt="../_images/7b79351eb800e2f6418de6aef3c7a8e69e594bd25b8fdfc5627c979a161aaaf7.png" src="../_images/7b79351eb800e2f6418de6aef3c7a8e69e594bd25b8fdfc5627c979a161aaaf7.png" />
-<img alt="../_images/79e24f45eb97f0969f30db6ac04a2d9cdf9e3a7729ca6c8a16a8e10b486ed756.png" src="../_images/79e24f45eb97f0969f30db6ac04a2d9cdf9e3a7729ca6c8a16a8e10b486ed756.png" />
-<img alt="../_images/eb5ddceef20703aae8d00ab3d9d773563575746d8dd6b397e095eac748532558.png" src="../_images/eb5ddceef20703aae8d00ab3d9d773563575746d8dd6b397e095eac748532558.png" />
-<img alt="../_images/2af8ec6c1de9189f96512a157284c27f5a01cba86510354073c71ce50bc086aa.png" src="../_images/2af8ec6c1de9189f96512a157284c27f5a01cba86510354073c71ce50bc086aa.png" />
-<img alt="../_images/7bec57c2b2aeaf09484e2cf46661b820c8546dd96b1f228a977706e0b847baa7.png" src="../_images/7bec57c2b2aeaf09484e2cf46661b820c8546dd96b1f228a977706e0b847baa7.png" />
-<img alt="../_images/119510e029d3d30673e2e200a1054d0932dd6a6ae9ff04fc6266a04e8ae85485.png" src="../_images/119510e029d3d30673e2e200a1054d0932dd6a6ae9ff04fc6266a04e8ae85485.png" />
-<img alt="../_images/695b2d6b41b66b6bf094722b69369e60be7e485e5e9a32ae1f33c22a7688931c.png" src="../_images/695b2d6b41b66b6bf094722b69369e60be7e485e5e9a32ae1f33c22a7688931c.png" />
-<img alt="../_images/0e8fc650cf6efd51050a9a8720b5b7449b015f52b475bda05f49c72b93360d69.png" src="../_images/0e8fc650cf6efd51050a9a8720b5b7449b015f52b475bda05f49c72b93360d69.png" />
-<img alt="../_images/5873044ddbe1a0dedada09d08366ebb119f75c7a02b8391deab726d600e2f997.png" src="../_images/5873044ddbe1a0dedada09d08366ebb119f75c7a02b8391deab726d600e2f997.png" />
-<img alt="../_images/1117d27a4492ed48c853521c4efb4837910671e5ff14a66ea48592d73be9031a.png" src="../_images/1117d27a4492ed48c853521c4efb4837910671e5ff14a66ea48592d73be9031a.png" />
-<img alt="../_images/2f49ca80da63f0f2cfde0a9ffe2c37b8f8e7fb765a3bbae200bbb5dadd200f5e.png" src="../_images/2f49ca80da63f0f2cfde0a9ffe2c37b8f8e7fb765a3bbae200bbb5dadd200f5e.png" />
-<img alt="../_images/5a6d66dfc66856e1e96e91bed8580f493134e09146ddce1ace8a4b106226771c.png" src="../_images/5a6d66dfc66856e1e96e91bed8580f493134e09146ddce1ace8a4b106226771c.png" />
-<img alt="../_images/20cd78521d715b91a9f41b4cd7efc23daf9a194f618c4d44b1a963b1695de201.png" src="../_images/20cd78521d715b91a9f41b4cd7efc23daf9a194f618c4d44b1a963b1695de201.png" />
-<img alt="../_images/d1d97f646daca23c1617ba0a5ea9e5d4ac9af821a0619a011f432fb15ad2391a.png" src="../_images/d1d97f646daca23c1617ba0a5ea9e5d4ac9af821a0619a011f432fb15ad2391a.png" />
-<img alt="../_images/1a7f169a2a1f43e487d770899b9032627419927c301da402933257e9f6ba98e7.png" src="../_images/1a7f169a2a1f43e487d770899b9032627419927c301da402933257e9f6ba98e7.png" />
-<img alt="../_images/9f11c8896581cd686654974dc0ace90567d5e33abf3acf225d88a8e7be9d8245.png" src="../_images/9f11c8896581cd686654974dc0ace90567d5e33abf3acf225d88a8e7be9d8245.png" />
-<img alt="../_images/911781fa06ef56fb6db4a1b7ce3e8c4330c06d74b671330babc25c9972b3b65d.png" src="../_images/911781fa06ef56fb6db4a1b7ce3e8c4330c06d74b671330babc25c9972b3b65d.png" />
-<img alt="../_images/e71a45add11d22b205df59735bba681ac943ea6bb1e9a450669dfc4148abbedb.png" src="../_images/e71a45add11d22b205df59735bba681ac943ea6bb1e9a450669dfc4148abbedb.png" />
-<img alt="../_images/7169baea76985fdab167ca6169e6011f711e396411817087bad0f7329c94096e.png" src="../_images/7169baea76985fdab167ca6169e6011f711e396411817087bad0f7329c94096e.png" />
-<img alt="../_images/1eb8de1c70b43344c8c1290c1d78c93fbca065384ce11e315d64b37bef19341d.png" src="../_images/1eb8de1c70b43344c8c1290c1d78c93fbca065384ce11e315d64b37bef19341d.png" />
-<img alt="../_images/fc10126dd8b027895fb0128cf7042b7efa5c656f517626f577aac10e2434dd41.png" src="../_images/fc10126dd8b027895fb0128cf7042b7efa5c656f517626f577aac10e2434dd41.png" />
-<img alt="../_images/a9fbe640011edec89b3ae7bc96beba380f90fedeed8685968991274dc8b02b51.png" src="../_images/a9fbe640011edec89b3ae7bc96beba380f90fedeed8685968991274dc8b02b51.png" />
-<img alt="../_images/6174becde2c16457fe9b891437a9d469ec43575b5b37e821f17b92f84347e432.png" src="../_images/6174becde2c16457fe9b891437a9d469ec43575b5b37e821f17b92f84347e432.png" />
-<img alt="../_images/cd1ddd660d874295c74be451f93d0673a578122cd4bb871daea6086060ab90de.png" src="../_images/cd1ddd660d874295c74be451f93d0673a578122cd4bb871daea6086060ab90de.png" />
-<img alt="../_images/15f4ee0dd395bdf202c749dbc3acf345388bff90af1efa8f436d17b4a24b1d1a.png" src="../_images/15f4ee0dd395bdf202c749dbc3acf345388bff90af1efa8f436d17b4a24b1d1a.png" />
-<img alt="../_images/ec4912065caec3b2494936ca0dd0459bc2ce892273ec210e4d5910e3afeab4fd.png" src="../_images/ec4912065caec3b2494936ca0dd0459bc2ce892273ec210e4d5910e3afeab4fd.png" />
-<img alt="../_images/e4924d8fb66f550992e9bb8fe29dc4f13dcf296e3d22f0173668eabc40f87ae3.png" src="../_images/e4924d8fb66f550992e9bb8fe29dc4f13dcf296e3d22f0173668eabc40f87ae3.png" />
-<img alt="../_images/3f8ad02d48bee5249009ac1cc8732eda7e1946055bf799d25b92b38b63204be7.png" src="../_images/3f8ad02d48bee5249009ac1cc8732eda7e1946055bf799d25b92b38b63204be7.png" />
-<img alt="../_images/d16f70c5b02ef003be763e631241cdd2635e2217d630362e5711dfea16648716.png" src="../_images/d16f70c5b02ef003be763e631241cdd2635e2217d630362e5711dfea16648716.png" />
-<img alt="../_images/29a76f65daf595fdedd663aba153be5544e835b63dad84f24c58113e79c6b6c1.png" src="../_images/29a76f65daf595fdedd663aba153be5544e835b63dad84f24c58113e79c6b6c1.png" />
-<img alt="../_images/43f8fbb68a78b60d7c5f835ab2bc235b3926f38b3ada41951d377c862ce191be.png" src="../_images/43f8fbb68a78b60d7c5f835ab2bc235b3926f38b3ada41951d377c862ce191be.png" />
-<img alt="../_images/c953cfbad1fec07ed3b7d88ede5af6f500c6ce8c1f7942d45613dc5c7dc8c32e.png" src="../_images/c953cfbad1fec07ed3b7d88ede5af6f500c6ce8c1f7942d45613dc5c7dc8c32e.png" />
-<img alt="../_images/ad9f6a875c93e1882e44569d1420b26107790706032148fe4cc44f64065533bd.png" src="../_images/ad9f6a875c93e1882e44569d1420b26107790706032148fe4cc44f64065533bd.png" />
-<img alt="../_images/06e09341ec4eb42761321cf2e6a9d29234b416867fd82abf9e61e989d11bd04c.png" src="../_images/06e09341ec4eb42761321cf2e6a9d29234b416867fd82abf9e61e989d11bd04c.png" />
-<img alt="../_images/239c81defd7ec55811f6a8a551c786acc1456a817036e0320d6c1f237caae385.png" src="../_images/239c81defd7ec55811f6a8a551c786acc1456a817036e0320d6c1f237caae385.png" />
-<img alt="../_images/98abf15ae577f4f73237df1b2b70ef8a20bedc00457095cd0dc2c3390d5e27ee.png" src="../_images/98abf15ae577f4f73237df1b2b70ef8a20bedc00457095cd0dc2c3390d5e27ee.png" />
-<img alt="../_images/1a33c549c2572e08665fbd6ecbe43a8a31af4de2a44009420c9cb4c7cc7c3430.png" src="../_images/1a33c549c2572e08665fbd6ecbe43a8a31af4de2a44009420c9cb4c7cc7c3430.png" />
-<img alt="../_images/aa09fdde478423f177fc06ad394a904a831504d7eea8486e2b357f9d09612eac.png" src="../_images/aa09fdde478423f177fc06ad394a904a831504d7eea8486e2b357f9d09612eac.png" />
-<img alt="../_images/2c09e0f359e1374f639965fcc8c12839d6bcc4eed9b233b07ec3d2f02fa63d8d.png" src="../_images/2c09e0f359e1374f639965fcc8c12839d6bcc4eed9b233b07ec3d2f02fa63d8d.png" />
-<img alt="../_images/bf79872909475003ded61ddaf71aae38d104918dc98ac4716f5615cf36d4f5ce.png" src="../_images/bf79872909475003ded61ddaf71aae38d104918dc98ac4716f5615cf36d4f5ce.png" />
-<img alt="../_images/f1c70ea0e9ed782eca2964106ed340748a60ff0f153d39ae3040b6ad589a5f86.png" src="../_images/f1c70ea0e9ed782eca2964106ed340748a60ff0f153d39ae3040b6ad589a5f86.png" />
-<img alt="../_images/1023f810e98005f14ed0cd0ac75634604deed1cf1acfa79ab58b34367bf33ab9.png" src="../_images/1023f810e98005f14ed0cd0ac75634604deed1cf1acfa79ab58b34367bf33ab9.png" />
-<img alt="../_images/a390e389e70260c0d2426acd2ddc0a55673f1811a791855772038331a1513409.png" src="../_images/a390e389e70260c0d2426acd2ddc0a55673f1811a791855772038331a1513409.png" />
-<img alt="../_images/7e2354095ca657ef941a246183869a03e11c32f4a9da4346daab9cdae988f1b5.png" src="../_images/7e2354095ca657ef941a246183869a03e11c32f4a9da4346daab9cdae988f1b5.png" />
-<img alt="../_images/48c171dd2f6d8a7958616baa4ec5f98919597daaa11788f6e3a3811f3bb37482.png" src="../_images/48c171dd2f6d8a7958616baa4ec5f98919597daaa11788f6e3a3811f3bb37482.png" />
-<img alt="../_images/cdc02694a5b1f687049e646797fc006f21baa161f5eabc6f5a19f49c2cd0bbea.png" src="../_images/cdc02694a5b1f687049e646797fc006f21baa161f5eabc6f5a19f49c2cd0bbea.png" />
-<img alt="../_images/4d7682a1120e6ee4bcc6c5577ab07ec9262611a0300d420c5dcfca6413348e7b.png" src="../_images/4d7682a1120e6ee4bcc6c5577ab07ec9262611a0300d420c5dcfca6413348e7b.png" />
-<img alt="../_images/b9c5e3b0b15974390cfafd48fc191668238abb49e600b6ae5346dd0ccd5a4322.png" src="../_images/b9c5e3b0b15974390cfafd48fc191668238abb49e600b6ae5346dd0ccd5a4322.png" />
-<img alt="../_images/40d22c6f31b87d568130dd5d1a2bc766f8a6f382ff5dff96d779aab7fa008346.png" src="../_images/40d22c6f31b87d568130dd5d1a2bc766f8a6f382ff5dff96d779aab7fa008346.png" />
-<img alt="../_images/fe343bdd5002d18571f458d90f6ab4fb942d7491c08de9680df7834bc1eba020.png" src="../_images/fe343bdd5002d18571f458d90f6ab4fb942d7491c08de9680df7834bc1eba020.png" />
-<img alt="../_images/da9f8c4d0cb86dda013863c0c07a9eab91b231498e0e9b6458e0feed552d4e75.png" src="../_images/da9f8c4d0cb86dda013863c0c07a9eab91b231498e0e9b6458e0feed552d4e75.png" />
-<img alt="../_images/d307839d41769150c5fd8bd2b25aef84964332715c5c37cbd4d9bcdd28d2d10a.png" src="../_images/d307839d41769150c5fd8bd2b25aef84964332715c5c37cbd4d9bcdd28d2d10a.png" />
-<img alt="../_images/5e1a1fe6c6434b8497111b5782f84fd5c6b9d07022dcecc2789ef4cd67fc920d.png" src="../_images/5e1a1fe6c6434b8497111b5782f84fd5c6b9d07022dcecc2789ef4cd67fc920d.png" />
-<img alt="../_images/e695e2a394f6fde76424d51cf26ef1afdbd230bc6ae50d538512652825912026.png" src="../_images/e695e2a394f6fde76424d51cf26ef1afdbd230bc6ae50d538512652825912026.png" />
-<img alt="../_images/ed330b726446d8d50b7a546f01f636135cc6b0147a2771771684871e67ffc40d.png" src="../_images/ed330b726446d8d50b7a546f01f636135cc6b0147a2771771684871e67ffc40d.png" />
-<img alt="../_images/b478d5f356b24801809ec9f4abd1dc05ebe0eb3a39ff01f7d299dc761e2a2913.png" src="../_images/b478d5f356b24801809ec9f4abd1dc05ebe0eb3a39ff01f7d299dc761e2a2913.png" />
-<img alt="../_images/5ce9784c784a9031dc3187d39f954088de790a2518c78c3b04f6e7c8d5a340f3.png" src="../_images/5ce9784c784a9031dc3187d39f954088de790a2518c78c3b04f6e7c8d5a340f3.png" />
-<img alt="../_images/5c6f06fe473accb96cd4c5ff8b79fedc65f6e805de0000c4a448d32e46304c59.png" src="../_images/5c6f06fe473accb96cd4c5ff8b79fedc65f6e805de0000c4a448d32e46304c59.png" />
-<img alt="../_images/417476f7d1e22e39b99c5ef46635ace12f7ffd51f8201cd172cd19dfa01767da.png" src="../_images/417476f7d1e22e39b99c5ef46635ace12f7ffd51f8201cd172cd19dfa01767da.png" />
-<img alt="../_images/968f64decb91bfe024f0eb5d2c032c17951a694202207f3e460e8d5261a6bb4a.png" src="../_images/968f64decb91bfe024f0eb5d2c032c17951a694202207f3e460e8d5261a6bb4a.png" />
-<img alt="../_images/f6c83cc71bd4e13c73137e21da426d4239335cb4841028a0f2a1556c74612fa7.png" src="../_images/f6c83cc71bd4e13c73137e21da426d4239335cb4841028a0f2a1556c74612fa7.png" />
-<img alt="../_images/0569fc4db0d2366d2fcfd109c6db46885b295c403008778450a52dfcaa4adbdc.png" src="../_images/0569fc4db0d2366d2fcfd109c6db46885b295c403008778450a52dfcaa4adbdc.png" />
-<img alt="../_images/ad763303f5e37730287a51c66679723cd8019e9bb45f4ed07c78235c8375663c.png" src="../_images/ad763303f5e37730287a51c66679723cd8019e9bb45f4ed07c78235c8375663c.png" />
-<img alt="../_images/b8355c264a97967feede72a1f4e37ea7fba9852fcc30286cea40e8ee455b1d1e.png" src="../_images/b8355c264a97967feede72a1f4e37ea7fba9852fcc30286cea40e8ee455b1d1e.png" />
-<img alt="../_images/96b4bcc16906ec891c6f849e53c0a87578c1c570fb408236387b46e044a856cb.png" src="../_images/96b4bcc16906ec891c6f849e53c0a87578c1c570fb408236387b46e044a856cb.png" />
-<img alt="../_images/d7eb1c2b452a15d83d17007f4d42ce40cbde1f5590867939187eed5a812b0075.png" src="../_images/d7eb1c2b452a15d83d17007f4d42ce40cbde1f5590867939187eed5a812b0075.png" />
-<img alt="../_images/038820b4e5c2b102d7e948e09f42e0c0dcd2789921d08eceec2de40d46ac67e4.png" src="../_images/038820b4e5c2b102d7e948e09f42e0c0dcd2789921d08eceec2de40d46ac67e4.png" />
-<img alt="../_images/cccb123da693f30458715d109732eee8915de9cf1d91b49086ba0aeb800e88c7.png" src="../_images/cccb123da693f30458715d109732eee8915de9cf1d91b49086ba0aeb800e88c7.png" />
-<img alt="../_images/53ba5fa8f34db536a385f124df4ef29610226b0bdfcf7320fc29b4b136a3d066.png" src="../_images/53ba5fa8f34db536a385f124df4ef29610226b0bdfcf7320fc29b4b136a3d066.png" />
-<img alt="../_images/88c3221577b9fd79afcd62b01491399349f7ca74e5597fb0b0592f5af58b60f5.png" src="../_images/88c3221577b9fd79afcd62b01491399349f7ca74e5597fb0b0592f5af58b60f5.png" />
-<img alt="../_images/b3dcd9320dcf297aebc2b733183c2bfeb6cc1422dc0d91320ddd319a7bd757b0.png" src="../_images/b3dcd9320dcf297aebc2b733183c2bfeb6cc1422dc0d91320ddd319a7bd757b0.png" />
-<img alt="../_images/65c8aa86d1aba49cfbf38908066ae6d873019fa3e009fb027c6943405baccedd.png" src="../_images/65c8aa86d1aba49cfbf38908066ae6d873019fa3e009fb027c6943405baccedd.png" />
-<img alt="../_images/2f60f76c296a35034584880bded64ffc29fb53f907ce0160f3478af45e828e97.png" src="../_images/2f60f76c296a35034584880bded64ffc29fb53f907ce0160f3478af45e828e97.png" />
-<img alt="../_images/31be33c7945b993ee9fcf435c8feb2686ca2a1198fd715e8f2f869734d01a698.png" src="../_images/31be33c7945b993ee9fcf435c8feb2686ca2a1198fd715e8f2f869734d01a698.png" />
-<img alt="../_images/a3843c660acee259d84984e9abd90c1ab79c299b3d2d7e0cfbb80bdbc39b51e7.png" src="../_images/a3843c660acee259d84984e9abd90c1ab79c299b3d2d7e0cfbb80bdbc39b51e7.png" />
-<img alt="../_images/973a79ff9e3fa68ac589c06dcf29018719907768522a745dd613cda47a8d6044.png" src="../_images/973a79ff9e3fa68ac589c06dcf29018719907768522a745dd613cda47a8d6044.png" />
-<img alt="../_images/3544308467a3d7a62b6aef33ed8d842308e2688adf7c0779647576b8ad92a8ec.png" src="../_images/3544308467a3d7a62b6aef33ed8d842308e2688adf7c0779647576b8ad92a8ec.png" />
-<img alt="../_images/23738cbdfad52d521307593c595b0af158201a2d9ad852ef65f42306c26bb9cb.png" src="../_images/23738cbdfad52d521307593c595b0af158201a2d9ad852ef65f42306c26bb9cb.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 683
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub17.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 718
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub18.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 753
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub19.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 792
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub20.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 831
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub21.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 871
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub22.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 913
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub23.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number_spheres_added 951
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_22460\1293624203.py:66: UserWarning: ../../data/deep learning training\spheres_small_noise_high_na_high\train\input0\phantom_forward_sub24.tif is a low contrast image
+  imsave(image_path + &#39;\phantom_forward_sub&#39;+str(n)+&#39;.tif&#39;, phantom_forward_sub)
+</pre></div>
+</div>
+<img alt="../_images/b473b11b7060a4e0a0ebd48305452b505c2bfffd84bff5f51a71f7f8add561e8.png" src="../_images/b473b11b7060a4e0a0ebd48305452b505c2bfffd84bff5f51a71f7f8add561e8.png" />
+<img alt="../_images/a6e7c9eff26f50653be04522d71984a44834d6a8247f1a5a89df7981d612fae6.png" src="../_images/a6e7c9eff26f50653be04522d71984a44834d6a8247f1a5a89df7981d612fae6.png" />
+<img alt="../_images/630cb7ebcd909acc09d99a4f632f64201c2ec581000dd18357635977206b5cb8.png" src="../_images/630cb7ebcd909acc09d99a4f632f64201c2ec581000dd18357635977206b5cb8.png" />
+<img alt="../_images/3a6404d817a204eb44545f7f1950c40a641a416e0dcb2a510152199aee74f3f9.png" src="../_images/3a6404d817a204eb44545f7f1950c40a641a416e0dcb2a510152199aee74f3f9.png" />
+<img alt="../_images/98e0c145712d19c7dd6ad02858df7bb0060c2eb150b1f3e72753545381abe497.png" src="../_images/98e0c145712d19c7dd6ad02858df7bb0060c2eb150b1f3e72753545381abe497.png" />
+<img alt="../_images/1cff26710279aff091f126102ffe14f7657121ac03183edaeba943b95b2449bf.png" src="../_images/1cff26710279aff091f126102ffe14f7657121ac03183edaeba943b95b2449bf.png" />
+<img alt="../_images/7e136ee97b46e08dbe678ec80f5bbea13425f933b53923641ca219fd329df7a8.png" src="../_images/7e136ee97b46e08dbe678ec80f5bbea13425f933b53923641ca219fd329df7a8.png" />
+<img alt="../_images/25a1dacc65f75995a1b62a01cc328ea10e5f27f18af4b1fbb3130ea86bba7a0c.png" src="../_images/25a1dacc65f75995a1b62a01cc328ea10e5f27f18af4b1fbb3130ea86bba7a0c.png" />
+<img alt="../_images/0bab977c1d9a19014aec44a594ef2b5358a3005ceaa13b0a5bb4642b58339ed7.png" src="../_images/0bab977c1d9a19014aec44a594ef2b5358a3005ceaa13b0a5bb4642b58339ed7.png" />
+<img alt="../_images/684a3db03eaf747c363409dddec6aff1662e49cc579045fb97f9f784526104a7.png" src="../_images/684a3db03eaf747c363409dddec6aff1662e49cc579045fb97f9f784526104a7.png" />
+<img alt="../_images/0a54dc7254fedaaf4b18e9d5e827f02d3a33de90218ae1f6373adfcec5cc6512.png" src="../_images/0a54dc7254fedaaf4b18e9d5e827f02d3a33de90218ae1f6373adfcec5cc6512.png" />
+<img alt="../_images/3fbf6d07a8853259f7767e3b6820d8fd22eef401d60a61f2c7103a5fca4642fa.png" src="../_images/3fbf6d07a8853259f7767e3b6820d8fd22eef401d60a61f2c7103a5fca4642fa.png" />
+<img alt="../_images/e8b8b3ed7dcaa198f2cba55b2d9e51aac1f7211d81a0717daac7f8c28c238136.png" src="../_images/e8b8b3ed7dcaa198f2cba55b2d9e51aac1f7211d81a0717daac7f8c28c238136.png" />
+<img alt="../_images/93a622362319e4b35ce8fd49f112cb09e1975522e95de1a781d850ee5b92db9a.png" src="../_images/93a622362319e4b35ce8fd49f112cb09e1975522e95de1a781d850ee5b92db9a.png" />
+<img alt="../_images/2e8dfe5eba473ca0317746bb16c4af721fc0af49d66e966bd83e3f74c220bd95.png" src="../_images/2e8dfe5eba473ca0317746bb16c4af721fc0af49d66e966bd83e3f74c220bd95.png" />
+<img alt="../_images/1b3486e46a14c2e231e6416016ec16b2c7706ecfebcf5d57b1c1c628616d76b8.png" src="../_images/1b3486e46a14c2e231e6416016ec16b2c7706ecfebcf5d57b1c1c628616d76b8.png" />
+<img alt="../_images/0b69200ac3d61211242355dc8a65dacc7bac13b079026ea621653e890eeaff21.png" src="../_images/0b69200ac3d61211242355dc8a65dacc7bac13b079026ea621653e890eeaff21.png" />
+<img alt="../_images/d2938a0c13525520e30c2e9116fc68d663bca8cf1e88eddf57e210feef5d5e66.png" src="../_images/d2938a0c13525520e30c2e9116fc68d663bca8cf1e88eddf57e210feef5d5e66.png" />
+<img alt="../_images/30a94ad5061b6896c5cbd61ac57f3a8bb5d30a95e7c7d7a296f306d23fb2ea1e.png" src="../_images/30a94ad5061b6896c5cbd61ac57f3a8bb5d30a95e7c7d7a296f306d23fb2ea1e.png" />
+<img alt="../_images/f046b078f3fc9ce9526816cf8685b13e7adf5d1c7f7d0df121e6ac4793af1b71.png" src="../_images/f046b078f3fc9ce9526816cf8685b13e7adf5d1c7f7d0df121e6ac4793af1b71.png" />
+<img alt="../_images/95d774ee2ecae67c6173b0b48efb0b2af3e2f547f73c1a4ae19c05d453699e09.png" src="../_images/95d774ee2ecae67c6173b0b48efb0b2af3e2f547f73c1a4ae19c05d453699e09.png" />
+<img alt="../_images/580488e429f2a98c5fdac7ab217368ff57f8d758b1fe1ff49dfa1c6e46e77c39.png" src="../_images/580488e429f2a98c5fdac7ab217368ff57f8d758b1fe1ff49dfa1c6e46e77c39.png" />
+<img alt="../_images/97d7dd9e89c854d31be8bec6fdd65976b1b8da9162108cbf4022717223c4f7a8.png" src="../_images/97d7dd9e89c854d31be8bec6fdd65976b1b8da9162108cbf4022717223c4f7a8.png" />
+<img alt="../_images/c6179e2a5a25abd2d2a8e0453cbbae6de594c201fb63821ffe79c37a9df9b270.png" src="../_images/c6179e2a5a25abd2d2a8e0453cbbae6de594c201fb63821ffe79c37a9df9b270.png" />
+<img alt="../_images/4807e76cbc9a99ad27a79ba068c1e37643a944b1be34d441ea57dd9a11ee9822.png" src="../_images/4807e76cbc9a99ad27a79ba068c1e37643a944b1be34d441ea57dd9a11ee9822.png" />
+<img alt="../_images/b1ed34f4b7e886603da2d7359cc72a02bfbda3a17fc9b6141143f1ea0d7aab01.png" src="../_images/b1ed34f4b7e886603da2d7359cc72a02bfbda3a17fc9b6141143f1ea0d7aab01.png" />
+<img alt="../_images/47ba249dac2ac65be7d0e12fb1e00f4db2008e28bdd36790b1e20153549f82aa.png" src="../_images/47ba249dac2ac65be7d0e12fb1e00f4db2008e28bdd36790b1e20153549f82aa.png" />
+<img alt="../_images/b4faaffa8902808447dcd8514c20e9136bb1d791514402938a7f91d75e99494b.png" src="../_images/b4faaffa8902808447dcd8514c20e9136bb1d791514402938a7f91d75e99494b.png" />
+<img alt="../_images/8d38713eec46905ab5e001d78813bb1ea96a1b4efa58b726adb5b88f322f8fc5.png" src="../_images/8d38713eec46905ab5e001d78813bb1ea96a1b4efa58b726adb5b88f322f8fc5.png" />
+<img alt="../_images/bd3ea62d2904006c66982a2cdb3bea17a0012db5de42211d079245f9ae240006.png" src="../_images/bd3ea62d2904006c66982a2cdb3bea17a0012db5de42211d079245f9ae240006.png" />
+<img alt="../_images/c4a7d98c54ff4201a12e5724a5fbf8ade29dbd492e3204d09ce259027c1fc190.png" src="../_images/c4a7d98c54ff4201a12e5724a5fbf8ade29dbd492e3204d09ce259027c1fc190.png" />
+<img alt="../_images/7d266687a492a11d9a5fbc901136d4b47efc02ff222b6409bed422b96b722858.png" src="../_images/7d266687a492a11d9a5fbc901136d4b47efc02ff222b6409bed422b96b722858.png" />
+<img alt="../_images/f682ef01ddc85c59fde24622095768508bca7831f98719875a0b305d8617253e.png" src="../_images/f682ef01ddc85c59fde24622095768508bca7831f98719875a0b305d8617253e.png" />
+<img alt="../_images/392bd413a8a09c994ac39f8f77e15c8d1d2dbcbfb337b9f18850e6209661fd93.png" src="../_images/392bd413a8a09c994ac39f8f77e15c8d1d2dbcbfb337b9f18850e6209661fd93.png" />
+<img alt="../_images/92bd45136382a3546373251c5e650e7403a61c349a725b04994ce291514a81c7.png" src="../_images/92bd45136382a3546373251c5e650e7403a61c349a725b04994ce291514a81c7.png" />
+<img alt="../_images/0d5e2b71677aae44f69432fb5c91f745ea2573402fc78d193712fe4a0f76b4e8.png" src="../_images/0d5e2b71677aae44f69432fb5c91f745ea2573402fc78d193712fe4a0f76b4e8.png" />
+<img alt="../_images/7eb5d8ac918bcbbe14e28195dd03e48f11a0d86ff9a896dcfcab6e8cd6c56dc2.png" src="../_images/7eb5d8ac918bcbbe14e28195dd03e48f11a0d86ff9a896dcfcab6e8cd6c56dc2.png" />
+<img alt="../_images/2a59994269bf1d486a3edc9d3a1d853a6890206418dec654a7b081577d11cf35.png" src="../_images/2a59994269bf1d486a3edc9d3a1d853a6890206418dec654a7b081577d11cf35.png" />
+<img alt="../_images/5deee033094d1a17b69604923076db00d00bb1fa90d0a7220e9fb46f9de51f0a.png" src="../_images/5deee033094d1a17b69604923076db00d00bb1fa90d0a7220e9fb46f9de51f0a.png" />
+<img alt="../_images/30869ab73f507d28c9ff69b397d3b8abf185496437722497465cd67a3341755b.png" src="../_images/30869ab73f507d28c9ff69b397d3b8abf185496437722497465cd67a3341755b.png" />
+<img alt="../_images/b594a9d20ce02007bf78e51bc6bcf64bf96a8a01994d762de80df0fec3be5fb7.png" src="../_images/b594a9d20ce02007bf78e51bc6bcf64bf96a8a01994d762de80df0fec3be5fb7.png" />
+<img alt="../_images/03ac25c0031c326574e5ee78c8fc28bd3884c03dd1e153b3c2fdc9ea9f5ed53b.png" src="../_images/03ac25c0031c326574e5ee78c8fc28bd3884c03dd1e153b3c2fdc9ea9f5ed53b.png" />
+<img alt="../_images/6ef2e8df4e19b40529c9f097e1bdd227b1242af9f6a6a5f441daf98709d004fe.png" src="../_images/6ef2e8df4e19b40529c9f097e1bdd227b1242af9f6a6a5f441daf98709d004fe.png" />
+<img alt="../_images/2c8e24716e80c7f17343cd4adfef1b0914cf6ebee02e807488115d81cdfe3b07.png" src="../_images/2c8e24716e80c7f17343cd4adfef1b0914cf6ebee02e807488115d81cdfe3b07.png" />
+<img alt="../_images/b35f55dedc588f9108292f93c72574a379ad83e14bc523b0a71998a89b742101.png" src="../_images/b35f55dedc588f9108292f93c72574a379ad83e14bc523b0a71998a89b742101.png" />
+<img alt="../_images/8f54c7f05f4b62539888f4641c09172e7d48c3be57bb792f9940b75343951ca3.png" src="../_images/8f54c7f05f4b62539888f4641c09172e7d48c3be57bb792f9940b75343951ca3.png" />
+<img alt="../_images/29f8be383d26b93a613052c630a22a5e0d88b18a86489679451ed99cab8cacc1.png" src="../_images/29f8be383d26b93a613052c630a22a5e0d88b18a86489679451ed99cab8cacc1.png" />
+<img alt="../_images/8aa80e51dbe334a49625b82513abc9e9cfdfb7839296458a1bf14451190e3673.png" src="../_images/8aa80e51dbe334a49625b82513abc9e9cfdfb7839296458a1bf14451190e3673.png" />
+<img alt="../_images/ff96756a68d5833143bea379e65376e32adaecdd40ab6689f770e3320a7da896.png" src="../_images/ff96756a68d5833143bea379e65376e32adaecdd40ab6689f770e3320a7da896.png" />
+<img alt="../_images/a2d285e9e58738afe7efb4d4cde24e41982c601730b362df44c6ef2881305640.png" src="../_images/a2d285e9e58738afe7efb4d4cde24e41982c601730b362df44c6ef2881305640.png" />
+<img alt="../_images/c9374413c0ca8c43858f0751734e7fb8edc783820f2fdb21869809afb441195b.png" src="../_images/c9374413c0ca8c43858f0751734e7fb8edc783820f2fdb21869809afb441195b.png" />
+<img alt="../_images/9b70986aa8671fbc22925c9bdc9470a03ff973d5cc215e80d6c6c8467d664339.png" src="../_images/9b70986aa8671fbc22925c9bdc9470a03ff973d5cc215e80d6c6c8467d664339.png" />
+<img alt="../_images/e5fcb8a507e467c09dc8a0cda10e0848fe537a43d8ea2f84d17828f707f8c8ca.png" src="../_images/e5fcb8a507e467c09dc8a0cda10e0848fe537a43d8ea2f84d17828f707f8c8ca.png" />
+<img alt="../_images/69ea78ee0284298b3b461c0d7915967537427b31d73a473aa5b3e62a349e1934.png" src="../_images/69ea78ee0284298b3b461c0d7915967537427b31d73a473aa5b3e62a349e1934.png" />
+<img alt="../_images/a7c84960401e3e31b31c62121e8b1d826cb32922a4a1fa520b958d12c02a8b59.png" src="../_images/a7c84960401e3e31b31c62121e8b1d826cb32922a4a1fa520b958d12c02a8b59.png" />
+<img alt="../_images/90e9064ed5fdb48143d40cb00d56d9511ea479fda30101534161ccb5ce895a24.png" src="../_images/90e9064ed5fdb48143d40cb00d56d9511ea479fda30101534161ccb5ce895a24.png" />
+<img alt="../_images/e051ae7d517aecb6db177964de4d0d14fc190d5d08e37864963fe4e84887b0ba.png" src="../_images/e051ae7d517aecb6db177964de4d0d14fc190d5d08e37864963fe4e84887b0ba.png" />
+<img alt="../_images/73f2c99d58bf73e0eb4ba4bc5bbdca9aaf010618fc3aa4d1ccb76f06b563415c.png" src="../_images/73f2c99d58bf73e0eb4ba4bc5bbdca9aaf010618fc3aa4d1ccb76f06b563415c.png" />
+<img alt="../_images/5b41cecebf16cdf5c6eba9ec0b7116e27e7846bc2cef2154a26b7fd200a4e1e0.png" src="../_images/5b41cecebf16cdf5c6eba9ec0b7116e27e7846bc2cef2154a26b7fd200a4e1e0.png" />
+<img alt="../_images/215815b45cc7dcbd77ab13e12f621910d288d747ed66021f51afe48b66bc147a.png" src="../_images/215815b45cc7dcbd77ab13e12f621910d288d747ed66021f51afe48b66bc147a.png" />
+<img alt="../_images/0f03162f014b9bd4238ff3be66ba6389222d29d0a7864de65262821b50bb068a.png" src="../_images/0f03162f014b9bd4238ff3be66ba6389222d29d0a7864de65262821b50bb068a.png" />
+<img alt="../_images/97b0fefb6223b661a8defac08d784d9f38a6e6b9bb4e3aea0642767148ad8494.png" src="../_images/97b0fefb6223b661a8defac08d784d9f38a6e6b9bb4e3aea0642767148ad8494.png" />
+<img alt="../_images/db5ea91e5329de58567c7a518cf65f5b39cbb306b3fbd935ce9b07f69e963366.png" src="../_images/db5ea91e5329de58567c7a518cf65f5b39cbb306b3fbd935ce9b07f69e963366.png" />
+<img alt="../_images/7ce40eb3d3035164479fee450f4d35ccca72d4668866582f1e8d4f5fbd9b50f4.png" src="../_images/7ce40eb3d3035164479fee450f4d35ccca72d4668866582f1e8d4f5fbd9b50f4.png" />
+<img alt="../_images/a3e74a33bd61f00ae1596fb5bcaf065c1702efbd92483da80e8d5befc348cbb9.png" src="../_images/a3e74a33bd61f00ae1596fb5bcaf065c1702efbd92483da80e8d5befc348cbb9.png" />
+<img alt="../_images/a8c128fc8f2d73d3d8661a4566de93b30d6de9c2faed70ad33b3c7337ae75166.png" src="../_images/a8c128fc8f2d73d3d8661a4566de93b30d6de9c2faed70ad33b3c7337ae75166.png" />
+<img alt="../_images/846f69639545a30d3006a353f6a8b3bb6946dc71030fd84daa49ef7d2b58d6b7.png" src="../_images/846f69639545a30d3006a353f6a8b3bb6946dc71030fd84daa49ef7d2b58d6b7.png" />
+<img alt="../_images/d7154dfa560080a360d95240d8990f4815ac355389b19cdecf851bad9c55b387.png" src="../_images/d7154dfa560080a360d95240d8990f4815ac355389b19cdecf851bad9c55b387.png" />
+<img alt="../_images/5ab279a40be8ae6380dd9792d17a1ac4739acbb045891024a233d80879d99325.png" src="../_images/5ab279a40be8ae6380dd9792d17a1ac4739acbb045891024a233d80879d99325.png" />
+<img alt="../_images/047a3268d0b8068cdd7468e994efae99c272c1b15c56ca7c705796b8506d1307.png" src="../_images/047a3268d0b8068cdd7468e994efae99c272c1b15c56ca7c705796b8506d1307.png" />
+<img alt="../_images/e6953f7ac4632b78b1cc7c3edbbfd3c132e5900cc32fa426ac82d9abf379dc3f.png" src="../_images/e6953f7ac4632b78b1cc7c3edbbfd3c132e5900cc32fa426ac82d9abf379dc3f.png" />
+<img alt="../_images/36400b30e601346af2f3feeef036c270d10d521edc6c0c14ad0d7c3f70d74c2f.png" src="../_images/36400b30e601346af2f3feeef036c270d10d521edc6c0c14ad0d7c3f70d74c2f.png" />
+<img alt="../_images/9369b1422ea15a011dd366546648e55ef25c055c4b729890a355b2c56a3990a3.png" src="../_images/9369b1422ea15a011dd366546648e55ef25c055c4b729890a355b2c56a3990a3.png" />
+<img alt="../_images/8753a8bfb1c1efdedeada27cd781a3dc69ecc6fcc65ee8268da4d0c8c8e9b85c.png" src="../_images/8753a8bfb1c1efdedeada27cd781a3dc69ecc6fcc65ee8268da4d0c8c8e9b85c.png" />
+<img alt="../_images/e1c1803ddd022be0a9f949b2cc3fbbea4d52c7ef39a22ec74e001268583c4999.png" src="../_images/e1c1803ddd022be0a9f949b2cc3fbbea4d52c7ef39a22ec74e001268583c4999.png" />
+<img alt="../_images/267f2041c60f054aefbf47ef3b07434a600d39efea16d5cc67203dc2cf6ee9b6.png" src="../_images/267f2041c60f054aefbf47ef3b07434a600d39efea16d5cc67203dc2cf6ee9b6.png" />
+<img alt="../_images/f0a50fc3c7ed52301a557fe3c1603a397761756db5225701546b517dc0f4db2c.png" src="../_images/f0a50fc3c7ed52301a557fe3c1603a397761756db5225701546b517dc0f4db2c.png" />
+<img alt="../_images/42f64395644a9c4f750de6bf72afb59abf8c24cec7839014549294b10fdfd1fe.png" src="../_images/42f64395644a9c4f750de6bf72afb59abf8c24cec7839014549294b10fdfd1fe.png" />
+<img alt="../_images/ce89a8d1c33c2ce6bc9ddda06202e5381938324a6b10788c0960f9aed2d35158.png" src="../_images/ce89a8d1c33c2ce6bc9ddda06202e5381938324a6b10788c0960f9aed2d35158.png" />
+<img alt="../_images/a32253cb55b5c512ae18bfdb59b802038222c1136740ffafa35cfe713096750b.png" src="../_images/a32253cb55b5c512ae18bfdb59b802038222c1136740ffafa35cfe713096750b.png" />
+<img alt="../_images/0c19cda3d884e27f34bf66a635b59cd73b0ec6dcb3b5457af438274a9574b10b.png" src="../_images/0c19cda3d884e27f34bf66a635b59cd73b0ec6dcb3b5457af438274a9574b10b.png" />
+<img alt="../_images/b3a5cbffeb73cd9153d70997766084bf73ac9bcf1ca8acfe6cedf92411e68ec5.png" src="../_images/b3a5cbffeb73cd9153d70997766084bf73ac9bcf1ca8acfe6cedf92411e68ec5.png" />
+<img alt="../_images/fad8555ce7482e7c434746121e6b4df41a6070e29bc837135cd036c2b38042d6.png" src="../_images/fad8555ce7482e7c434746121e6b4df41a6070e29bc837135cd036c2b38042d6.png" />
+<img alt="../_images/6e51ece8c87c800e11b5634b547c13d717866dbc23ba7abc96ee813433894343.png" src="../_images/6e51ece8c87c800e11b5634b547c13d717866dbc23ba7abc96ee813433894343.png" />
+<img alt="../_images/c32242942a7936802e1869a73d10f0804c4d4ecf9ee4e8eaa30315349c8fe9f2.png" src="../_images/c32242942a7936802e1869a73d10f0804c4d4ecf9ee4e8eaa30315349c8fe9f2.png" />
+<img alt="../_images/810b0f2951a03590311fe1e9f13fe257fa869b94d713d48bdfb00951d5e41d25.png" src="../_images/810b0f2951a03590311fe1e9f13fe257fa869b94d713d48bdfb00951d5e41d25.png" />
+<img alt="../_images/31996b75559ff36b3efddb26c3ea22e5b59d4e18f454c722cbdc5211556a7ac8.png" src="../_images/31996b75559ff36b3efddb26c3ea22e5b59d4e18f454c722cbdc5211556a7ac8.png" />
+<img alt="../_images/6b1b0ee247186bbd0c48a1e7234bedcc7b735270834459eca0f0509642cd5070.png" src="../_images/6b1b0ee247186bbd0c48a1e7234bedcc7b735270834459eca0f0509642cd5070.png" />
+<img alt="../_images/6f7270859d1ec587cfd1ff3f26d9d6952777e85536c431d4613ca883da3ff748.png" src="../_images/6f7270859d1ec587cfd1ff3f26d9d6952777e85536c431d4613ca883da3ff748.png" />
+<img alt="../_images/d54ad44ad83a2fd78b5a045d65cc1e412200eec5b6dc3adc131861924a3ecfeb.png" src="../_images/d54ad44ad83a2fd78b5a045d65cc1e412200eec5b6dc3adc131861924a3ecfeb.png" />
+<img alt="../_images/2771ad5e0a0f266837c732417fdbf30d7810b8dd785cc909499160e7f527417d.png" src="../_images/2771ad5e0a0f266837c732417fdbf30d7810b8dd785cc909499160e7f527417d.png" />
+<img alt="../_images/c232569eb4c3b89fc458724086a99a791ea6be40b146a75ef71ad5af36c24af2.png" src="../_images/c232569eb4c3b89fc458724086a99a791ea6be40b146a75ef71ad5af36c24af2.png" />
+<img alt="../_images/0dd6440f9459baa67cd916d08e151c1a469a1c77fe3f5cd4968d95776a6b803e.png" src="../_images/0dd6440f9459baa67cd916d08e151c1a469a1c77fe3f5cd4968d95776a6b803e.png" />
+<img alt="../_images/964223c4ab92ebdc83f12701d052b86882b7846183e38b30e4fc027c2583fd90.png" src="../_images/964223c4ab92ebdc83f12701d052b86882b7846183e38b30e4fc027c2583fd90.png" />
+<img alt="../_images/2e58e0fd25acc975af387cc95261e91bacc10e4d4a19ba755d046199b1c615b4.png" src="../_images/2e58e0fd25acc975af387cc95261e91bacc10e4d4a19ba755d046199b1c615b4.png" />
+<img alt="../_images/931136d9d2a2caf3442ceb35e45ea76bb2795c46829634f41b59a65aa9427c1e.png" src="../_images/931136d9d2a2caf3442ceb35e45ea76bb2795c46829634f41b59a65aa9427c1e.png" />
+<img alt="../_images/bc2ca2dfb6b9d3dc6e42fbc05b99132f1b1f4214dd6b2885ae6e5a8291c7d80a.png" src="../_images/bc2ca2dfb6b9d3dc6e42fbc05b99132f1b1f4214dd6b2885ae6e5a8291c7d80a.png" />
+<img alt="../_images/7b03c980b98cbb3c548c8c9f07fbb4340a8b8668747139408e9e29c8a4de6c70.png" src="../_images/7b03c980b98cbb3c548c8c9f07fbb4340a8b8668747139408e9e29c8a4de6c70.png" />
+<img alt="../_images/52117ed32b4c48fc2569e0d01b5c12427d288f109ccefd02f4ee89734db71be6.png" src="../_images/52117ed32b4c48fc2569e0d01b5c12427d288f109ccefd02f4ee89734db71be6.png" />
+<img alt="../_images/5df5e42530a38e264c1752856e2f28ee042e0045971fdda333046c71c8824de5.png" src="../_images/5df5e42530a38e264c1752856e2f28ee042e0045971fdda333046c71c8824de5.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -946,6 +950,24 @@ C:\Users\bnort\AppData\Local\Temp\ipykernel_31420\1293624203.py:66: UserWarning:
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="10_Introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Module3: Deep Learning</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="17_training_data_cytopacq.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Creating training data from cytopacq simulated nuclei images</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>

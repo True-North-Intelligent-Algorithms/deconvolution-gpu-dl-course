@@ -161,7 +161,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/18_Get_data.html">Get test data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
 
 
 
@@ -177,7 +179,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/40_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/30_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/80_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/90_decon_systems_design.html">Deconvolution Systems Design</a></li>
 
@@ -185,6 +187,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="10_Introduction.html">Module3: Deep Learning</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="15_training_data.html">Creating training data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_training_data_cytopacq.html">Creating training data from cytopacq simulated nuclei images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="20_restore_trivial.html">Train and restore with trivial conv net</a></li>
 
 
@@ -439,6 +443,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tnia available
+stackview available
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="load-an-input-image">
@@ -446,22 +456,28 @@ document.write(`
 <p>In this cell we load an input image.  Note that the image is bigger than the patch size we trained on.  The CSBDeep framework will take care of applying the network in chunks.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="s1">&#39;../../data/deconvolution/simulation/im.tif&#39;</span><span class="p">)</span>
-<span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/nuclei.tif&#39;</span><span class="p">,</span>
+              <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres1.tif&#39;</span><span class="p">,</span>
+              <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres2.tif&#39;</span><span class="p">,</span>
+              <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres3.tif&#39;</span><span class="p">]</span>
+
+<span class="n">inputs</span><span class="o">=</span><span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">input_name</span> <span class="ow">in</span> <span class="n">input_names</span><span class="p">:</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">input_name</span><span class="p">)</span>
+    <span class="n">nmin</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">nmax</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span><span class="o">-</span><span class="n">nmin</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nmax</span> <span class="o">-</span> <span class="n">nmin</span><span class="p">)</span>
+    <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8e6c7a790d4db223531f1c496ffc20876cc589d690dbd7f1b41a8392822924e5.png" src="../_images/8e6c7a790d4db223531f1c496ffc20876cc589d690dbd7f1b41a8392822924e5.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nmin</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-<span class="n">nmax</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-<span class="n">normalized</span> <span class="o">=</span> <span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span><span class="o">-</span><span class="n">nmin</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nmax</span> <span class="o">-</span> <span class="n">nmin</span><span class="p">)</span>
-</pre></div>
-</div>
+<img alt="../_images/9b699b94900ca2f1987b5fb4e6fb5ceb8a4da774cc9790be1d756607e2989bc9.png" src="../_images/9b699b94900ca2f1987b5fb4e6fb5ceb8a4da774cc9790be1d756607e2989bc9.png" />
+<img alt="../_images/3fbec548450b0d84171aabce3afa772c6aa72a80368f38f1efb367c4f077b44c.png" src="../_images/3fbec548450b0d84171aabce3afa772c6aa72a80368f38f1efb367c4f077b44c.png" />
+<img alt="../_images/4e54fc44621749343cfb51dea1b9854b561459539d97c1032e4eabe79f29e8cc.png" src="../_images/4e54fc44621749343cfb51dea1b9854b561459539d97c1032e4eabe79f29e8cc.png" />
+<img alt="../_images/d57ac4fdaa6cf07c75516634e233e3b14567733c481b93260d37ae3df8e735de.png" src="../_images/d57ac4fdaa6cf07c75516634e233e3b14567733c481b93260d37ae3df8e735de.png" />
 </div>
 </div>
 </section>
@@ -471,7 +487,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the model using the name of the model and the path to the model</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">StarDist3D</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;stardist_big&#39;</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">bnort</span><span class="se">\\</span><span class="s1">work</span><span class="se">\\</span><span class="s1">ImageJ2022</span><span class="se">\\</span><span class="s1">tnia</span><span class="se">\\</span><span class="s1">models363&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">StarDist3D</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;stardist_model1&#39;</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;../../models&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -485,18 +501,6 @@ Using default values: prob_thresh=0.5, nms_thresh=0.4.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">normalized</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">normalized</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.0, 1.0)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.deeplearning.dl_helper</span> <span class="kn">import</span> <span class="n">apply_stardist</span>
 </pre></div>
 </div>
@@ -504,42 +508,43 @@ Using default values: prob_thresh=0.5, nms_thresh=0.4.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels_</span><span class="p">,</span> <span class="n">details</span> <span class="o">=</span> <span class="n">apply_stardist</span><span class="p">(</span><span class="n">normalized</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">prob_thresh</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">nms_thresh</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">down_sample</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pmax</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span><span class="o">=</span><span class="p">[]</span>
+
+<span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
+
+    <span class="n">labels_</span><span class="p">,</span> <span class="n">details</span> <span class="o">=</span> <span class="n">apply_stardist</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">prob_thresh</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">nms_thresh</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">down_sample</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pmax</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels_</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels_</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">labels_</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">labels_</span><span class="p">,</span> <span class="nb">input</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="n">show_xyz_max</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="n">show_xyz_max</span><span class="p">(</span><span class="n">labels_</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="n">colormap</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0, 6)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">normalized</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">labels_</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">colormap</span><span class="o">=</span><span class="n">colormap</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/bf28e55770190a239a88222e00a99717b9a7cf7c3b350c924f4a093202fbf3af.png" src="../_images/bf28e55770190a239a88222e00a99717b9a7cf7c3b350c924f4a093202fbf3af.png" />
-<img alt="../_images/41573131c2aa1a5b4146e71b3f9d14279d4f5d84f9aaabe190e3ff2eb8f54990.png" src="../_images/41573131c2aa1a5b4146e71b3f9d14279d4f5d84f9aaabe190e3ff2eb8f54990.png" />
+<img alt="../_images/04ef806b84c12547d3a010e7343ad85bbe9b71220f36f40c39f716501e776269.png" src="../_images/04ef806b84c12547d3a010e7343ad85bbe9b71220f36f40c39f716501e776269.png" />
+<img alt="../_images/6d87ad22563a79a249c86d951cfdb6121316b5aae6c2a7807a120bebebc83e5b.png" src="../_images/6d87ad22563a79a249c86d951cfdb6121316b5aae6c2a7807a120bebebc83e5b.png" />
+<img alt="../_images/9172958919a56a6ac2a0412159ff52f32b75564d83904f667266842c4e42119d.png" src="../_images/9172958919a56a6ac2a0412159ff52f32b75564d83904f667266842c4e42119d.png" />
+<img alt="../_images/06780443f14c9e26b602019b24b46f12830bfa96ea9218fd391291580ef57a8d.png" src="../_images/06780443f14c9e26b602019b24b46f12830bfa96ea9218fd391291580ef57a8d.png" />
+<img alt="../_images/1dcdd2a88e85ad2450846b6e154afb6f4be20d0694eef827769235b3d44126df.png" src="../_images/1dcdd2a88e85ad2450846b6e154afb6f4be20d0694eef827769235b3d44126df.png" />
+<img alt="../_images/3a45b10692ddb1a671f79d6064d89ae0d8c6719d75203b29cf25f899d7c9f14d.png" src="../_images/3a45b10692ddb1a671f79d6064d89ae0d8c6719d75203b29cf25f899d7c9f14d.png" />
+<img alt="../_images/5fd0159aac934c740f96c502cd68fa74b03400fba2d64d1291a51f639cf5b480.png" src="../_images/5fd0159aac934c740f96c502cd68fa74b03400fba2d64d1291a51f639cf5b480.png" />
+<img alt="../_images/9e9cc78242d17aa6a047af355a0325faac136e2a30eaf94aea81bd87a0175584.png" src="../_images/9e9cc78242d17aa6a047af355a0325faac136e2a30eaf94aea81bd87a0175584.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
-<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">normalized</span><span class="p">)</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">labels_</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;stardist&#39;</span><span class="p">)</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">labels_</span><span class="p">,</span> <span class="nb">input</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">)</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">labels_</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;stardist&#39;</span><span class="p">)</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

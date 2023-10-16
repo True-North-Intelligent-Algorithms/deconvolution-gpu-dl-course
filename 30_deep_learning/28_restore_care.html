@@ -161,7 +161,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/18_Get_data.html">Get test data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
 
 
 
@@ -177,7 +179,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/40_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/30_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/80_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/90_decon_systems_design.html">Deconvolution Systems Design</a></li>
 
@@ -185,6 +187,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="10_Introduction.html">Module3: Deep Learning</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="15_training_data.html">Creating training data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_training_data_cytopacq.html">Creating training data from cytopacq simulated nuclei images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="20_restore_trivial.html">Train and restore with trivial conv net</a></li>
 
 
@@ -450,23 +454,27 @@ stackview available
 <p>In this cell we load an input image.  Note that the image is bigger than the patch size we trained on.  The CSBDeep framework will take care of applying the network in chunks.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#input = imread(&#39;../../data/deconvolution/nuclei4_out_c90_dr10_image.tif&#39;)</span>
-<span class="nb">input</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="s1">&#39;../../data/deconvolution/simulation/im_no_aberration_3.tif&#39;</span><span class="p">)</span>
-<span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/nuclei.tif&#39;</span><span class="p">,</span>
+              <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres1.tif&#39;</span><span class="p">,</span>
+              <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres2.tif&#39;</span><span class="p">,</span>
+              <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres3.tif&#39;</span><span class="p">]</span>
+<span class="n">inputs</span><span class="o">=</span><span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">input_name</span> <span class="ow">in</span> <span class="n">input_names</span><span class="p">:</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">input_name</span><span class="p">)</span>
+    <span class="n">nmin</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">nmax</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span><span class="o">-</span><span class="n">nmin</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nmax</span> <span class="o">-</span> <span class="n">nmin</span><span class="p">)</span>
+    <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ad7932f87d366f382ee42993e2b6a6847462c0c6d4684be386f46d797e023497.png" src="../_images/ad7932f87d366f382ee42993e2b6a6847462c0c6d4684be386f46d797e023497.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nmin</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-<span class="n">nmax</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-<span class="n">normalized</span> <span class="o">=</span> <span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span><span class="o">-</span><span class="n">nmin</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nmax</span> <span class="o">-</span> <span class="n">nmin</span><span class="p">)</span>
-</pre></div>
-</div>
+<img alt="../_images/9b699b94900ca2f1987b5fb4e6fb5ceb8a4da774cc9790be1d756607e2989bc9.png" src="../_images/9b699b94900ca2f1987b5fb4e6fb5ceb8a4da774cc9790be1d756607e2989bc9.png" />
+<img alt="../_images/3fbec548450b0d84171aabce3afa772c6aa72a80368f38f1efb367c4f077b44c.png" src="../_images/3fbec548450b0d84171aabce3afa772c6aa72a80368f38f1efb367c4f077b44c.png" />
+<img alt="../_images/4e54fc44621749343cfb51dea1b9854b561459539d97c1032e4eabe79f29e8cc.png" src="../_images/4e54fc44621749343cfb51dea1b9854b561459539d97c1032e4eabe79f29e8cc.png" />
+<img alt="../_images/d57ac4fdaa6cf07c75516634e233e3b14567733c481b93260d37ae3df8e735de.png" src="../_images/d57ac4fdaa6cf07c75516634e233e3b14567733c481b93260d37ae3df8e735de.png" />
 </div>
 </div>
 </section>
@@ -476,7 +484,12 @@ stackview available
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the model using the name of the model and the path to the model</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">CARE</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;big_small_noisy_notnoisy_model_2&#39;</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;../../models&#39;</span><span class="p">)</span>
+
+<span class="c1">#model_name = &#39;cytopacq_noise_high_na_high&#39;</span>
+<span class="c1">#model_name = &#39;big_small_noisy_notnoisy_model&#39;</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;combined&#39;</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">CARE</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;../../models&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -491,45 +504,102 @@ stackview available
 <h1>Apply the model<a class="headerlink" href="#apply-the-model" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restored</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">normalized</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="s1">&#39;ZYX&#39;</span><span class="p">,</span> <span class="n">n_tiles</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restorations</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
+    <span class="n">restored</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="s1">&#39;ZYX&#39;</span><span class="p">,</span> <span class="n">n_tiles</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">restorations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">restored</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 417ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 4s 4s/step
+1/1 [==============================] - 1s 940ms/step
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 100ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 32ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:05&lt;00:05,  2.83s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:00&lt;00:00,  6.38it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 88ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 42ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:11&lt;00:04,  4.15s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:00&lt;00:00,  4.36it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 89ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 50ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:19&lt;00:00,  4.75s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.91it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 38ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 39ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:00&lt;00:00,  6.21it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 59ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:00&lt;00:00,  4.20it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 42ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.98it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 41ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 40ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:00&lt;00:00,  5.95it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 41ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:00&lt;00:00,  4.24it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 41ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.95it/s]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">restored</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">restored</span> <span class="ow">in</span> <span class="n">restorations</span><span class="p">:</span>
+    <span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">restored</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4d256ee19a992593d62b42f1309616812ccf3d765b7bb8721e69d0b95720d5d8.png" src="../_images/4d256ee19a992593d62b42f1309616812ccf3d765b7bb8721e69d0b95720d5d8.png" />
+<img alt="../_images/12f35752f25b5720627adc5920b3dff747acb8134e43d23091fce74e5e684175.png" src="../_images/12f35752f25b5720627adc5920b3dff747acb8134e43d23091fce74e5e684175.png" />
+<img alt="../_images/038d21328c032ad6dee3b8eef2e7cf5d3a4daa5a6384409d9a8798e912c61ed7.png" src="../_images/038d21328c032ad6dee3b8eef2e7cf5d3a4daa5a6384409d9a8798e912c61ed7.png" />
+<img alt="../_images/d867a2df5a643b63739300905ac7687a15129e17fc0fbd4cca154e652d5704bb.png" src="../_images/d867a2df5a643b63739300905ac7687a15129e17fc0fbd4cca154e652d5704bb.png" />
+<img alt="../_images/1a0c00e276447d5ca5b1a91582aa8bc67660fb9578bc13a8aeb552833f692ad9.png" src="../_images/1a0c00e276447d5ca5b1a91582aa8bc67660fb9578bc13a8aeb552833f692ad9.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -542,7 +612,10 @@ stackview available
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;restored&#39; at 0x1ca0b0466a0&gt;
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>napari.manifest -&gt; &#39;napari-hello&#39; could not be imported: Cannot find module &#39;napari_plugins&#39; declared in entrypoint: &#39;napari_plugins:napari.yaml&#39;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;restored&#39; at 0x22c3d38c760&gt;
 </pre></div>
 </div>
 </div>

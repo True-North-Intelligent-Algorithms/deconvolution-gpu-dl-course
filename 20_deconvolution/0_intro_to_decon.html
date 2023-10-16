@@ -161,7 +161,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/18_Get_data.html">Get test data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
 
 
 
@@ -177,7 +179,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="20_cupy_forward.html">Forward modelling</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="40_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="80_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="90_decon_systems_design.html">Deconvolution Systems Design</a></li>
 
@@ -185,6 +187,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../30_deep_learning/10_Introduction.html">Module3: Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/15_training_data.html">Creating training data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/17_training_data_cytopacq.html">Creating training data from cytopacq simulated nuclei images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/20_restore_trivial.html">Train and restore with trivial conv net</a></li>
 
 
@@ -448,8 +452,8 @@ document.write(`
 <li><p>A lens does not focus light as a point but rather as a difraction pattern in the lateral plane.</p></li>
 <li><p>The 3D PSF of widefield instruments are hour glass when viewed in the z plane.</p></li>
 <li><p>The 3D PSF of confocal instruments are football shaped when viewed in the z plane.</p>
-<p><img alt="" src="20_deconvolution/images/PSF_xy.jpg" />
-<img alt="" src="20_deconvolution/images/PSF_xz.jpg" /></p>
+<p><img alt="" src="../_images/PSF_xy.jpg" />
+<img alt="" src="../_images/PSF_xz.jpg" /></p>
 </li>
 </ul>
 <section id="variable-point-spread-function">
@@ -473,12 +477,12 @@ document.write(`
 <li><p>Creating simulations to test deconvolution</p></li>
 <li><p>Creating simulations to train deep learning restoration systems.</p></li>
 </ol>
-<p><img alt="" src="20_deconvolution/images/sphere_xy.jpg" />
-<img alt="" src="20_deconvolution/images/sphere_convolved_xy.jpg" />
-<img alt="" src="20_deconvolution/images/sphere_convolved_noise_xy.jpg" /></p>
-<p><img alt="" src="20_deconvolution/images/sphere_xz.jpg" />
-<img alt="" src="20_deconvolution/images/sphere_convolved_xz.jpg" />
-<img alt="" src="20_deconvolution/images/sphere_convolved_noise_xz.jpg" /></p>
+<p><img alt="" src="../_images/sphere_xy.jpg" />
+<img alt="" src="../_images/sphere_convolved_xy.jpg" />
+<img alt="" src="../_images/sphere_convolved_noise_xy.jpg" /></p>
+<p><img alt="" src="../_images/sphere_xz.jpg" />
+<img alt="" src="../_images/sphere_convolved_xz.jpg" />
+<img alt="" src="../_images/sphere_convolved_noise_xz.jpg" /></p>
 </section>
 <section id="deconvolution">
 <h2>Deconvolution<a class="headerlink" href="#deconvolution" title="Permalink to this heading">#</a></h2>
@@ -503,22 +507,22 @@ document.write(`
 <section id="richardson-lucy-iterations">
 <h2>Richardson Lucy Iterations<a class="headerlink" href="#richardson-lucy-iterations" title="Permalink to this heading">#</a></h2>
 <p>The images below show left to right the blurred sphere and the result of 10, 20 and 30 accelerated Richardson Lucy iterations.</p>
-<p><img alt="" src="20_deconvolution/images/rl_iterations/xy.jpg" />
-<img alt="" src="20_deconvolution/images/rl_iterations/rl10xy.jpg" />
-<img alt="" src="20_deconvolution/images/rl_iterations/rl20xy.jpg" />
-<img alt="" src="20_deconvolution/images/rl_iterations/rl30xy.jpg" /></p>
-<p><img alt="" src="20_deconvolution/images/rl_iterations/xz.jpg" />
-<img alt="" src="20_deconvolution/images/rl_iterations/rl10xz.jpg" />
-<img alt="" src="20_deconvolution/images/rl_iterations/rl20xz.jpg" />
-<img alt="" src="20_deconvolution/images/rl_iterations/rl30xz.jpg" /></p>
+<p><img alt="" src="../_images/xy.jpg" />
+<img alt="" src="../_images/rl10xy.jpg" />
+<img alt="" src="../_images/rl20xy.jpg" />
+<img alt="" src="../_images/rl30xy.jpg" /></p>
+<p><img alt="" src="../_images/xz.jpg" />
+<img alt="" src="../_images/rl10xz.jpg" />
+<img alt="" src="../_images/rl20xz.jpg" />
+<img alt="" src="../_images/rl30xz.jpg" /></p>
 </section>
 <section id="richardson-lucy-with-total-variation-regularization-noisy-image">
 <h2>Richardson Lucy with Total Variation regularization (Noisy Image)<a class="headerlink" href="#richardson-lucy-with-total-variation-regularization-noisy-image" title="Permalink to this heading">#</a></h2>
 <p>Richardson Lucy Deconvolution can amplify noise, so regularization is used to limit noise.  Once approch is the Richardson Lucy with Total Variation algorithm (Dey etc. al. 2006).  The image on the left was deconvolved with 50 iterations of accelerated Richardson Lucy Deconvolution, the Image on the right with 50 iterations of accelerated Richardson Lucy with Total Variation regularization (regularization factor = 0.002).</p>
-<p><img alt="" src="20_deconvolution/images/rl_rltv/sphere_deconvolved_rla50_xy.jpg" />
-<img alt="" src="20_deconvolution/images/rl_rltv/sphere_deconvolved_rltv0.002_a50_xy.jpg" /></p>
-<p><img alt="" src="20_deconvolution/images/rl_rltv/sphere_deconvolved_rla50_xz.jpg" />
-<img alt="" src="20_deconvolution/images/rl_rltv/sphere_deconvolved_rltv0.002_a50_xz.jpg" /></p>
+<p><img alt="" src="../_images/sphere_deconvolved_rla50_xy.jpg" />
+<img alt="" src="../_images/sphere_deconvolved_rltv0.002_a50_xy.jpg" /></p>
+<p><img alt="" src="../_images/sphere_deconvolved_rla50_xz.jpg" />
+<img alt="" src="../_images/sphere_deconvolved_rltv0.002_a50_xz.jpg" /></p>
 </section>
 <section id="edge-handling">
 <h2>Edge Handling<a class="headerlink" href="#edge-handling" title="Permalink to this heading">#</a></h2>

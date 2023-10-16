@@ -161,7 +161,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/18_Get_data.html">Get test data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
 
 
 
@@ -177,7 +179,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/40_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/30_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/80_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/90_decon_systems_design.html">Deconvolution Systems Design</a></li>
 
@@ -185,6 +187,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="10_Introduction.html">Module3: Deep Learning</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="15_training_data.html">Creating training data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_training_data_cytopacq.html">Creating training data from cytopacq simulated nuclei images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="20_restore_trivial.html">Train and restore with trivial conv net</a></li>
 
 
@@ -411,6 +415,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-corrupted-images-and-ground-truth-images">Load the corrupted images and ground truth images</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shuffle-the-datasets">Shuffle the datasets</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-stardist">Import Stardist</a></li>
 </ul>
 </li>
@@ -436,6 +441,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">label</span>
+<span class="kn">from</span> <span class="nn">tnia.deeplearning.dl_helper</span> <span class="kn">import</span> <span class="n">collect_training_data</span>
 <span class="kn">from</span> <span class="nn">stardist</span> <span class="kn">import</span> <span class="n">calculate_extents</span>
 </pre></div>
 </div>
@@ -464,7 +470,7 @@ document.write(`
 <p>This is the path where the model will be saved, change to be local to your machine</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parent_dl_path</span><span class="o">=</span><span class="n">get_parent_dl_path</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parent_dl_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;../../models&#39;</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dl_path</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;models&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
 <span class="n">patches_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dl_path</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;patches&#39;</span><span class="p">)</span>
@@ -473,14 +479,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="ne">c</span>:\Users\bnort\work\ImageJ2022\tnia\deconvolution-gpu-dl-course\docs\30_deep_learning\30_stardist.ipynb Cell 6 line 1
-<span class="o">----&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/30_deep_learning/30_stardist.ipynb#W5sZmlsZQ%3D%3D?line=0&#39;</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">parent_dl_path</span><span class="o">=</span><span class="n">get_parent_dl_path</span><span class="p">()</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/30_deep_learning/30_stardist.ipynb#W5sZmlsZQ%3D%3D?line=1&#39;</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dl_path</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;models&#39;</span><span class="p">)</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/30_deep_learning/30_stardist.ipynb#W5sZmlsZQ%3D%3D?line=2&#39;</span><span class="o">&gt;</span><span class="mi">3</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;get_parent_dl_path&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>../../models\models
+../../models\patches
 </pre></div>
 </div>
 </div>
@@ -491,44 +491,27 @@ document.write(`
 <h1>Load the corrupted images and ground truth images<a class="headerlink" href="#load-the-corrupted-images-and-ground-truth-images" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corrupted_dir</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;D:\images\deep-learning\big_spheres\train\images&quot;</span>
-<span class="n">ground_truth_dir</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;D:\images\deep-learning\big_spheres\train\ground truth&quot;</span>
-<span class="n">corrupted_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">corrupted_dir</span><span class="p">)</span>
-<span class="n">ground_truth_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">ground_truth_dir</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;../../data/deep learning training/&#39;</span>
+<span class="n">dl_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;../../models&#39;</span>
 
-<span class="c1"># Preprocess the images</span>
+<span class="n">data_path1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;spheres_small_noise_high_na_high&#39;</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">)</span>
+
+<span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_path1</span><span class="p">]</span>
+
 <span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">Y</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">corrupted_files</span><span class="p">)):</span>
-    <span class="c1"># Load the corrupted image and ground truth image</span>
-    <span class="n">corrupted_img</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">corrupted_dir</span><span class="p">,</span> <span class="n">corrupted_files</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">plugin</span><span class="o">=</span><span class="s1">&#39;tifffile&#39;</span><span class="p">)</span>
-    <span class="n">ground_truth_img</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ground_truth_dir</span><span class="p">,</span> <span class="n">ground_truth_files</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">plugin</span><span class="o">=</span><span class="s1">&#39;tifffile&#39;</span><span class="p">)</span>
-    <span class="c1"># Resize the images to the desired size</span>
-    <span class="c1">#corrupted_img = np.reshape(corrupted_img, (256, 256, 100, 1))</span>
-    <span class="c1">#ground_truth_img = np.reshape(ground_truth_img, (256, 256, 100, 1))</span>
-    
-    <span class="n">corrupted_img</span> <span class="o">=</span> <span class="n">corrupted_img</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-    <span class="n">ground_truth_img</span> <span class="o">=</span> <span class="n">ground_truth_img</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-    
-    <span class="nb">print</span><span class="p">(</span><span class="n">corrupted_img</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">corrupted_img</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">ground_truth_img</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">ground_truth_img</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 
-    <span class="c1"># Normalize the pixel values to [0, 1]</span>
-    <span class="n">corrupted_img</span> <span class="o">=</span> <span class="p">(</span><span class="n">corrupted_img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span><span class="o">-</span><span class="n">corrupted_img</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">corrupted_img</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">corrupted_img</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
-    <span class="c1">#ground_truth_img = (ground_truth_img.astype(&#39;float32&#39;)-ground_truth_img.min()) / (ground_truth_img.max() - ground_truth_img.min()) </span>
-    
-    <span class="c1"># Append the preprocessed images to the training set</span>
-    <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corrupted_img</span><span class="p">)</span>
-    <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ground_truth_img</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+    <span class="n">X_</span><span class="p">,</span> <span class="n">Y_</span> <span class="o">=</span> <span class="n">collect_training_data</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sub_sample</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalize_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">training_multiple</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
-<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint16&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="n">X</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">X_</span><span class="p">)</span>
+    <span class="n">Y</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">Y_</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">Y</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -536,54 +519,46 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5 1117
-0.0 4914.01
-1 798
-0.0 2284.8398
-17 2265
-0.0 4970.25
-3 1231
-0.0 5314.4097
-2 2100
-0.0 5520.4897
-3 1226
-0.0 4774.81
-5 1924
-0.0 5184.0
-3 1588
-0.0 6384.01
-4 892
-0.0 1874.89
-2 643
-0.0 2007.0399
-10 1676
-0.0 3819.24
-5 2043
-0.0 4529.29
-7 1663
-0.0 4096.0
-4 926
-0.0 2070.25
-13 924
-0.0 1962.49
-12 1902
-0.0 4970.25
-0 155
-0.0 249.64
-10 2291
-0.0 5358.2397
-1 145
-0.0 576.0
-15 2720
-0.0 6384.01
-(20, 16, 128, 128) (20, 16, 128, 128)
-float32 uint16
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>../../data/deep learning training/spheres_small_noise_high_na_high\train
+25
+
+25
+25
 </pre></div>
 </div>
-<img alt="../_images/b5f8258406de3bd87f6ba81da51a17d65781e89a784aa32729a9993efa351f44.png" src="../_images/b5f8258406de3bd87f6ba81da51a17d65781e89a784aa32729a9993efa351f44.png" />
-<img alt="../_images/7f055d12b3605299cb086efa335ce32274a5c3f9e8fb43c0dc5c1092697f382b.png" src="../_images/7f055d12b3605299cb086efa335ce32274a5c3f9e8fb43c0dc5c1092697f382b.png" />
+<img alt="../_images/6ef0f1b009ad78df24661f6775f50f6f28e4ec4992dc501d8da27259e1826790.png" src="../_images/6ef0f1b009ad78df24661f6775f50f6f28e4ec4992dc501d8da27259e1826790.png" />
+<img alt="../_images/c4787a6cf2ef5b2db6f22b2091ea1f4a8fe71c0511ec38a86020f8f38d841d4e.png" src="../_images/c4787a6cf2ef5b2db6f22b2091ea1f4a8fe71c0511ec38a86020f8f38d841d4e.png" />
 </div>
 </div>
+<section id="shuffle-the-datasets">
+<h2>Shuffle the datasets<a class="headerlink" href="#shuffle-the-datasets" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.deeplearning.dl_helper</span> <span class="kn">import</span> <span class="n">shuffle</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">shuffle</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.159091
+399
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="import-stardist">
 <h2>Import Stardist<a class="headerlink" href="#import-stardist" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -605,8 +580,8 @@ float32 uint16
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>extents [14.25 74.   66.5 ]
-anisotropy (5.192982456140351, 1.0, 1.112781954887218)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>extents [ 4.5 18.  18. ]
+anisotropy (4.0, 1.0, 1.0)
 </pre></div>
 </div>
 </div>
@@ -645,19 +620,26 @@ anisotropy (5.192982456140351, 1.0, 1.112781954887218)
 <span class="c1">#print(config)</span>
 <span class="n">new_model</span> <span class="o">=</span> <span class="kc">True</span>
 
+<span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;stardist_model1&#39;</span>
+
 <span class="k">if</span> <span class="n">new_model</span><span class="p">:</span>
     <span class="c1">#model = StarDist3D(config, name=&#39;stardist_model_48ray_combined&#39;, basedir=model_path)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;initializing new model&#39;</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">StarDist3D</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;stardist_big&#39;</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">bnort</span><span class="se">\\</span><span class="s1">work</span><span class="se">\\</span><span class="s1">ImageJ2022</span><span class="se">\\</span><span class="s1">tnia</span><span class="se">\\</span><span class="s1">models363&#39;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">StarDist3D</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="n">dl_path</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">StarDist3D</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;stardist_model_Sep_22_new_labels&#39;</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">bnort</span><span class="se">\\</span><span class="s1">work</span><span class="se">\\</span><span class="s1">ImageJ2022</span><span class="se">\\</span><span class="s1">tnia</span><span class="se">\\</span><span class="s1">models363&#39;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">StarDist3D</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span>  <span class="n">name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="n">dl_path</span><span class="p">)</span>
 <span class="nb">vars</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initializing new model
-Using default values: prob_thresh=0.5, nms_thresh=0.4.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>base_model.py (149): output path for model already exists, files may be overwritten: C:\Users\bnort\work\ImageJ2022\tnia\deconvolution-gpu-dl-course\models\stardist_model1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using default values: prob_thresh=0.5, nms_thresh=0.4.
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_dim&#39;: 3,
@@ -669,11 +651,10 @@ Using default values: prob_thresh=0.5, nms_thresh=0.4.
  &#39;train_checkpoint_epoch&#39;: &#39;weights_now.h5&#39;,
  &#39;n_rays&#39;: 96,
  &#39;grid&#39;: (1, 4, 4),
- &#39;anisotropy&#39;: (5.192982456140351, 1.0, 1.112781954887218),
+ &#39;anisotropy&#39;: (4.0, 1.0, 1.0),
  &#39;backbone&#39;: &#39;unet&#39;,
  &#39;rays_json&#39;: {&#39;name&#39;: &#39;Rays_GoldenSpiral&#39;,
-  &#39;kwargs&#39;: {&#39;n&#39;: 96,
-   &#39;anisotropy&#39;: (5.192982456140351, 1.0, 1.112781954887218)}},
+  &#39;kwargs&#39;: {&#39;n&#39;: 96, &#39;anisotropy&#39;: (4.0, 1.0, 1.0)}},
  &#39;n_classes&#39;: None,
  &#39;unet_n_depth&#39;: 3,
  &#39;unet_kernel_size&#39;: (3, 3, 3),
@@ -720,7 +701,7 @@ Using default values: prob_thresh=0.5, nms_thresh=0.4.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>median object size:      [14. 74. 58.]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>median object size:      [ 4.5 19.  19.5]
 network field of view :  [ 32 128 128]
 </pre></div>
 </div>
@@ -738,47 +719,172 @@ network field of view :  [ 32 128 128]
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span><span class="n">Y_val</span><span class="p">),</span><span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">steps_per_epoch</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span><span class="n">Y_val</span><span class="p">),</span><span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">steps_per_epoch</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/10
- 6/50 [==&gt;...........................] - ETA: 46s - loss: 6.7903 - prob_loss: 0.6615 - dist_loss: 30.6438 - prob_kld: 0.3886 - dist_relevant_mae: 30.6438 - dist_relevant_mse: 1467.8043 - dist_dist_iou_metric: 8.2207e-06WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.4762s vs `on_train_batch_end` time: 0.6243s). Check your callbacks.
-3/3 [==============================] - 1s 473ms/steposs: 6.1917 - prob_loss: 0.5402 - dist_loss: 28.2578 - prob_kld: 0.2712 - dist_relevant_mae: 28.2578 - dist_relevant_mse: 1252.0479 - dist_dist_iou_metric: 4.82
-50/50 [==============================] - 52s 988ms/step - loss: 6.1917 - prob_loss: 0.5402 - dist_loss: 28.2578 - prob_kld: 0.2712 - dist_relevant_mae: 28.2578 - dist_relevant_mse: 1252.0479 - dist_dist_iou_metric: 4.8221e-04 - val_loss: 6.3097 - val_prob_loss: 0.5252 - val_dist_loss: 28.9225 - val_prob_kld: 0.2323 - val_dist_relevant_mae: 28.9223 - val_dist_relevant_mse: 1341.1978 - val_dist_dist_iou_metric: 0.0060 - lr: 3.0000e-04
-Epoch 2/10
-3/3 [==============================] - 1s 492ms/steposs: 4.7368 - prob_loss: 0.5639 - dist_loss: 20.8646 - prob_kld: 0.2926 - dist_relevant_mae: 20.8635 - dist_relevant_mse: 821.8854 - dist_dist_iou_metric: 
-50/50 [==============================] - 62s 1s/step - loss: 4.7368 - prob_loss: 0.5639 - dist_loss: 20.8646 - prob_kld: 0.2926 - dist_relevant_mae: 20.8635 - dist_relevant_mse: 821.8854 - dist_dist_iou_metric: 0.1652 - val_loss: 4.1756 - val_prob_loss: 0.5490 - val_dist_loss: 18.1332 - val_prob_kld: 0.2561 - val_dist_relevant_mae: 18.1320 - val_dist_relevant_mse: 669.7757 - val_dist_dist_iou_metric: 0.2020 - lr: 3.0000e-04
-Epoch 3/10
-3/3 [==============================] - 1s 572ms/steposs: 3.5330 - prob_loss: 0.5102 - dist_loss: 15.1137 - prob_kld: 0.2412 - dist_relevant_mae: 15.1121 - dist_relevant_mse: 465.6276 - dist_dist_iou_metric: 
-50/50 [==============================] - 58s 1s/step - loss: 3.5330 - prob_loss: 0.5102 - dist_loss: 15.1137 - prob_kld: 0.2412 - dist_relevant_mae: 15.1121 - dist_relevant_mse: 465.6276 - dist_dist_iou_metric: 0.2963 - val_loss: 3.5145 - val_prob_loss: 0.5433 - val_dist_loss: 14.8561 - val_prob_kld: 0.2504 - val_dist_relevant_mae: 14.8545 - val_dist_relevant_mse: 464.0417 - val_dist_dist_iou_metric: 0.3069 - lr: 3.0000e-04
-Epoch 4/10
-3/3 [==============================] - 1s 456ms/steposs: 3.3371 - prob_loss: 0.5061 - dist_loss: 14.1550 - prob_kld: 0.2351 - dist_relevant_mae: 14.1532 - dist_relevant_mse: 410.9774 - dist_dist_iou_metric: 
-50/50 [==============================] - 62s 1s/step - loss: 3.3371 - prob_loss: 0.5061 - dist_loss: 14.1550 - prob_kld: 0.2351 - dist_relevant_mae: 14.1532 - dist_relevant_mse: 410.9774 - dist_dist_iou_metric: 0.3207 - val_loss: 3.2797 - val_prob_loss: 0.5048 - val_dist_loss: 13.8745 - val_prob_kld: 0.2118 - val_dist_relevant_mae: 13.8725 - val_dist_relevant_mse: 383.2743 - val_dist_dist_iou_metric: 0.3657 - lr: 3.0000e-04
-Epoch 5/10
-3/3 [==============================] - 1s 298ms/steposs: 3.1826 - prob_loss: 0.5049 - dist_loss: 13.3884 - prob_kld: 0.2311 - dist_relevant_mae: 13.3866 - dist_relevant_mse: 372.7035 - dist_dist_iou_metric: 
-50/50 [==============================] - 55s 1s/step - loss: 3.1826 - prob_loss: 0.5049 - dist_loss: 13.3884 - prob_kld: 0.2311 - dist_relevant_mae: 13.3866 - dist_relevant_mse: 372.7035 - dist_dist_iou_metric: 0.3501 - val_loss: 3.1760 - val_prob_loss: 0.5146 - val_dist_loss: 13.3068 - val_prob_kld: 0.2217 - val_dist_relevant_mae: 13.3050 - val_dist_relevant_mse: 390.4666 - val_dist_dist_iou_metric: 0.3481 - lr: 3.0000e-04
-Epoch 6/10
-3/3 [==============================] - 1s 333ms/steposs: 2.9888 - prob_loss: 0.5176 - dist_loss: 12.3562 - prob_kld: 0.2539 - dist_relevant_mae: 12.3543 - dist_relevant_mse: 328.5089 - dist_dist_iou_metric: 
-50/50 [==============================] - 59s 1s/step - loss: 2.9888 - prob_loss: 0.5176 - dist_loss: 12.3562 - prob_kld: 0.2539 - dist_relevant_mae: 12.3543 - dist_relevant_mse: 328.5089 - dist_dist_iou_metric: 0.3738 - val_loss: 3.2633 - val_prob_loss: 0.5173 - val_dist_loss: 13.7304 - val_prob_kld: 0.2243 - val_dist_relevant_mae: 13.7288 - val_dist_relevant_mse: 429.3690 - val_dist_dist_iou_metric: 0.3149 - lr: 3.0000e-04
-Epoch 7/10
-3/3 [==============================] - 1s 284ms/steposs: 2.9158 - prob_loss: 0.5026 - dist_loss: 12.0661 - prob_kld: 0.2309 - dist_relevant_mae: 12.0642 - dist_relevant_mse: 321.4571 - dist_dist_iou_metric: 
-50/50 [==============================] - 55s 1s/step - loss: 2.9158 - prob_loss: 0.5026 - dist_loss: 12.0661 - prob_kld: 0.2309 - dist_relevant_mae: 12.0642 - dist_relevant_mse: 321.4571 - dist_dist_iou_metric: 0.3944 - val_loss: 2.8882 - val_prob_loss: 0.5148 - val_dist_loss: 11.8672 - val_prob_kld: 0.2219 - val_dist_relevant_mae: 11.8651 - val_dist_relevant_mse: 307.1732 - val_dist_dist_iou_metric: 0.4176 - lr: 3.0000e-04
-Epoch 8/10
-3/3 [==============================] - 1s 466ms/steposs: 2.7608 - prob_loss: 0.5199 - dist_loss: 11.2043 - prob_kld: 0.2476 - dist_relevant_mae: 11.2024 - dist_relevant_mse: 277.6218 - dist_dist_iou_metric: 
-50/50 [==============================] - 58s 1s/step - loss: 2.7608 - prob_loss: 0.5199 - dist_loss: 11.2043 - prob_kld: 0.2476 - dist_relevant_mae: 11.2024 - dist_relevant_mse: 277.6218 - dist_dist_iou_metric: 0.4252 - val_loss: 2.8738 - val_prob_loss: 0.5176 - val_dist_loss: 11.7809 - val_prob_kld: 0.2247 - val_dist_relevant_mae: 11.7788 - val_dist_relevant_mse: 280.6311 - val_dist_dist_iou_metric: 0.4518 - lr: 3.0000e-04
-Epoch 9/10
-3/3 [==============================] - 1s 390ms/steposs: 2.6343 - prob_loss: 0.5086 - dist_loss: 10.6283 - prob_kld: 0.2407 - dist_relevant_mae: 10.6263 - dist_relevant_mse: 251.3277 - dist_dist_iou_metric: 
-50/50 [==============================] - 55s 1s/step - loss: 2.6343 - prob_loss: 0.5086 - dist_loss: 10.6283 - prob_kld: 0.2407 - dist_relevant_mae: 10.6263 - dist_relevant_mse: 251.3277 - dist_dist_iou_metric: 0.4426 - val_loss: 2.8915 - val_prob_loss: 0.5561 - val_dist_loss: 11.6771 - val_prob_kld: 0.2631 - val_dist_relevant_mae: 11.6753 - val_dist_relevant_mse: 313.5869 - val_dist_dist_iou_metric: 0.4028 - lr: 3.0000e-04
-Epoch 10/10
-3/3 [==============================] - 1s 554ms/steposs: 2.5851 - prob_loss: 0.5377 - dist_loss: 10.2367 - prob_kld: 0.2695 - dist_relevant_mae: 10.2348 - dist_relevant_mse: 236.5063 - dist_dist_iou_metric: 
-50/50 [==============================] - 50s 1s/step - loss: 2.5851 - prob_loss: 0.5377 - dist_loss: 10.2367 - prob_kld: 0.2695 - dist_relevant_mae: 10.2348 - dist_relevant_mse: 236.5063 - dist_dist_iou_metric: 0.4655 - val_loss: 2.9223 - val_prob_loss: 0.5255 - val_dist_loss: 11.9841 - val_prob_kld: 0.2326 - val_dist_relevant_mae: 11.9824 - val_dist_relevant_mse: 319.2395 - val_dist_dist_iou_metric: 0.3860 - lr: 3.0000e-04
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/50
+WARNING:tensorflow:AutoGraph could not transform &lt;function _gcd_import at 0x000002CA200013A0&gt; and will run it as-is.
+Cause: Unable to locate the source code of &lt;function _gcd_import at 0x000002CA200013A0&gt;. Note that functions defined in certain environments, like the interactive Python shell, do not expose their source code. If that is the case, you should define them in a .py source file. If you are certain the code is graph-compatible, wrap the call using @tf.autograph.experimental.do_not_convert. Original error: could not get source code
+To silence this warning, decorate the function with @tf.autograph.experimental.do_not_convert
+WARNING: AutoGraph could not transform &lt;function _gcd_import at 0x000002CA200013A0&gt; and will run it as-is.
+Cause: Unable to locate the source code of &lt;function _gcd_import at 0x000002CA200013A0&gt;. Note that functions defined in certain environments, like the interactive Python shell, do not expose their source code. If that is the case, you should define them in a .py source file. If you are certain the code is graph-compatible, wrap the call using @tf.autograph.experimental.do_not_convert. Original error: could not get source code
+To silence this warning, decorate the function with @tf.autograph.experimental.do_not_convert
+3/3 [==============================] - 0s 14ms/step- loss: 1.3270 - prob_loss: 0.2139 - dist_loss: 5.5655 - prob_kld: 0.1732 - dist_relevant_mae: 5.5653 - dist_relevant_mse: 52.1026 - dist_dist_iou_metric: 0.15
+100/100 [==============================] - 11s 70ms/step - loss: 1.3270 - prob_loss: 0.2139 - dist_loss: 5.5655 - prob_kld: 0.1732 - dist_relevant_mae: 5.5653 - dist_relevant_mse: 52.1026 - dist_dist_iou_metric: 0.1520 - val_loss: 0.9803 - val_prob_loss: 0.1859 - val_dist_loss: 3.9717 - val_prob_kld: 0.1376 - val_dist_relevant_mae: 3.9711 - val_dist_relevant_mse: 28.0732 - val_dist_dist_iou_metric: 0.3577 - lr: 3.0000e-04
+Epoch 2/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.8350 - prob_loss: 0.1372 - dist_loss: 3.4890 - prob_kld: 0.0960 - dist_relevant_mae: 3.4884 - dist_relevant_mse: 21.8643 - dist_dist_iou_metric: 0.38
+100/100 [==============================] - 6s 56ms/step - loss: 0.8350 - prob_loss: 0.1372 - dist_loss: 3.4890 - prob_kld: 0.0960 - dist_relevant_mae: 3.4884 - dist_relevant_mse: 21.8643 - dist_dist_iou_metric: 0.3818 - val_loss: 0.7996 - val_prob_loss: 0.1546 - val_dist_loss: 3.2250 - val_prob_kld: 0.1063 - val_dist_relevant_mae: 3.2244 - val_dist_relevant_mse: 18.2369 - val_dist_dist_iou_metric: 0.4291 - lr: 3.0000e-04
+Epoch 3/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.7709 - prob_loss: 0.1322 - dist_loss: 3.1936 - prob_kld: 0.0924 - dist_relevant_mae: 3.1930 - dist_relevant_mse: 18.1167 - dist_dist_iou_metric: 0.41
+100/100 [==============================] - 6s 57ms/step - loss: 0.7714 - prob_loss: 0.1326 - dist_loss: 3.1944 - prob_kld: 0.0927 - dist_relevant_mae: 3.1937 - dist_relevant_mse: 18.1194 - dist_dist_iou_metric: 0.4155 - val_loss: 0.7821 - val_prob_loss: 0.1592 - val_dist_loss: 3.1143 - val_prob_kld: 0.1109 - val_dist_relevant_mae: 3.1136 - val_dist_relevant_mse: 17.2422 - val_dist_dist_iou_metric: 0.4345 - lr: 3.0000e-04
+Epoch 4/50
+3/3 [==============================] - 0s 14ms/step- loss: 0.7470 - prob_loss: 0.1327 - dist_loss: 3.0717 - prob_kld: 0.0924 - dist_relevant_mae: 3.0711 - dist_relevant_mse: 16.8825 - dist_dist_iou_metric: 0.43
+100/100 [==============================] - 6s 56ms/step - loss: 0.7470 - prob_loss: 0.1327 - dist_loss: 3.0717 - prob_kld: 0.0924 - dist_relevant_mae: 3.0711 - dist_relevant_mse: 16.8825 - dist_dist_iou_metric: 0.4371 - val_loss: 0.7515 - val_prob_loss: 0.1497 - val_dist_loss: 3.0091 - val_prob_kld: 0.1014 - val_dist_relevant_mae: 3.0086 - val_dist_relevant_mse: 16.8290 - val_dist_dist_iou_metric: 0.4194 - lr: 3.0000e-04
+Epoch 5/50
+3/3 [==============================] - 0s 14ms/step- loss: 0.6420 - prob_loss: 0.1091 - dist_loss: 2.6643 - prob_kld: 0.0692 - dist_relevant_mae: 2.6637 - dist_relevant_mse: 12.7788 - dist_dist_iou_metric: 0.49
+100/100 [==============================] - 6s 56ms/step - loss: 0.6420 - prob_loss: 0.1091 - dist_loss: 2.6643 - prob_kld: 0.0692 - dist_relevant_mae: 2.6637 - dist_relevant_mse: 12.7788 - dist_dist_iou_metric: 0.4992 - val_loss: 0.5477 - val_prob_loss: 0.0955 - val_dist_loss: 2.2609 - val_prob_kld: 0.0473 - val_dist_relevant_mae: 2.2604 - val_dist_relevant_mse: 9.5608 - val_dist_dist_iou_metric: 0.5720 - lr: 3.0000e-04
+Epoch 6/50
+3/3 [==============================] - 0s 16ms/step- loss: 0.5099 - prob_loss: 0.0738 - dist_loss: 2.1804 - prob_kld: 0.0332 - dist_relevant_mae: 2.1798 - dist_relevant_mse: 8.9809 - dist_dist_iou_metric: 0.57
+100/100 [==============================] - 6s 56ms/step - loss: 0.5099 - prob_loss: 0.0738 - dist_loss: 2.1804 - prob_kld: 0.0332 - dist_relevant_mae: 2.1798 - dist_relevant_mse: 8.9809 - dist_dist_iou_metric: 0.5737 - val_loss: 0.4733 - val_prob_loss: 0.0709 - val_dist_loss: 2.0119 - val_prob_kld: 0.0226 - val_dist_relevant_mae: 2.0113 - val_dist_relevant_mse: 7.5943 - val_dist_dist_iou_metric: 0.6262 - lr: 3.0000e-04
+Epoch 7/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.4258 - prob_loss: 0.0604 - dist_loss: 1.8267 - prob_kld: 0.0203 - dist_relevant_mae: 1.8261 - dist_relevant_mse: 6.3346 - dist_dist_iou_metric: 0.63
+100/100 [==============================] - 6s 57ms/step - loss: 0.4258 - prob_loss: 0.0604 - dist_loss: 1.8267 - prob_kld: 0.0203 - dist_relevant_mae: 1.8261 - dist_relevant_mse: 6.3346 - dist_dist_iou_metric: 0.6321 - val_loss: 0.4062 - val_prob_loss: 0.0655 - val_dist_loss: 1.7031 - val_prob_kld: 0.0173 - val_dist_relevant_mae: 1.7025 - val_dist_relevant_mse: 6.0409 - val_dist_dist_iou_metric: 0.6473 - lr: 3.0000e-04
+Epoch 8/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.3672 - prob_loss: 0.0561 - dist_loss: 1.5556 - prob_kld: 0.0157 - dist_relevant_mae: 1.5551 - dist_relevant_mse: 4.6732 - dist_dist_iou_metric: 0.67
+100/100 [==============================] - 6s 56ms/step - loss: 0.3672 - prob_loss: 0.0561 - dist_loss: 1.5556 - prob_kld: 0.0157 - dist_relevant_mae: 1.5551 - dist_relevant_mse: 4.6732 - dist_dist_iou_metric: 0.6765 - val_loss: 0.3924 - val_prob_loss: 0.0634 - val_dist_loss: 1.6449 - val_prob_kld: 0.0151 - val_dist_relevant_mae: 1.6444 - val_dist_relevant_mse: 5.1874 - val_dist_dist_iou_metric: 0.6864 - lr: 3.0000e-04
+Epoch 9/50
+3/3 [==============================] - 0s 12ms/step- loss: 0.3387 - prob_loss: 0.0523 - dist_loss: 1.4320 - prob_kld: 0.0123 - dist_relevant_mae: 1.4315 - dist_relevant_mse: 4.0111 - dist_dist_iou_metric: 0.70
+100/100 [==============================] - 6s 55ms/step - loss: 0.3387 - prob_loss: 0.0523 - dist_loss: 1.4320 - prob_kld: 0.0123 - dist_relevant_mae: 1.4315 - dist_relevant_mse: 4.0111 - dist_dist_iou_metric: 0.7003 - val_loss: 0.3344 - val_prob_loss: 0.0599 - val_dist_loss: 1.3725 - val_prob_kld: 0.0117 - val_dist_relevant_mae: 1.3720 - val_dist_relevant_mse: 3.8657 - val_dist_dist_iou_metric: 0.7119 - lr: 3.0000e-04
+Epoch 10/50
+3/3 [==============================] - 0s 15ms/step- loss: 0.3007 - prob_loss: 0.0499 - dist_loss: 1.2538 - prob_kld: 0.0107 - dist_relevant_mae: 1.2533 - dist_relevant_mse: 3.1277 - dist_dist_iou_metric: 0.73
+100/100 [==============================] - 6s 56ms/step - loss: 0.3009 - prob_loss: 0.0500 - dist_loss: 1.2541 - prob_kld: 0.0107 - dist_relevant_mae: 1.2537 - dist_relevant_mse: 3.1286 - dist_dist_iou_metric: 0.7328 - val_loss: 0.3175 - val_prob_loss: 0.0597 - val_dist_loss: 1.2894 - val_prob_kld: 0.0114 - val_dist_relevant_mae: 1.2889 - val_dist_relevant_mse: 3.6239 - val_dist_dist_iou_metric: 0.7338 - lr: 3.0000e-04
+Epoch 11/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.2852 - prob_loss: 0.0504 - dist_loss: 1.1740 - prob_kld: 0.0093 - dist_relevant_mae: 1.1735 - dist_relevant_mse: 2.7481 - dist_dist_iou_metric: 0.74
+100/100 [==============================] - 6s 57ms/step - loss: 0.2852 - prob_loss: 0.0504 - dist_loss: 1.1740 - prob_kld: 0.0093 - dist_relevant_mae: 1.1735 - dist_relevant_mse: 2.7481 - dist_dist_iou_metric: 0.7483 - val_loss: 0.3007 - val_prob_loss: 0.0576 - val_dist_loss: 1.2153 - val_prob_kld: 0.0093 - val_dist_relevant_mae: 1.2149 - val_dist_relevant_mse: 3.0857 - val_dist_dist_iou_metric: 0.7524 - lr: 3.0000e-04
+Epoch 12/50
+3/3 [==============================] - 0s 15ms/step- loss: 0.2666 - prob_loss: 0.0487 - dist_loss: 1.0897 - prob_kld: 0.0088 - dist_relevant_mae: 1.0893 - dist_relevant_mse: 2.3725 - dist_dist_iou_metric: 0.76
+100/100 [==============================] - 6s 57ms/step - loss: 0.2666 - prob_loss: 0.0487 - dist_loss: 1.0897 - prob_kld: 0.0088 - dist_relevant_mae: 1.0893 - dist_relevant_mse: 2.3725 - dist_dist_iou_metric: 0.7646 - val_loss: 0.2830 - val_prob_loss: 0.0567 - val_dist_loss: 1.1312 - val_prob_kld: 0.0084 - val_dist_relevant_mae: 1.1309 - val_dist_relevant_mse: 2.7547 - val_dist_dist_iou_metric: 0.7611 - lr: 3.0000e-04
+Epoch 13/50
+3/3 [==============================] - 0s 16ms/step- loss: 0.2596 - prob_loss: 0.0477 - dist_loss: 1.0595 - prob_kld: 0.0077 - dist_relevant_mae: 1.0591 - dist_relevant_mse: 2.2508 - dist_dist_iou_metric: 0.77
+100/100 [==============================] - 6s 55ms/step - loss: 0.2596 - prob_loss: 0.0477 - dist_loss: 1.0595 - prob_kld: 0.0077 - dist_relevant_mae: 1.0591 - dist_relevant_mse: 2.2508 - dist_dist_iou_metric: 0.7707 - val_loss: 0.2913 - val_prob_loss: 0.0572 - val_dist_loss: 1.1707 - val_prob_kld: 0.0089 - val_dist_relevant_mae: 1.1703 - val_dist_relevant_mse: 2.9046 - val_dist_dist_iou_metric: 0.7646 - lr: 3.0000e-04
+Epoch 14/50
+3/3 [==============================] - 0s 18ms/step- loss: 0.2460 - prob_loss: 0.0474 - dist_loss: 0.9928 - prob_kld: 0.0072 - dist_relevant_mae: 0.9925 - dist_relevant_mse: 2.0164 - dist_dist_iou_metric: 0.78
+100/100 [==============================] - 6s 58ms/step - loss: 0.2460 - prob_loss: 0.0475 - dist_loss: 0.9926 - prob_kld: 0.0072 - dist_relevant_mae: 0.9922 - dist_relevant_mse: 2.0150 - dist_dist_iou_metric: 0.7843 - val_loss: 0.2800 - val_prob_loss: 0.0562 - val_dist_loss: 1.1193 - val_prob_kld: 0.0079 - val_dist_relevant_mae: 1.1190 - val_dist_relevant_mse: 2.7974 - val_dist_dist_iou_metric: 0.7593 - lr: 3.0000e-04
+Epoch 15/50
+3/3 [==============================] - 0s 14ms/step- loss: 0.2498 - prob_loss: 0.0473 - dist_loss: 1.0123 - prob_kld: 0.0067 - dist_relevant_mae: 1.0120 - dist_relevant_mse: 2.0418 - dist_dist_iou_metric: 0.78
+100/100 [==============================] - 6s 55ms/step - loss: 0.2498 - prob_loss: 0.0473 - dist_loss: 1.0123 - prob_kld: 0.0067 - dist_relevant_mae: 1.0120 - dist_relevant_mse: 2.0418 - dist_dist_iou_metric: 0.7801 - val_loss: 0.2612 - val_prob_loss: 0.0566 - val_dist_loss: 1.0226 - val_prob_kld: 0.0083 - val_dist_relevant_mae: 1.0223 - val_dist_relevant_mse: 2.3322 - val_dist_dist_iou_metric: 0.7856 - lr: 3.0000e-04
+Epoch 16/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.2301 - prob_loss: 0.0465 - dist_loss: 0.9180 - prob_kld: 0.0062 - dist_relevant_mae: 0.9177 - dist_relevant_mse: 1.7309 - dist_dist_iou_metric: 0.79
+100/100 [==============================] - 6s 55ms/step - loss: 0.2301 - prob_loss: 0.0465 - dist_loss: 0.9180 - prob_kld: 0.0062 - dist_relevant_mae: 0.9177 - dist_relevant_mse: 1.7309 - dist_dist_iou_metric: 0.7975 - val_loss: 0.2684 - val_prob_loss: 0.0565 - val_dist_loss: 1.0593 - val_prob_kld: 0.0083 - val_dist_relevant_mae: 1.0589 - val_dist_relevant_mse: 2.6229 - val_dist_dist_iou_metric: 0.7811 - lr: 3.0000e-04
+Epoch 17/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.2298 - prob_loss: 0.0461 - dist_loss: 0.9188 - prob_kld: 0.0056 - dist_relevant_mae: 0.9185 - dist_relevant_mse: 1.6960 - dist_dist_iou_metric: 0.79
+100/100 [==============================] - 6s 55ms/step - loss: 0.2297 - prob_loss: 0.0461 - dist_loss: 0.9182 - prob_kld: 0.0056 - dist_relevant_mae: 0.9179 - dist_relevant_mse: 1.6939 - dist_dist_iou_metric: 0.7992 - val_loss: 0.2699 - val_prob_loss: 0.0562 - val_dist_loss: 1.0683 - val_prob_kld: 0.0079 - val_dist_relevant_mae: 1.0680 - val_dist_relevant_mse: 2.5936 - val_dist_dist_iou_metric: 0.7672 - lr: 3.0000e-04
+Epoch 18/50
+3/3 [==============================] - 0s 14ms/step- loss: 0.2207 - prob_loss: 0.0446 - dist_loss: 0.8808 - prob_kld: 0.0056 - dist_relevant_mae: 0.8805 - dist_relevant_mse: 1.5929 - dist_dist_iou_metric: 0.80
+100/100 [==============================] - 6s 56ms/step - loss: 0.2207 - prob_loss: 0.0446 - dist_loss: 0.8808 - prob_kld: 0.0056 - dist_relevant_mae: 0.8805 - dist_relevant_mse: 1.5929 - dist_dist_iou_metric: 0.8045 - val_loss: 0.2497 - val_prob_loss: 0.0550 - val_dist_loss: 0.9736 - val_prob_kld: 0.0067 - val_dist_relevant_mae: 0.9733 - val_dist_relevant_mse: 2.1236 - val_dist_dist_iou_metric: 0.7964 - lr: 3.0000e-04
+Epoch 19/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.2167 - prob_loss: 0.0454 - dist_loss: 0.8566 - prob_kld: 0.0053 - dist_relevant_mae: 0.8563 - dist_relevant_mse: 1.5015 - dist_dist_iou_metric: 0.81
+100/100 [==============================] - 6s 57ms/step - loss: 0.2167 - prob_loss: 0.0454 - dist_loss: 0.8566 - prob_kld: 0.0053 - dist_relevant_mae: 0.8563 - dist_relevant_mse: 1.5015 - dist_dist_iou_metric: 0.8115 - val_loss: 0.2492 - val_prob_loss: 0.0553 - val_dist_loss: 0.9696 - val_prob_kld: 0.0070 - val_dist_relevant_mae: 0.9693 - val_dist_relevant_mse: 2.2486 - val_dist_dist_iou_metric: 0.7975 - lr: 3.0000e-04
+Epoch 20/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.2208 - prob_loss: 0.0461 - dist_loss: 0.8737 - prob_kld: 0.0052 - dist_relevant_mae: 0.8734 - dist_relevant_mse: 1.5388 - dist_dist_iou_metric: 0.80
+100/100 [==============================] - 6s 56ms/step - loss: 0.2208 - prob_loss: 0.0461 - dist_loss: 0.8737 - prob_kld: 0.0052 - dist_relevant_mae: 0.8734 - dist_relevant_mse: 1.5388 - dist_dist_iou_metric: 0.8080 - val_loss: 0.2652 - val_prob_loss: 0.0546 - val_dist_loss: 1.0529 - val_prob_kld: 0.0063 - val_dist_relevant_mae: 1.0526 - val_dist_relevant_mse: 2.3717 - val_dist_dist_iou_metric: 0.7854 - lr: 3.0000e-04
+Epoch 21/50
+3/3 [==============================] - 0s 15ms/step- loss: 0.2074 - prob_loss: 0.0438 - dist_loss: 0.8180 - prob_kld: 0.0046 - dist_relevant_mae: 0.8177 - dist_relevant_mse: 1.3642 - dist_dist_iou_metric: 0.81
+100/100 [==============================] - 6s 57ms/step - loss: 0.2076 - prob_loss: 0.0439 - dist_loss: 0.8185 - prob_kld: 0.0046 - dist_relevant_mae: 0.8182 - dist_relevant_mse: 1.3656 - dist_dist_iou_metric: 0.8198 - val_loss: 0.2396 - val_prob_loss: 0.0547 - val_dist_loss: 0.9246 - val_prob_kld: 0.0064 - val_dist_relevant_mae: 0.9243 - val_dist_relevant_mse: 2.1076 - val_dist_dist_iou_metric: 0.8031 - lr: 3.0000e-04
+Epoch 22/50
+3/3 [==============================] - 0s 11ms/step- loss: 0.2030 - prob_loss: 0.0450 - dist_loss: 0.7904 - prob_kld: 0.0044 - dist_relevant_mae: 0.7901 - dist_relevant_mse: 1.2892 - dist_dist_iou_metric: 0.82
+100/100 [==============================] - 6s 55ms/step - loss: 0.2033 - prob_loss: 0.0450 - dist_loss: 0.7914 - prob_kld: 0.0045 - dist_relevant_mae: 0.7911 - dist_relevant_mse: 1.2931 - dist_dist_iou_metric: 0.8273 - val_loss: 0.2436 - val_prob_loss: 0.0547 - val_dist_loss: 0.9443 - val_prob_kld: 0.0065 - val_dist_relevant_mae: 0.9440 - val_dist_relevant_mse: 2.1245 - val_dist_dist_iou_metric: 0.8045 - lr: 3.0000e-04
+Epoch 23/50
+3/3 [==============================] - 0s 15ms/step- loss: 0.2066 - prob_loss: 0.0443 - dist_loss: 0.8117 - prob_kld: 0.0045 - dist_relevant_mae: 0.8115 - dist_relevant_mse: 1.3456 - dist_dist_iou_metric: 0.82
+100/100 [==============================] - 6s 57ms/step - loss: 0.2066 - prob_loss: 0.0443 - dist_loss: 0.8117 - prob_kld: 0.0045 - dist_relevant_mae: 0.8115 - dist_relevant_mse: 1.3456 - dist_dist_iou_metric: 0.8200 - val_loss: 0.2380 - val_prob_loss: 0.0544 - val_dist_loss: 0.9181 - val_prob_kld: 0.0061 - val_dist_relevant_mae: 0.9178 - val_dist_relevant_mse: 2.0196 - val_dist_dist_iou_metric: 0.8029 - lr: 3.0000e-04
+Epoch 24/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.1994 - prob_loss: 0.0436 - dist_loss: 0.7790 - prob_kld: 0.0043 - dist_relevant_mae: 0.7787 - dist_relevant_mse: 1.2438 - dist_dist_iou_metric: 0.82
+100/100 [==============================] - 6s 56ms/step - loss: 0.1994 - prob_loss: 0.0436 - dist_loss: 0.7790 - prob_kld: 0.0043 - dist_relevant_mae: 0.7787 - dist_relevant_mse: 1.2438 - dist_dist_iou_metric: 0.8262 - val_loss: 0.2365 - val_prob_loss: 0.0539 - val_dist_loss: 0.9135 - val_prob_kld: 0.0056 - val_dist_relevant_mae: 0.9132 - val_dist_relevant_mse: 2.0614 - val_dist_dist_iou_metric: 0.8053 - lr: 3.0000e-04
+Epoch 25/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.1978 - prob_loss: 0.0438 - dist_loss: 0.7702 - prob_kld: 0.0041 - dist_relevant_mae: 0.7699 - dist_relevant_mse: 1.2125 - dist_dist_iou_metric: 0.82
+100/100 [==============================] - 6s 55ms/step - loss: 0.1977 - prob_loss: 0.0437 - dist_loss: 0.7699 - prob_kld: 0.0041 - dist_relevant_mae: 0.7697 - dist_relevant_mse: 1.2119 - dist_dist_iou_metric: 0.8294 - val_loss: 0.2372 - val_prob_loss: 0.0548 - val_dist_loss: 0.9121 - val_prob_kld: 0.0065 - val_dist_relevant_mae: 0.9118 - val_dist_relevant_mse: 1.9579 - val_dist_dist_iou_metric: 0.8093 - lr: 3.0000e-04
+Epoch 26/50
+3/3 [==============================] - 0s 12ms/step- loss: 0.1960 - prob_loss: 0.0444 - dist_loss: 0.7581 - prob_kld: 0.0041 - dist_relevant_mae: 0.7579 - dist_relevant_mse: 1.1775 - dist_dist_iou_metric: 0.83
+100/100 [==============================] - 5s 55ms/step - loss: 0.1958 - prob_loss: 0.0442 - dist_loss: 0.7580 - prob_kld: 0.0041 - dist_relevant_mae: 0.7577 - dist_relevant_mse: 1.1771 - dist_dist_iou_metric: 0.8314 - val_loss: 0.2516 - val_prob_loss: 0.0547 - val_dist_loss: 0.9846 - val_prob_kld: 0.0064 - val_dist_relevant_mae: 0.9842 - val_dist_relevant_mse: 2.1027 - val_dist_dist_iou_metric: 0.7989 - lr: 3.0000e-04
+Epoch 27/50
+3/3 [==============================] - 0s 16ms/step- loss: 0.1985 - prob_loss: 0.0451 - dist_loss: 0.7669 - prob_kld: 0.0042 - dist_relevant_mae: 0.7666 - dist_relevant_mse: 1.2108 - dist_dist_iou_metric: 0.83
+100/100 [==============================] - 6s 57ms/step - loss: 0.1985 - prob_loss: 0.0451 - dist_loss: 0.7668 - prob_kld: 0.0042 - dist_relevant_mae: 0.7665 - dist_relevant_mse: 1.2100 - dist_dist_iou_metric: 0.8308 - val_loss: 0.2301 - val_prob_loss: 0.0538 - val_dist_loss: 0.8815 - val_prob_kld: 0.0056 - val_dist_relevant_mae: 0.8812 - val_dist_relevant_mse: 1.9017 - val_dist_dist_iou_metric: 0.8124 - lr: 3.0000e-04
+Epoch 28/50
+3/3 [==============================] - 0s 14ms/step- loss: 0.1930 - prob_loss: 0.0437 - dist_loss: 0.7463 - prob_kld: 0.0037 - dist_relevant_mae: 0.7461 - dist_relevant_mse: 1.1401 - dist_dist_iou_metric: 0.83
+100/100 [==============================] - 6s 56ms/step - loss: 0.1930 - prob_loss: 0.0437 - dist_loss: 0.7463 - prob_kld: 0.0037 - dist_relevant_mae: 0.7461 - dist_relevant_mse: 1.1401 - dist_dist_iou_metric: 0.8347 - val_loss: 0.2355 - val_prob_loss: 0.0545 - val_dist_loss: 0.9047 - val_prob_kld: 0.0062 - val_dist_relevant_mae: 0.9045 - val_dist_relevant_mse: 2.0729 - val_dist_dist_iou_metric: 0.8064 - lr: 3.0000e-04
+Epoch 29/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.1975 - prob_loss: 0.0440 - dist_loss: 0.7679 - prob_kld: 0.0038 - dist_relevant_mae: 0.7677 - dist_relevant_mse: 1.1921 - dist_dist_iou_metric: 0.83
+100/100 [==============================] - 6s 56ms/step - loss: 0.1975 - prob_loss: 0.0440 - dist_loss: 0.7679 - prob_kld: 0.0038 - dist_relevant_mae: 0.7677 - dist_relevant_mse: 1.1921 - dist_dist_iou_metric: 0.8302 - val_loss: 0.2316 - val_prob_loss: 0.0538 - val_dist_loss: 0.8890 - val_prob_kld: 0.0056 - val_dist_relevant_mae: 0.8887 - val_dist_relevant_mse: 1.8020 - val_dist_dist_iou_metric: 0.8165 - lr: 3.0000e-04
+Epoch 30/50
+3/3 [==============================] - 0s 11ms/step- loss: 0.1966 - prob_loss: 0.0446 - dist_loss: 0.7598 - prob_kld: 0.0039 - dist_relevant_mae: 0.7595 - dist_relevant_mse: 1.1722 - dist_dist_iou_metric: 0.83
+100/100 [==============================] - 6s 58ms/step - loss: 0.1967 - prob_loss: 0.0448 - dist_loss: 0.7595 - prob_kld: 0.0039 - dist_relevant_mae: 0.7592 - dist_relevant_mse: 1.1710 - dist_dist_iou_metric: 0.8317 - val_loss: 0.2226 - val_prob_loss: 0.0533 - val_dist_loss: 0.8464 - val_prob_kld: 0.0050 - val_dist_relevant_mae: 0.8462 - val_dist_relevant_mse: 1.6842 - val_dist_dist_iou_metric: 0.8166 - lr: 3.0000e-04
+Epoch 31/50
+3/3 [==============================] - 0s 16ms/step- loss: 0.1875 - prob_loss: 0.0435 - dist_loss: 0.7203 - prob_kld: 0.0034 - dist_relevant_mae: 0.7200 - dist_relevant_mse: 1.0697 - dist_dist_iou_metric: 0.83
+100/100 [==============================] - 6s 57ms/step - loss: 0.1875 - prob_loss: 0.0435 - dist_loss: 0.7203 - prob_kld: 0.0034 - dist_relevant_mae: 0.7200 - dist_relevant_mse: 1.0697 - dist_dist_iou_metric: 0.8390 - val_loss: 0.2245 - val_prob_loss: 0.0537 - val_dist_loss: 0.8538 - val_prob_kld: 0.0054 - val_dist_relevant_mae: 0.8536 - val_dist_relevant_mse: 1.7542 - val_dist_dist_iou_metric: 0.8167 - lr: 3.0000e-04
+Epoch 32/50
+3/3 [==============================] - 0s 16ms/step- loss: 0.1862 - prob_loss: 0.0440 - dist_loss: 0.7111 - prob_kld: 0.0034 - dist_relevant_mae: 0.7108 - dist_relevant_mse: 1.0454 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 56ms/step - loss: 0.1862 - prob_loss: 0.0440 - dist_loss: 0.7111 - prob_kld: 0.0034 - dist_relevant_mae: 0.7108 - dist_relevant_mse: 1.0454 - dist_dist_iou_metric: 0.8422 - val_loss: 0.2356 - val_prob_loss: 0.0543 - val_dist_loss: 0.9066 - val_prob_kld: 0.0060 - val_dist_relevant_mae: 0.9064 - val_dist_relevant_mse: 1.9698 - val_dist_dist_iou_metric: 0.8063 - lr: 3.0000e-04
+Epoch 33/50
+3/3 [==============================] - 0s 15ms/step- loss: 0.1870 - prob_loss: 0.0440 - dist_loss: 0.7150 - prob_kld: 0.0033 - dist_relevant_mae: 0.7148 - dist_relevant_mse: 1.0470 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 57ms/step - loss: 0.1872 - prob_loss: 0.0440 - dist_loss: 0.7155 - prob_kld: 0.0033 - dist_relevant_mae: 0.7153 - dist_relevant_mse: 1.0489 - dist_dist_iou_metric: 0.8416 - val_loss: 0.2487 - val_prob_loss: 0.0544 - val_dist_loss: 0.9713 - val_prob_kld: 0.0062 - val_dist_relevant_mae: 0.9710 - val_dist_relevant_mse: 2.0018 - val_dist_dist_iou_metric: 0.8016 - lr: 3.0000e-04
+Epoch 34/50
+3/3 [==============================] - 0s 11ms/step- loss: 0.1852 - prob_loss: 0.0426 - dist_loss: 0.7129 - prob_kld: 0.0032 - dist_relevant_mae: 0.7126 - dist_relevant_mse: 1.0340 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 55ms/step - loss: 0.1852 - prob_loss: 0.0426 - dist_loss: 0.7129 - prob_kld: 0.0032 - dist_relevant_mae: 0.7126 - dist_relevant_mse: 1.0340 - dist_dist_iou_metric: 0.8423 - val_loss: 0.2230 - val_prob_loss: 0.0539 - val_dist_loss: 0.8455 - val_prob_kld: 0.0056 - val_dist_relevant_mae: 0.8452 - val_dist_relevant_mse: 1.6361 - val_dist_dist_iou_metric: 0.8216 - lr: 3.0000e-04
+Epoch 35/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.1830 - prob_loss: 0.0430 - dist_loss: 0.7001 - prob_kld: 0.0031 - dist_relevant_mae: 0.6998 - dist_relevant_mse: 1.0106 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 55ms/step - loss: 0.1830 - prob_loss: 0.0430 - dist_loss: 0.7001 - prob_kld: 0.0031 - dist_relevant_mae: 0.6998 - dist_relevant_mse: 1.0106 - dist_dist_iou_metric: 0.8429 - val_loss: 0.2249 - val_prob_loss: 0.0540 - val_dist_loss: 0.8545 - val_prob_kld: 0.0057 - val_dist_relevant_mae: 0.8542 - val_dist_relevant_mse: 1.7643 - val_dist_dist_iou_metric: 0.8158 - lr: 3.0000e-04
+Epoch 36/50
+3/3 [==============================] - 0s 14ms/step- loss: 0.1811 - prob_loss: 0.0440 - dist_loss: 0.6856 - prob_kld: 0.0030 - dist_relevant_mae: 0.6854 - dist_relevant_mse: 0.9775 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 56ms/step - loss: 0.1811 - prob_loss: 0.0440 - dist_loss: 0.6856 - prob_kld: 0.0030 - dist_relevant_mae: 0.6854 - dist_relevant_mse: 0.9775 - dist_dist_iou_metric: 0.8481 - val_loss: 0.2233 - val_prob_loss: 0.0535 - val_dist_loss: 0.8486 - val_prob_kld: 0.0053 - val_dist_relevant_mae: 0.8483 - val_dist_relevant_mse: 1.6642 - val_dist_dist_iou_metric: 0.8232 - lr: 3.0000e-04
+Epoch 37/50
+3/3 [==============================] - 0s 12ms/step- loss: 0.1782 - prob_loss: 0.0436 - dist_loss: 0.6732 - prob_kld: 0.0029 - dist_relevant_mae: 0.6730 - dist_relevant_mse: 0.9362 - dist_dist_iou_metric: 0.85
+100/100 [==============================] - 6s 55ms/step - loss: 0.1782 - prob_loss: 0.0436 - dist_loss: 0.6732 - prob_kld: 0.0029 - dist_relevant_mae: 0.6730 - dist_relevant_mse: 0.9362 - dist_dist_iou_metric: 0.8505 - val_loss: 0.2268 - val_prob_loss: 0.0540 - val_dist_loss: 0.8637 - val_prob_kld: 0.0057 - val_dist_relevant_mae: 0.8635 - val_dist_relevant_mse: 1.8194 - val_dist_dist_iou_metric: 0.8192 - lr: 3.0000e-04
+Epoch 38/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.1855 - prob_loss: 0.0437 - dist_loss: 0.7090 - prob_kld: 0.0032 - dist_relevant_mae: 0.7087 - dist_relevant_mse: 1.0187 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 57ms/step - loss: 0.1856 - prob_loss: 0.0438 - dist_loss: 0.7089 - prob_kld: 0.0032 - dist_relevant_mae: 0.7086 - dist_relevant_mse: 1.0185 - dist_dist_iou_metric: 0.8418 - val_loss: 0.2246 - val_prob_loss: 0.0534 - val_dist_loss: 0.8561 - val_prob_kld: 0.0051 - val_dist_relevant_mae: 0.8558 - val_dist_relevant_mse: 1.6534 - val_dist_dist_iou_metric: 0.8213 - lr: 3.0000e-04
+Epoch 39/50
+3/3 [==============================] - 0s 12ms/step- loss: 0.1798 - prob_loss: 0.0417 - dist_loss: 0.6905 - prob_kld: 0.0030 - dist_relevant_mae: 0.6903 - dist_relevant_mse: 0.9770 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 5s 55ms/step - loss: 0.1797 - prob_loss: 0.0417 - dist_loss: 0.6901 - prob_kld: 0.0030 - dist_relevant_mae: 0.6899 - dist_relevant_mse: 0.9764 - dist_dist_iou_metric: 0.8455 - val_loss: 0.2303 - val_prob_loss: 0.0540 - val_dist_loss: 0.8811 - val_prob_kld: 0.0058 - val_dist_relevant_mae: 0.8808 - val_dist_relevant_mse: 1.7475 - val_dist_dist_iou_metric: 0.8164 - lr: 3.0000e-04
+Epoch 40/50
+3/3 [==============================] - 0s 11ms/step- loss: 0.1826 - prob_loss: 0.0420 - dist_loss: 0.7034 - prob_kld: 0.0030 - dist_relevant_mae: 0.7032 - dist_relevant_mse: 1.0108 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 56ms/step - loss: 0.1826 - prob_loss: 0.0420 - dist_loss: 0.7034 - prob_kld: 0.0030 - dist_relevant_mae: 0.7032 - dist_relevant_mse: 1.0108 - dist_dist_iou_metric: 0.8429 - val_loss: 0.2189 - val_prob_loss: 0.0537 - val_dist_loss: 0.8261 - val_prob_kld: 0.0054 - val_dist_relevant_mae: 0.8259 - val_dist_relevant_mse: 1.7012 - val_dist_dist_iou_metric: 0.8229 - lr: 3.0000e-04
+Epoch 41/50
+3/3 [==============================] - 0s 16ms/step- loss: 0.1752 - prob_loss: 0.0438 - dist_loss: 0.6570 - prob_kld: 0.0028 - dist_relevant_mae: 0.6568 - dist_relevant_mse: 0.9003 - dist_dist_iou_metric: 0.85
+100/100 [==============================] - 6s 57ms/step - loss: 0.1752 - prob_loss: 0.0438 - dist_loss: 0.6570 - prob_kld: 0.0028 - dist_relevant_mae: 0.6568 - dist_relevant_mse: 0.9003 - dist_dist_iou_metric: 0.8530 - val_loss: 0.2166 - val_prob_loss: 0.0534 - val_dist_loss: 0.8159 - val_prob_kld: 0.0052 - val_dist_relevant_mae: 0.8157 - val_dist_relevant_mse: 1.6178 - val_dist_dist_iou_metric: 0.8284 - lr: 3.0000e-04
+Epoch 42/50
+3/3 [==============================] - 0s 14ms/step- loss: 0.1727 - prob_loss: 0.0429 - dist_loss: 0.6491 - prob_kld: 0.0027 - dist_relevant_mae: 0.6490 - dist_relevant_mse: 0.8753 - dist_dist_iou_metric: 0.85
+100/100 [==============================] - 6s 56ms/step - loss: 0.1727 - prob_loss: 0.0429 - dist_loss: 0.6491 - prob_kld: 0.0027 - dist_relevant_mae: 0.6490 - dist_relevant_mse: 0.8753 - dist_dist_iou_metric: 0.8545 - val_loss: 0.2171 - val_prob_loss: 0.0535 - val_dist_loss: 0.8181 - val_prob_kld: 0.0052 - val_dist_relevant_mae: 0.8180 - val_dist_relevant_mse: 1.6264 - val_dist_dist_iou_metric: 0.8273 - lr: 3.0000e-04
+Epoch 43/50
+3/3 [==============================] - 0s 15ms/step- loss: 0.1822 - prob_loss: 0.0435 - dist_loss: 0.6932 - prob_kld: 0.0028 - dist_relevant_mae: 0.6930 - dist_relevant_mse: 0.9735 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 59ms/step - loss: 0.1822 - prob_loss: 0.0435 - dist_loss: 0.6932 - prob_kld: 0.0028 - dist_relevant_mae: 0.6930 - dist_relevant_mse: 0.9735 - dist_dist_iou_metric: 0.8449 - val_loss: 0.2239 - val_prob_loss: 0.0539 - val_dist_loss: 0.8504 - val_prob_kld: 0.0056 - val_dist_relevant_mae: 0.8502 - val_dist_relevant_mse: 1.7538 - val_dist_dist_iou_metric: 0.8146 - lr: 3.0000e-04
+Epoch 44/50
+3/3 [==============================] - 0s 15ms/step- loss: 0.1767 - prob_loss: 0.0430 - dist_loss: 0.6686 - prob_kld: 0.0027 - dist_relevant_mae: 0.6684 - dist_relevant_mse: 0.9198 - dist_dist_iou_metric: 0.85
+100/100 [==============================] - 6s 58ms/step - loss: 0.1767 - prob_loss: 0.0430 - dist_loss: 0.6686 - prob_kld: 0.0027 - dist_relevant_mae: 0.6684 - dist_relevant_mse: 0.9198 - dist_dist_iou_metric: 0.8504 - val_loss: 0.2160 - val_prob_loss: 0.0534 - val_dist_loss: 0.8129 - val_prob_kld: 0.0051 - val_dist_relevant_mae: 0.8128 - val_dist_relevant_mse: 1.6038 - val_dist_dist_iou_metric: 0.8248 - lr: 3.0000e-04
+Epoch 45/50
+3/3 [==============================] - 0s 15ms/step- loss: 0.1770 - prob_loss: 0.0430 - dist_loss: 0.6699 - prob_kld: 0.0027 - dist_relevant_mae: 0.6697 - dist_relevant_mse: 0.9167 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 57ms/step - loss: 0.1770 - prob_loss: 0.0430 - dist_loss: 0.6699 - prob_kld: 0.0027 - dist_relevant_mae: 0.6697 - dist_relevant_mse: 0.9167 - dist_dist_iou_metric: 0.8499 - val_loss: 0.2197 - val_prob_loss: 0.0547 - val_dist_loss: 0.8251 - val_prob_kld: 0.0064 - val_dist_relevant_mae: 0.8250 - val_dist_relevant_mse: 1.6490 - val_dist_dist_iou_metric: 0.8226 - lr: 3.0000e-04
+Epoch 46/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.1824 - prob_loss: 0.0435 - dist_loss: 0.6943 - prob_kld: 0.0027 - dist_relevant_mae: 0.6941 - dist_relevant_mse: 0.9722 - dist_dist_iou_metric: 0.84
+100/100 [==============================] - 6s 56ms/step - loss: 0.1824 - prob_loss: 0.0435 - dist_loss: 0.6943 - prob_kld: 0.0027 - dist_relevant_mae: 0.6941 - dist_relevant_mse: 0.9722 - dist_dist_iou_metric: 0.8454 - val_loss: 0.2178 - val_prob_loss: 0.0536 - val_dist_loss: 0.8210 - val_prob_kld: 0.0053 - val_dist_relevant_mae: 0.8208 - val_dist_relevant_mse: 1.6356 - val_dist_dist_iou_metric: 0.8239 - lr: 3.0000e-04
+Epoch 47/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.1738 - prob_loss: 0.0427 - dist_loss: 0.6553 - prob_kld: 0.0027 - dist_relevant_mae: 0.6552 - dist_relevant_mse: 0.8885 - dist_dist_iou_metric: 0.85
+100/100 [==============================] - 6s 58ms/step - loss: 0.1738 - prob_loss: 0.0427 - dist_loss: 0.6553 - prob_kld: 0.0027 - dist_relevant_mae: 0.6552 - dist_relevant_mse: 0.8885 - dist_dist_iou_metric: 0.8537 - val_loss: 0.2226 - val_prob_loss: 0.0540 - val_dist_loss: 0.8433 - val_prob_kld: 0.0057 - val_dist_relevant_mae: 0.8432 - val_dist_relevant_mse: 1.6867 - val_dist_dist_iou_metric: 0.8154 - lr: 3.0000e-04
+Epoch 48/50
+3/3 [==============================] - 0s 13ms/step- loss: 0.1744 - prob_loss: 0.0430 - dist_loss: 0.6572 - prob_kld: 0.0026 - dist_relevant_mae: 0.6571 - dist_relevant_mse: 0.8882 - dist_dist_iou_metric: 0.85
+100/100 [==============================] - 6s 57ms/step - loss: 0.1744 - prob_loss: 0.0430 - dist_loss: 0.6572 - prob_kld: 0.0026 - dist_relevant_mae: 0.6571 - dist_relevant_mse: 0.8882 - dist_dist_iou_metric: 0.8532 - val_loss: 0.2197 - val_prob_loss: 0.0539 - val_dist_loss: 0.8293 - val_prob_kld: 0.0056 - val_dist_relevant_mae: 0.8292 - val_dist_relevant_mse: 1.6267 - val_dist_dist_iou_metric: 0.8190 - lr: 3.0000e-04
+Epoch 49/50
+3/3 [==============================] - 0s 16ms/step- loss: 0.1691 - prob_loss: 0.0430 - dist_loss: 0.6306 - prob_kld: 0.0024 - dist_relevant_mae: 0.6305 - dist_relevant_mse: 0.8266 - dist_dist_iou_metric: 0.85
+100/100 [==============================] - 6s 59ms/step - loss: 0.1691 - prob_loss: 0.0430 - dist_loss: 0.6306 - prob_kld: 0.0024 - dist_relevant_mae: 0.6305 - dist_relevant_mse: 0.8266 - dist_dist_iou_metric: 0.8584 - val_loss: 0.2097 - val_prob_loss: 0.0535 - val_dist_loss: 0.7811 - val_prob_kld: 0.0052 - val_dist_relevant_mae: 0.7810 - val_dist_relevant_mse: 1.4948 - val_dist_dist_iou_metric: 0.8318 - lr: 3.0000e-04
+Epoch 50/50
+3/3 [==============================] - 0s 12ms/step- loss: 0.1687 - prob_loss: 0.0430 - dist_loss: 0.6289 - prob_kld: 0.0024 - dist_relevant_mae: 0.6287 - dist_relevant_mse: 0.8217 - dist_dist_iou_metric: 0.85
+100/100 [==============================] - 6s 58ms/step - loss: 0.1689 - prob_loss: 0.0431 - dist_loss: 0.6291 - prob_kld: 0.0024 - dist_relevant_mae: 0.6290 - dist_relevant_mse: 0.8221 - dist_dist_iou_metric: 0.8591 - val_loss: 0.2099 - val_prob_loss: 0.0535 - val_dist_loss: 0.7821 - val_prob_kld: 0.0052 - val_dist_relevant_mae: 0.7819 - val_dist_relevant_mse: 1.4696 - val_dist_dist_iou_metric: 0.8350 - lr: 3.0000e-04
 
 Loading network weights from &#39;weights_best.h5&#39;.
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;keras.callbacks.History at 0x1ad62abe520&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;keras.callbacks.History at 0x2ca48f14fa0&gt;
 </pre></div>
 </div>
 </div>
@@ -790,19 +896,10 @@ Loading network weights from &#39;weights_best.h5&#39;.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((17, 16, 128, 128), (17, 16, 128, 128), (3, 16, 128, 128), (3, 16, 128, 128))
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5148696899414062
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((22, 16, 128, 128, 1),
+ (22, 16, 128, 128),
+ (3, 16, 128, 128, 1),
+ (3, 16, 128, 128))
 </pre></div>
 </div>
 </div>
@@ -818,24 +915,31 @@ Loading network weights from &#39;weights_best.h5&#39;.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fac639962feff01a69001e99306766de0e97b584e9ffff940d68b692d27c8995.png" src="../_images/fac639962feff01a69001e99306766de0e97b584e9ffff940d68b692d27c8995.png" />
-<img alt="../_images/bc0cf91563d0edca4280ba4e5190f496871774357373996d2adab280ff253350.png" src="../_images/bc0cf91563d0edca4280ba4e5190f496871774357373996d2adab280ff253350.png" />
-<img alt="../_images/77deb06dca8dda4ae04ae0c519f96d49a2d21a4131361b33b94976cf5c3b9a75.png" src="../_images/77deb06dca8dda4ae04ae0c519f96d49a2d21a4131361b33b94976cf5c3b9a75.png" />
+<img alt="../_images/94b54dc33bcf4dbd3c69ce80a24119f1c2f07e9225196f05442f8a54f85bab2c.png" src="../_images/94b54dc33bcf4dbd3c69ce80a24119f1c2f07e9225196f05442f8a54f85bab2c.png" />
+<img alt="../_images/069d9373b0935b1f69f86654cc3ff6e4d187fdcbe3b3a193374a4ef13eebcb5f.png" src="../_images/069d9373b0935b1f69f86654cc3ff6e4d187fdcbe3b3a193374a4ef13eebcb5f.png" />
+<img alt="../_images/fc450eae928b89206439b4b6ec3a15f0b59385f43918ab82d18675669d784696.png" src="../_images/fc450eae928b89206439b4b6ec3a15f0b59385f43918ab82d18675669d784696.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(16, 128, 128, 1)
+</pre></div>
+</div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">Y_train</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">Y_train</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>napari.manifest -&gt; &#39;napari-hello&#39; could not be imported: Cannot find module &#39;napari_plugins&#39; declared in entrypoint: &#39;napari_plugins:napari.yaml&#39;
 </pre></div>
 </div>
 </div>
@@ -916,6 +1020,7 @@ Loading network weights from &#39;weights_best.h5&#39;.
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-corrupted-images-and-ground-truth-images">Load the corrupted images and ground truth images</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shuffle-the-datasets">Shuffle the datasets</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-stardist">Import Stardist</a></li>
 </ul>
 </li>

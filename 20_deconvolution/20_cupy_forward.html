@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '20_deconvolution/20_cupy_forward';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Nuclei Deconvolution and Segmentation" href="40_Nuclei_Deconvolution_Segmentation.html" />
+    <link rel="next" title="Nuclei Deconvolution and Compare intensities to ground truth" href="30_Nuclei_Deconvolution_Compare_to_Truth.html" />
     <link rel="prev" title="Module 2: Deconvolution" href="0_intro_to_decon.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -161,7 +161,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/18_Get_data.html">Get test data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
 
 
 
@@ -177,7 +179,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Forward modelling</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="40_Nuclei_Deconvolution_Segmentation.html">Nuclei Deconvolution and Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="80_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="90_decon_systems_design.html">Deconvolution Systems Design</a></li>
 
@@ -185,6 +187,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../30_deep_learning/10_Introduction.html">Module3: Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/15_training_data.html">Creating training data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/17_training_data_cytopacq.html">Creating training data from cytopacq simulated nuclei images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../30_deep_learning/20_restore_trivial.html">Train and restore with trivial conv net</a></li>
 
 
@@ -436,9 +440,10 @@ document.write(`
 <h1>Forward modelling<a class="headerlink" href="#forward-modelling" title="Permalink to this heading">#</a></h1>
 <section id="implementing-the-forward-model-convolution-with-cupy">
 <h2>Implementing the forward model (Convolution) with cupy<a class="headerlink" href="#implementing-the-forward-model-convolution-with-cupy" title="Permalink to this heading">#</a></h2>
-<p>In this notebook we will perform convolution in the FFT domain <a class="reference external" href="https://en.wikipedia.org/wiki/Convolution_theorem">see convolution theorem</a>.</p>
+<p>In this notebook we will perform convolution in the FFT domain <a class="reference external" href="https://en.wikipedia.org/wiki/Convolution_theorem">see convolution theorem</a>.  The notebook goes into the weeds a bit to look at how convolution is done on the GPU.  The notebook will be useful for anybody writing their own forward modelling or deconvolution code with cupy who need to optimize memory use and performance.</p>
 <p>The convolution theorem states that the convolution of two signals is the pointwise multiplication of the Fourier transform of the signals.  This is important because for large Kernel sizes it is much faster to take 2 fourier transforms, mulitply them, and take the inverse transform then it is to perform convolution in the spatial domain.  Many deconvolution algorithms, including the Richardson Lucy algorithm consist of a series of convolutions, thus the convolution theorem is important for both convolution and deconvolution.</p>
 <ol class="arabic simple">
+<li><p>Learn how to generate simulated images consisting of spheres.</p></li>
 <li><p>Learn how to implement convolution using FFTs</p></li>
 <li><p>Learn how to manage FFT memory with cupy</p></li>
 <li><p>Purposely run out of memory and think through strategies to deal with high memory use</p></li>
@@ -527,8 +532,8 @@ Problem size = 1.125 GB
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>float32 (128, 256, 256)
 </pre></div>
 </div>
-<img alt="../_images/fe26daf85c8c2c7935d3470a4bd9c45e91133a7f42c8fd1223eb7593766be163.png" src="../_images/fe26daf85c8c2c7935d3470a4bd9c45e91133a7f42c8fd1223eb7593766be163.png" />
-<img alt="../_images/fef8c91c2e83d0e5c85e3424c833dbee9ef8adb6c05aae538a7ddc18579b7389.png" src="../_images/fef8c91c2e83d0e5c85e3424c833dbee9ef8adb6c05aae538a7ddc18579b7389.png" />
+<img alt="../_images/11d0184026b51082ee43a423abd50f5829f711012fbf0525ca1f9d559b7f81af.png" src="../_images/11d0184026b51082ee43a423abd50f5829f711012fbf0525ca1f9d559b7f81af.png" />
+<img alt="../_images/2248a66a1289cdcef5b17903a687b32feaf7bf1528d9c25206c7d83911666dcd.png" src="../_images/2248a66a1289cdcef5b17903a687b32feaf7bf1528d9c25206c7d83911666dcd.png" />
 </div>
 </div>
 </section>
@@ -558,7 +563,7 @@ Problem size = 1.125 GB
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4bdf5d88dc1b089566568809bd60a147bdc73c22f8d5dfee8b5ec7b194f46a9f.png" src="../_images/4bdf5d88dc1b089566568809bd60a147bdc73c22f8d5dfee8b5ec7b194f46a9f.png" />
+<img alt="../_images/53a27d00ffe674cba4df6c526b3ae3a89e74d2232060e63c6b1a7279969f46b8.png" src="../_images/53a27d00ffe674cba4df6c526b3ae3a89e74d2232060e63c6b1a7279969f46b8.png" />
 </div>
 </div>
 </section>
@@ -662,8 +667,8 @@ After creating temp, used = 0.876953125
 After creating convolved_cp, used = 1.12744140625
 </pre></div>
 </div>
-<img alt="../_images/4bdf5d88dc1b089566568809bd60a147bdc73c22f8d5dfee8b5ec7b194f46a9f.png" src="../_images/4bdf5d88dc1b089566568809bd60a147bdc73c22f8d5dfee8b5ec7b194f46a9f.png" />
-<img alt="../_images/789ca6208cdeb3042359876e8433a8c24bf2508c3d9e3dc2e6cebf74b5883dfd.png" src="../_images/789ca6208cdeb3042359876e8433a8c24bf2508c3d9e3dc2e6cebf74b5883dfd.png" />
+<img alt="../_images/53a27d00ffe674cba4df6c526b3ae3a89e74d2232060e63c6b1a7279969f46b8.png" src="../_images/53a27d00ffe674cba4df6c526b3ae3a89e74d2232060e63c6b1a7279969f46b8.png" />
+<img alt="../_images/ba95d6a39a16a91af989635e84bba2b7a4653f82c1dd7a6e05eb528ac87faa42.png" src="../_images/ba95d6a39a16a91af989635e84bba2b7a4653f82c1dd7a6e05eb528ac87faa42.png" />
 </div>
 </div>
 </section>
@@ -817,8 +822,8 @@ After clearing fft cache, used = 0.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9eed2b3d137e30249f909e1543fad588f0b72cc61c7439ec9c6c97d78e956e56.png" src="../_images/9eed2b3d137e30249f909e1543fad588f0b72cc61c7439ec9c6c97d78e956e56.png" />
-<img alt="../_images/f7236e965c0d9cab954322729d106a080dd6c86eae3fe2e5a6fc0b63ef2defc2.png" src="../_images/f7236e965c0d9cab954322729d106a080dd6c86eae3fe2e5a6fc0b63ef2defc2.png" />
+<img alt="../_images/127cdef69df15e5bb53022c80e6356b730ae94e690dfd55aea2738be0a065e8b.png" src="../_images/127cdef69df15e5bb53022c80e6356b730ae94e690dfd55aea2738be0a065e8b.png" />
+<img alt="../_images/33ddaa7690716014e3393903ec28297674042f3ee7e4bd6b848c1af03bc79458.png" src="../_images/33ddaa7690716014e3393903ec28297674042f3ee7e4bd6b848c1af03bc79458.png" />
 </div>
 </div>
 </section>
@@ -892,11 +897,11 @@ After clearing fft cache, used = 0.0
       </div>
     </a>
     <a class="right-next"
-       href="40_Nuclei_Deconvolution_Segmentation.html"
+       href="30_Nuclei_Deconvolution_Compare_to_Truth.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Nuclei Deconvolution and Segmentation</p>
+        <p class="prev-next-title">Nuclei Deconvolution and Compare intensities to ground truth</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
