@@ -1,12 +1,14 @@
 # Introduction
 
-This course explores both classical deconvolution and AI approaches to image restoration and how GPU computing is used for both. 
+This workshop explores both classical deconvolution and AI approaches to image restoration and how GPU computing is used for both. 
+
+Disclaimer:  The exercises in this workshop are designed such that the entire workshop can be performed in hours and the individual networks trained in minutes.  They are meant to provide some interesting examples and provoke discussion.  For real projects results will be generated over weeks, months or even years, and networks may be trained for hours or even days with much larger training sets thus for a real project the quality of results will likely be better. 
 
 ## Outline
 
-* the basics of deconvoluton 
-* how to use GPUs for deconvolution
-* how to train deep neural networks for image restoration
+* Module 1: Installing tools 
+* Module 2: Deconvolution
+* Module 3: Deep Learning
 
 ## License
 
