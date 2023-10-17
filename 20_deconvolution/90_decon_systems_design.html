@@ -480,6 +480,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tnia available
+stackview available
+</pre></div>
+</div>
+</div>
 </div>
 <section id="create-the-phantom">
 <h2>Create the phantom<a class="headerlink" href="#create-the-phantom" title="Permalink to this heading">#</a></h2>
@@ -535,27 +541,27 @@ document.write(`
 <span class="sd">add_small_to_large(phantom, 1.5*small_sphere, phantom.shape[2]//2, phantom.shape[1]//8, 3*phantom.shape[0]//4)</span>
 <span class="sd">add_small_to_large(phantom, .8*small_sphere, phantom.shape[2]//2, 7*phantom.shape[1]//8, 3*phantom.shape[0]//4)</span>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">medium_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">medium_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">medium_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">medium_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">medium_sphere</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">medium_sphere</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">medium_sphere</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">small_sphere</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">1.4</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">1.6</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">1.2</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">1.6</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
 
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">1.1</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">1.8</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">1.5</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mf">.8</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">add_small_to_large</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">small_sphere</span><span class="p">,</span> <span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">phantom</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="n">phantom</span> <span class="o">=</span> <span class="n">phantom</span><span class="p">[::</span><span class="mi">3</span><span class="p">,:,:]</span>
 <span class="n">phantom</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">*</span><span class="n">gain</span>
@@ -566,7 +572,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4b70163da8a50167f9301ad2b90d3ed944f9a5b85314ae4c1abd4620b2971de6.png" src="../_images/4b70163da8a50167f9301ad2b90d3ed944f9a5b85314ae4c1abd4620b2971de6.png" />
+<img alt="../_images/cd6b43de56ccc569f65cc384a9614796c4fc84842611436d486f803b465cc767.png" src="../_images/cd6b43de56ccc569f65cc384a9614796c4fc84842611436d486f803b465cc767.png" />
 </div>
 </div>
 </section>
@@ -644,15 +650,21 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e90d82ff47f1070bb7f726bd0858384167ed38e91812d94581111581e3d27cf3.png" src="../_images/e90d82ff47f1070bb7f726bd0858384167ed38e91812d94581111581e3d27cf3.png" />
+<img alt="../_images/4cd41144d572bbdba1ed16845c0f21d45e8f4cb7b055cd52c54e7f33a591487b.png" src="../_images/4cd41144d572bbdba1ed16845c0f21d45e8f4cb7b055cd52c54e7f33a591487b.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imsave</span>
 
-<span class="c1">#imsave(&#39;../../data/deconvolution/simulation/phantom_3.tif&#39;, phantom)</span>
-<span class="c1">#imsave(&#39;../../data/deconvolution/simulation/im_no_aberration_3.tif&#39;, im)</span>
+<span class="n">imsave</span><span class="p">(</span><span class="s1">&#39;../../data/deep learning testing/ground truth/spheres4.tif&#39;</span><span class="p">,</span> <span class="n">phantom</span><span class="p">)</span>
+<span class="n">imsave</span><span class="p">(</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres4.tif&#39;</span><span class="p">,</span> <span class="n">im</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bnort\AppData\Local\Temp\ipykernel_14720\2493545118.py:3: UserWarning: ../../data/deep learning testing/ground truth/spheres4.tif is a low contrast image
+  imsave(&#39;../../data/deep learning testing/ground truth/spheres4.tif&#39;, phantom)
 </pre></div>
 </div>
 </div>
@@ -725,62 +737,92 @@ document.write(`
 <p>Note:  Depending on the GPU memory available you may or may not need to process using Chunks.  However the purpose of the notebook is to examine how various settings (including chunking settings) affect the deconvolution result, so that when we do have very large image sizes, and have to use chunking, we understand how to use chunks optimally.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">overlap</span> <span class="o">=</span> <span class="mi">0</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#overlap = 0</span>
+<span class="n">overlap</span> <span class="o">=</span> <span class="mi">25</span>
+
 <span class="n">dimg</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="n">z_chunk_size</span><span class="p">,</span> <span class="n">y_chunk_size</span><span class="p">,</span> <span class="n">x_chunk_size</span><span class="p">))</span>
-<span class="n">out1</span> <span class="o">=</span> <span class="n">dimg</span><span class="o">.</span><span class="n">map_overlap</span><span class="p">(</span><span class="n">deconv_chunk</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">overlap</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">overlap</span><span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">psf</span><span class="o">=</span><span class="n">psf_decon</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">reg</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">out1</span> <span class="o">=</span> <span class="n">dimg</span><span class="o">.</span><span class="n">map_overlap</span><span class="p">(</span><span class="n">deconv_chunk</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">overlap</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">overlap</span><span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">psf</span><span class="o">=</span><span class="n">psf_decon</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">reg</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
 <span class="n">decon1</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-
-<span class="n">overlap</span> <span class="o">=</span> <span class="mi">25</span>
-<span class="n">out2</span> <span class="o">=</span> <span class="n">dimg</span><span class="o">.</span><span class="n">map_overlap</span><span class="p">(</span><span class="n">deconv_chunk</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">overlap</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">overlap</span><span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">psf</span><span class="o">=</span><span class="n">psf_forward</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">reg</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">)</span>
+<span class="n">out2</span> <span class="o">=</span> <span class="n">dimg</span><span class="o">.</span><span class="n">map_overlap</span><span class="p">(</span><span class="n">deconv_chunk</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">overlap</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">overlap</span><span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">psf</span><span class="o">=</span><span class="n">psf_forward</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">reg</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
 <span class="n">decon2</span> <span class="o">=</span> <span class="n">out2</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">out3</span> <span class="o">=</span> <span class="n">dimg</span><span class="o">.</span><span class="n">map_overlap</span><span class="p">(</span><span class="n">deconv_chunk</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">overlap</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">overlap</span><span class="p">},</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">psf</span><span class="o">=</span><span class="n">psf_forward</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">reg</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">decon3</span> <span class="o">=</span> <span class="n">out3</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">decon1</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">decon2</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">show_xyz_slice</span><span class="p">(</span><span class="n">decon3</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>iterations+reg 50 0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>iterations+reg 200 0.005
 deconvolving chunk with size (0, 0, 0)
-iterations+reg 50 0
-deconvolving chunk with size (86, 128, 128)
+iterations+reg 200 0.005
+deconvolving chunk with size (86, 153, 153)
 get lib
 /nfinished decon chunk
-iterations+reg 50 0
-deconvolving chunk with size (86, 128, 128)
+iterations+reg 200 0.005
+deconvolving chunk with size (86, 153, 153)
 get lib
 /nfinished decon chunk
-iterations+reg 50 0
-deconvolving chunk with size (86, 128, 128)
+iterations+reg 200 0.005
+deconvolving chunk with size (86, 153, 153)
 get lib
 /nfinished decon chunk
-iterations+reg 50 0
-deconvolving chunk with size (86, 128, 128)
+iterations+reg 200 0.005
+deconvolving chunk with size (86, 153, 153)
 get lib
 /nfinished decon chunk
-iterations+reg 500 0.0005
+iterations+reg 500 0.005
 deconvolving chunk with size (0, 0, 0)
-iterations+reg 500 0.0005
+iterations+reg 500 0.005
 deconvolving chunk with size (86, 153, 153)
 get lib
 /nfinished decon chunk
-iterations+reg 500 0.0005
+iterations+reg 500 0.005
 deconvolving chunk with size (86, 153, 153)
 get lib
 /nfinished decon chunk
-iterations+reg 500 0.0005
+iterations+reg 500 0.005
 deconvolving chunk with size (86, 153, 153)
 get lib
 /nfinished decon chunk
-iterations+reg 500 0.0005
+iterations+reg 500 0.005
+deconvolving chunk with size (86, 153, 153)
+get lib
+/nfinished decon chunk
+iterations+reg 500 0
+deconvolving chunk with size (0, 0, 0)
+iterations+reg 500 0
+deconvolving chunk with size (86, 153, 153)
+get lib
+/nfinished decon chunk
+iterations+reg 500 0
+deconvolving chunk with size (86, 153, 153)
+get lib
+/nfinished decon chunk
+iterations+reg 500 0
+deconvolving chunk with size (86, 153, 153)
+get lib
+/nfinished decon chunk
+iterations+reg 500 0
 deconvolving chunk with size (86, 153, 153)
 get lib
 /nfinished decon chunk
 </pre></div>
 </div>
-<img alt="../_images/7fdc0ed0a27276310a6a5b12af8165004a48e45ab29084d7f6687f351b7dfd17.png" src="../_images/7fdc0ed0a27276310a6a5b12af8165004a48e45ab29084d7f6687f351b7dfd17.png" />
-<img alt="../_images/cdd1051bbcb01f9ee145a81bcb5b633a99ed41144f2fb133a320096a949eab1d.png" src="../_images/cdd1051bbcb01f9ee145a81bcb5b633a99ed41144f2fb133a320096a949eab1d.png" />
+<img alt="../_images/49bc9e407884ff0a8fdbec7d4326933dc60639a1727c896c37c5bb62f658fcf0.png" src="../_images/49bc9e407884ff0a8fdbec7d4326933dc60639a1727c896c37c5bb62f658fcf0.png" />
+<img alt="../_images/8f566c91886e990e47633aff5fe43f1e095e3d02094b2ff565847573adc2d2e7.png" src="../_images/8f566c91886e990e47633aff5fe43f1e095e3d02094b2ff565847573adc2d2e7.png" />
+<img alt="../_images/1f07d1439b505faca84cf6ad6477e50b8e3939102b6899b3014fea018d9de4bf.png" src="../_images/1f07d1439b505faca84cf6ad6477e50b8e3939102b6899b3014fea018d9de4bf.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">imsave</span><span class="p">(</span><span class="s1">&#39;../../data/deep learning testing/deconvolutions/spheres4.tif&#39;</span><span class="p">,</span> <span class="n">decon2</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </section>
@@ -794,14 +836,16 @@ get lib
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, im)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">im</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, decon 1)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">decon1</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, decon 2)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">decon2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE (phantom, decon 2)&#39;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">phantom</span><span class="p">,</span> <span class="n">decon3</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RMSE (phantom, phantom) 0.0
-RMSE (phantom, im) 58.265694
-RMSE (phantom, decon 1) 42.740486
-RMSE (phantom, decon 2) 19.573734
+RMSE (phantom, im) 30.721592
+RMSE (phantom, decon 1) 19.471014
+RMSE (phantom, decon 2) 8.962998
+RMSE (phantom, decon 2) 15.717233
 </pre></div>
 </div>
 </div>
@@ -855,10 +899,10 @@ RMSE (phantom, decon 2) 19.573734
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>objects_truth 17
-objects_im 17
-objects_decon 17
-objects_decon 17
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>objects_truth 12
+objects_im 13
+objects_decon 12
+objects_decon 12
 </pre></div>
 </div>
 </div>
@@ -890,24 +934,6 @@ objects_decon 17
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig3</span><span class="p">)</span>
 
 <span class="n">makefigs</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="ne">c</span>:\Users\bnort\work\ImageJ2022\tnia\deconvolution-gpu-dl-course\docs\20_deconvolution\90_decon_systems_design.ipynb Cell 23 line 2
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/20_deconvolution/90_decon_systems_design.ipynb#X31sZmlsZQ%3D%3D?line=18&#39;</span><span class="o">&gt;</span><span class="mi">19</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig2</span><span class="p">)</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/20_deconvolution/90_decon_systems_design.ipynb#X31sZmlsZQ%3D%3D?line=19&#39;</span><span class="o">&gt;</span><span class="mi">20</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig3</span><span class="p">)</span>
-<span class="o">---&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/20_deconvolution/90_decon_systems_design.ipynb#X31sZmlsZQ%3D%3D?line=21&#39;</span><span class="o">&gt;</span><span class="mi">22</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">makefigs</span><span class="p">()</span>
-
-<span class="ne">c</span>:\Users\bnort\work\ImageJ2022\tnia\deconvolution-gpu-dl-course\docs\20_deconvolution\90_decon_systems_design.ipynb Cell 23 line 9
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/20_deconvolution/90_decon_systems_design.ipynb#X31sZmlsZQ%3D%3D?line=7&#39;</span><span class="o">&gt;</span><span class="mi">8</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">def</span> <span class="nf">makefigs</span><span class="p">():</span>
-<span class="o">----&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/20_deconvolution/90_decon_systems_design.ipynb#X31sZmlsZQ%3D%3D?line=8&#39;</span><span class="o">&gt;</span><span class="mi">9</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">fig1</span><span class="o">=</span><span class="n">show_xy_xz_slice</span><span class="p">(</span><span class="n">labels_im</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="n">colormap</span><span class="o">=</span><span class="n">random_label_cmap</span><span class="p">())</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/20_deconvolution/90_decon_systems_design.ipynb#X31sZmlsZQ%3D%3D?line=9&#39;</span><span class="o">&gt;</span><span class="mi">10</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">fig1</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Segmentation of image&#39;</span><span class="p">)</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/c%3A/Users/bnort/work/ImageJ2022/tnia/deconvolution-gpu-dl-course/docs/20_deconvolution/90_decon_systems_design.ipynb#X31sZmlsZQ%3D%3D?line=10&#39;</span><span class="o">&gt;</span><span class="mi">11</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">fig2</span><span class="o">=</span><span class="n">show_xy_xz_slice</span><span class="p">(</span><span class="n">labels_decon1</span><span class="p">,</span> <span class="n">x_v</span><span class="p">,</span> <span class="n">y_v</span><span class="p">,</span> <span class="n">z_v</span><span class="p">,</span> <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span> <span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="n">colormap</span><span class="o">=</span><span class="n">random_label_cmap</span><span class="p">())</span>
-
-<span class="ne">NameError</span>: name &#39;labels_im&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -950,77 +976,131 @@ objects_decon 17
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>truth 184.0 560.0
-truth 184.0 640.0
-truth 184.0 640.0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>truth 4808.0 400.0
 truth 4808.0 400.0
-truth 4808.0 400.0
-truth 4808.0 400.0
-truth 4808.0 400.0
-truth 4808.0 400.0
+truth 4808.0 800.0
 truth 184.0 400.0
 truth 184.0 400.0
 truth 184.0 400.0
 truth 184.0 400.0
-truth 184.0 600.0
-truth 184.0 440.0
-truth 184.0 720.0
-truth 184.0 320.0
+truth 184.0 800.0
+truth 184.0 800.0
+truth 184.0 800.0
+truth 184.0 800.0
 
-im 219.0 18.287672
-im 221.0 18.190044
-im 156.0 17.160257
-im 11786.0 24.726456
-im 11749.0 24.759724
-im 11746.0 24.762558
-im 11798.0 24.692999
-im 11812.0 24.699036
-im 70.0 15.185715
-im 66.0 15.651515
-im 65.0 15.292308
-im 71.0 15.591549
-im 192.0 17.817709
-im 233.0 19.802574
-im 106.0 15.537736
-im 33.0 14.515152
+im 21937.0 35.20582
+im 8971.0 28.120722
+im 8954.0 28.090574
+im 8970.0 28.146822
+im 3239.0 20.169497
+im 23.0 17.826086
+im 27.0 17.555555
+im 22.0 18.136364
+im 26.0 17.692308
+im 219.0 22.187214
+im 212.0 22.061321
+im 204.0 22.769608
+im 205.0 22.365854
 
-decon 1 155.0 227.52074
-decon 1 190.0 275.37866
-decon 1 164.0 255.94493
-decon 1 190.0 278.8845
-decon 1 4571.0 217.92438
-decon 1 3768.0 181.85344
-decon 1 3794.0 182.07584
-decon 1 3745.0 183.23639
-decon 1 3749.0 183.26329
-decon 1 143.0 201.34668
-decon 1 146.0 191.83151
-decon 1 134.0 202.05724
-decon 1 140.0 200.79266
-decon 1 194.0 253.84734
-decon 1 205.0 297.4484
-decon 1 146.0 217.55595
-decon 1 106.0 179.96455
+decon 1 4746.0 358.59055
+decon 1 3702.0 203.51573
+decon 1 3710.0 203.3501
+decon 1 3709.0 206.54538
+decon 1 116.0 179.72592
+decon 1 125.0 168.94081
+decon 1 114.0 173.75645
+decon 1 111.0 186.98831
+decon 1 179.0 300.00623
+decon 1 187.0 296.14847
+decon 1 187.0 288.65787
+decon 1 180.0 298.71106
 
-decon 2 148.0 439.03525
-decon 2 163.0 477.46942
-decon 2 171.0 545.1961
-decon 2 169.0 560.8648
-decon 2 4211.0 391.06982
-decon 2 4179.0 395.9162
-decon 2 4155.0 396.75204
-decon 2 4163.0 396.3905
-decon 2 4194.0 393.7156
-decon 2 135.0 385.7155
-decon 2 130.0 394.7399
-decon 2 127.0 391.2315
-decon 2 139.0 392.75085
-decon 2 163.0 523.251
-decon 2 141.0 419.43518
-decon 2 163.0 634.58887
-decon 2 102.0 346.71292
+decon 2 4154.0 391.68628
+decon 2 4064.0 394.78577
+decon 2 4120.0 391.55966
+decon 2 4919.0 717.2278
+decon 2 131.0 352.678
+decon 2 142.0 337.03024
+decon 2 136.0 335.78482
+decon 2 129.0 369.26266
+decon 2 198.0 622.7576
+decon 2 201.0 615.9947
+decon 2 203.0 612.35864
+decon 2 190.0 635.9131
 </pre></div>
 </div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">s</span><span class="o">=</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">14</span><span class="p">))</span>
+
+<span class="n">line_z</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">line_y</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mi">7</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">im</span><span class="p">[</span><span class="n">line_z</span><span class="p">,</span><span class="n">line_y</span><span class="p">,:]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;image&#39;</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">decon1</span><span class="p">[</span><span class="n">line_z</span><span class="p">,</span><span class="n">line_y</span><span class="p">,:]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rl &#39;</span><span class="o">+</span><span class="s1">&#39;200 reg = 0.005&#39;</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">decon2</span><span class="p">[</span><span class="n">line_z</span><span class="p">,</span><span class="n">line_y</span><span class="p">,:]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rl &#39;</span><span class="o">+</span><span class="s1">&#39;500 reg= 0.005&#39;</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">decon3</span><span class="p">[</span><span class="n">line_z</span><span class="p">,</span><span class="n">line_y</span><span class="p">,:]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rl &#39;</span><span class="o">+</span><span class="s1">&#39;500 reg= 0&#39;</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">phantom</span><span class="p">[</span><span class="n">line_z</span><span class="p">,</span><span class="n">line_y</span><span class="p">,:]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;truth&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1f84620c0a0&gt;
+</pre></div>
+</div>
+<img alt="../_images/b63bc3824ca7f6989aa65bc91f58ac7f43d884e78184558e525be69c43070ebc.png" src="../_images/b63bc3824ca7f6989aa65bc91f58ac7f43d884e78184558e525be69c43070ebc.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">s</span><span class="o">=</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">14</span><span class="p">))</span>
+
+<span class="n">line_y</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">line_x</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">im</span><span class="p">[:,</span><span class="n">line_y</span><span class="p">,</span><span class="n">line_x</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;image&#39;</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">decon1</span><span class="p">[:,</span><span class="n">line_y</span><span class="p">,</span><span class="n">line_x</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rl &#39;</span><span class="o">+</span><span class="s1">&#39;200 reg = 0.005&#39;</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">decon2</span><span class="p">[:,</span><span class="n">line_y</span><span class="p">,</span><span class="n">line_x</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rl &#39;</span><span class="o">+</span><span class="s1">&#39;500 reg= 0.005&#39;</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">decon3</span><span class="p">[:,</span><span class="n">line_y</span><span class="p">,</span><span class="n">line_x</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rl &#39;</span><span class="o">+</span><span class="s1">&#39;500 reg= 0&#39;</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">=</span><span class="n">phantom</span><span class="p">[:,</span><span class="n">line_y</span><span class="p">,</span><span class="n">line_x</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;truth&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1f845dd0970&gt;
+</pre></div>
+</div>
+<img alt="../_images/0910fe78808a325dc479c3ef460d6d3a92adfb7c34fa433ebfb17271ae6ceab1.png" src="../_images/0910fe78808a325dc479c3ef460d6d3a92adfb7c34fa433ebfb17271ae6ceab1.png" />
 </div>
 </div>
 </section>
@@ -1042,7 +1122,10 @@ decon 2 102.0 346.71292
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Labels layer &#39;labels_decon 2&#39; at 0x7f89933aefd0&gt;
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>napari.manifest -&gt; &#39;napari-hello&#39; could not be imported: Cannot find module &#39;napari_plugins&#39; declared in entrypoint: &#39;napari_plugins:napari.yaml&#39;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Labels layer &#39;labels_decon 2&#39; at 0x1f89918ac70&gt;
 </pre></div>
 </div>
 </div>

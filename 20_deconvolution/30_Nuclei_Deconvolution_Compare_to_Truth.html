@@ -409,7 +409,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-test-images">Open test images</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-test-images">Get test images</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#show-image-truth-and-psf">Show image, truth and PSF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-deconvolotion-and-make-a-deconvolver">Import Deconvolotion and make a ‘deconvolver’</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-deconvolution-for-varying-iteration-numbers">Run deconvolution for varying iteration numbers</a></li>
@@ -430,13 +430,11 @@ document.write(`
 <h1>Nuclei Deconvolution and Compare intensities to ground truth<a class="headerlink" href="#nuclei-deconvolution-and-compare-intensities-to-ground-truth" title="Permalink to this heading">#</a></h1>
 <p>This notebook shows deconvolution of a simulated image.  The images are similar to the ones generated in the ABRF study <a class="reference external" href="https://sites.google.com/view/lmrg-image-analysis-study">here</a></p>
 <p>Question:  Does deconvolution restore intensities closer to ground truth?</p>
-<section id="open-test-images">
-<h2>Open test images<a class="headerlink" href="#open-test-images" title="Permalink to this heading">#</a></h2>
+<section id="get-test-images">
+<h2>Get test images<a class="headerlink" href="#get-test-images" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p>Get images from this folder <a class="reference external" href="https://www.dropbox.com/scl/fo/ngs73x29t1ch8208d75lv/h?rlkey=7acq2epqp1f1x039q833ry6p4&amp;amp;dl=0">https://www.dropbox.com/scl/fo/ngs73x29t1ch8208d75lv/h?rlkey=7acq2epqp1f1x039q833ry6p4&amp;dl=0</a></p></li>
-<li><p>Beside the <code class="docutils literal notranslate"><span class="pre">PoL-BioImage-Analysis-TS-GPU-Accelerated-Image-Analysis</span></code> folder create an images folder and place the deconvolution folder inside of it.</p></li>
-<li><p>In the code snippet below change <code class="docutils literal notranslate"><span class="pre">im_path</span></code> to the local location on your machine where you put the above folder</p></li>
-<li><p>Print out the size of the images to verify they loaded propertly.  Note that the ground truth and image are different sizes, that is something we will have to deal with (with a careful resizing operation) before comparing.</p></li>
+<li><p>Get images and models from this link <a class="reference external" href="https://www.dropbox.com/scl/fo/yc5jaoj3ap936dqqy8urc/h?rlkey=ho8vp2nbvprzyltytryj9demp&amp;amp;dl=0">https://www.dropbox.com/scl/fo/yc5jaoj3ap936dqqy8urc/h?rlkey=ho8vp2nbvprzyltytryj9demp&amp;dl=0</a></p></li>
+<li><p>Place both the <code class="docutils literal notranslate"><span class="pre">data</span></code> and <code class="docutils literal notranslate"><span class="pre">models</span></code> folders beside the <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder.</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -695,7 +693,7 @@ RMSE deconvolution 500 iterations and ground truth 2474.483
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-test-images">Open test images</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-test-images">Get test images</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#show-image-truth-and-psf">Show image, truth and PSF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-deconvolotion-and-make-a-deconvolver">Import Deconvolotion and make a ‘deconvolver’</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-deconvolution-for-varying-iteration-numbers">Run deconvolution for varying iteration numbers</a></li>

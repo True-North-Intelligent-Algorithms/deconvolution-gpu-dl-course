@@ -2,7 +2,7 @@
 
 This workshop explores both classical deconvolution and AI approaches to image restoration and how GPU computing is used for both. 
 
-Disclaimer:  The exercises in this workshop are designed such that the entire workshop can be performed in hours and the individual networks trained in minutes.  They are meant to provide some interesting examples and provoke discussion.  For real projects results will be generated over weeks, months or even years, and networks may be trained for hours or even days with much larger training sets thus for a real project the quality of results will likely be better. 
+Disclaimer:  The exercises in this workshop are designed such that the entire workshop can be performed in hours and the individual networks trained in minutes.  They are meant to provide some interesting examples and provoke discussion.  For real projects results will be generated over weeks, months or even years, and networks may be trained for hours or even days with much larger training sets and larger and newer network architectures, thus for a real project the quality of results may be better.   It should also be noted that the examples in this workshop are trained on a very limited set of content (blurred and noisy spheres and simulated nuclei) so while results on similar content (spheres and nuclei) may be of similar nature, results on structure different then the training content likely will be less impressive and may contain artifacts. 
 
 ## Outline
 
