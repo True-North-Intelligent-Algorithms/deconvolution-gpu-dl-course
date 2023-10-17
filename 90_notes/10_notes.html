@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Notes &#8212; My Jupyter Book</title>
+    <title>Collaborative Assignment &#8212; My Jupyter Book</title>
   
   
   
@@ -212,7 +212,7 @@ const thebe_selector_output = ".output, .cell_output"
 
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Notes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Collaborative Assignment</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="20_notes.html">Second set of notes</a></li>
 </ul>
 </li>
@@ -397,7 +397,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Notes</h1>
+    <h1>Collaborative Assignment</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -411,9 +411,24 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Permalink to this heading">#</a></h1>
-<p>Todo: Notes</p>
+  <section id="collaborative-assignment">
+<h1>Collaborative Assignment<a class="headerlink" href="#collaborative-assignment" title="Permalink to this heading">#</a></h1>
+<p>If you have any interesting answers, observations or thoughts about the below question please post on our <a class="reference external" href="http://Image.sc">Image.sc</a> thread.</p>
+<ol class="arabic simple">
+<li><p>Were you able to run the deep learning training notebooks or did you run out of GPU memory?  Is it possible to get the training examples running by modifying the batch size or the size of the training patches?  How much memory is needed to train convnets for 3D applications as compared to 2D applications?  Do you have suggestions as to cloud computing services (such as AWS or other) that could be used to do deep learning training using high memory GPUs?  Post answers on workshop <a class="reference external" href="http://Image.sc">Image.sc</a> thread.</p></li>
+<li><p>Re-run the <code class="docutils literal notranslate"><span class="pre">restore_care</span></code> network with all three pretrained networks ‘cytopacq_noise_high_na_high’ (a network trained on cytopacq nuclei), <code class="docutils literal notranslate"><span class="pre">big_small_noisy_notnoisy</span></code> (a network trained on big and small spheres but no nuclei) and ‘combined’ (a networks trained on several sphere images and nuclei).  How well can networks generalize?  What is the difference in results for the sphere (or nuclei) specific networks as compared to the combined?</p></li>
+<li><p>Look at the results of the <code class="docutils literal notranslate"><span class="pre">restore_care</span></code> and <code class="docutils literal notranslate"><span class="pre">restore_stardist</span></code> notebooks (if you couldn’t run them look at the results on the online pre-run copies).  Do you notice a difference in quality of results between the images with large spheres in the center, and the images with medium sized spheres in the center?  You should notice that both restoration and segmentation of the peripheral spheres, were better when there was only a small sphere in the center.  Even though in both cases the size and brightness of the peripheral spheres were the same.  How do you explain this?</p></li>
+<li><p>Try to get better performance on the entire test set (especially the images with large spheres) by retraining the CARE and/or Stardist networks.  Some strategies that may help get better results.</p></li>
+</ol>
+<ul class="simple">
+<li><p>train for more epochs</p></li>
+<li><p>create new training images with more examples of large spheres and small spheres in the same image</p></li>
+<li><p>other?</p></li>
+</ul>
+<ol class="arabic simple" start="5">
+<li><p>If you know of other deep learning and/or deconvolution toolkits that can be used to get better or more interesting results on these images, post these results on the workshop <a class="reference external" href="http://image.sc">image.sc</a> thread.   Especially of interest would be performance of ‘segment anything’ (SAM) models.</p></li>
+<li><p>What is faster on the same image size?  Applying a CARE network, or 200 iterations of Richardson Lucy?</p></li>
+</ol>
 <div class="toctree-wrapper compound">
 </div>
 </section>
