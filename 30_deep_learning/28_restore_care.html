@@ -453,9 +453,8 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/nuclei.tif&#39;</span><span class="p">,</span>
-              <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres1.tif&#39;</span><span class="p">,</span>
               <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres2.tif&#39;</span><span class="p">,</span>
-              <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres4.tif&#39;</span><span class="p">]</span>
+              <span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres3.tif&#39;</span><span class="p">]</span>
 <span class="n">inputs</span><span class="o">=</span><span class="p">[]</span>
 <span class="n">minmaxes</span><span class="o">=</span><span class="p">[]</span>
 
@@ -479,8 +478,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/9b699b94900ca2f1987b5fb4e6fb5ceb8a4da774cc9790be1d756607e2989bc9.png" src="../_images/9b699b94900ca2f1987b5fb4e6fb5ceb8a4da774cc9790be1d756607e2989bc9.png" />
-<img alt="../_images/3fbec548450b0d84171aabce3afa772c6aa72a80368f38f1efb367c4f077b44c.png" src="../_images/3fbec548450b0d84171aabce3afa772c6aa72a80368f38f1efb367c4f077b44c.png" />
-<img alt="../_images/4e54fc44621749343cfb51dea1b9854b561459539d97c1032e4eabe79f29e8cc.png" src="../_images/4e54fc44621749343cfb51dea1b9854b561459539d97c1032e4eabe79f29e8cc.png" />
+<img alt="../_images/b1da3c1fa6c4a52375140063ab4680999e8356fe93ef09bc4fd0ab583997f595.png" src="../_images/b1da3c1fa6c4a52375140063ab4680999e8356fe93ef09bc4fd0ab583997f595.png" />
 <img alt="../_images/28537a9a2a6e8cf291379ff680489a047759aeab9f71fd6e151fedb74e75cc66.png" src="../_images/28537a9a2a6e8cf291379ff680489a047759aeab9f71fd6e151fedb74e75cc66.png" />
 </div>
 </div>
@@ -492,10 +490,9 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the model using the name of the model and the path to the model</span>
 
-<span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;cytopacq&#39;</span>
-<span class="c1">#model_name = &#39;spheres&#39;</span>
+<span class="c1">#model_name = &#39;cytopacq&#39;</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;spheres&#39;</span>
 <span class="c1">#model_name = &#39;combined&#39;</span>
-<span class="c1">#model_name = &#39;spheres_improved&#39;</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">CARE</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;../../models&#39;</span><span class="p">)</span>
 </pre></div>
@@ -521,77 +518,53 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 350ms/step
-1/1 [==============================] - 0s 261ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 325ms/step
+1/1 [==============================] - 0s 243ms/step
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 48ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 42ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:00&lt;00:00,  6.05it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:00&lt;00:00,  5.99it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 43ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 42ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:00&lt;00:00,  4.24it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:00&lt;00:00,  4.16it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 48ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 41ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.93it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 46ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 46ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:00&lt;00:00,  5.93it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 51ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:00&lt;00:00,  4.09it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 47ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.86it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 46ms/step
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.91it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 44ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:00&lt;00:00,  5.92it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 1/4 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 46ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 50ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:00&lt;00:00,  4.21it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 2/4 [00:00&lt;00:00,  5.88it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 44ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 42ms/step
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.70it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 3/4 [00:00&lt;00:00,  4.16it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - 0s 40ms/step
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.90it/s]
 </pre></div>
 </div>
 </div>
@@ -604,18 +577,17 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/733efc7d6ea661882ad6a65492038fcb6f213383f06db333cff2fe8301fc3625.png" src="../_images/733efc7d6ea661882ad6a65492038fcb6f213383f06db333cff2fe8301fc3625.png" />
-<img alt="../_images/c4e807eca77654ff7f91e46b0ea24d85883db7b26377de1253777f1e92b1a347.png" src="../_images/c4e807eca77654ff7f91e46b0ea24d85883db7b26377de1253777f1e92b1a347.png" />
-<img alt="../_images/b3098bd70542047031d677926ff4b5ca742f29af6f9f59104c944f181e058cff.png" src="../_images/b3098bd70542047031d677926ff4b5ca742f29af6f9f59104c944f181e058cff.png" />
-<img alt="../_images/c3b6f2828d1487fc00c0ea7b6a5bf4897a67921129c3d793f6bb8df23c1dbaad.png" src="../_images/c3b6f2828d1487fc00c0ea7b6a5bf4897a67921129c3d793f6bb8df23c1dbaad.png" />
+<img alt="../_images/d9b8f87c75e26f57f3f786bf62ad8ca18767f7505610079cb13d4afe8d5d2f06.png" src="../_images/d9b8f87c75e26f57f3f786bf62ad8ca18767f7505610079cb13d4afe8d5d2f06.png" />
+<img alt="../_images/a55258690cb60deb29e7be67fd91146551ffc3df7f41be41cdf22ede13590772.png" src="../_images/a55258690cb60deb29e7be67fd91146551ffc3df7f41be41cdf22ede13590772.png" />
+<img alt="../_images/d6b32d0bdd6e15d18a4cda78f6ffac393470092d985a1e9a4961523a0731b1e0.png" src="../_images/d6b32d0bdd6e15d18a4cda78f6ffac393470092d985a1e9a4961523a0731b1e0.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">napari</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="n">n</span><span class="o">=</span><span class="mi">3</span>
-<span class="n">decon</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/deconvolutions/spheres4.tif&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">decon</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/deconvolutions/spheres3.tif&#39;</span><span class="p">)</span>
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">)</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">restorations</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span> <span class="n">restorations</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;restored&#39;</span><span class="p">)</span>
@@ -624,7 +596,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;deconvolution&#39; at 0x2aed8cacf10&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;deconvolution&#39; at 0x1ffd94bce50&gt;
 </pre></div>
 </div>
 </div>
