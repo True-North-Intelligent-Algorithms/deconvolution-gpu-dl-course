@@ -39,6 +39,13 @@ Then install stardist which should also install CSBDeep
 pip install stardist
 ```
 
+## Cellpose
+
+```
+pip install "opencv-python-headless<4.3"
+pip install cellpose
+```
+
 ## raster-geometry
 
 Raster-Geometry is used to generate simulate images for deconvolution testing and deep learning training.
