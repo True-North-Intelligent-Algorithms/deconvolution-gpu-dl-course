@@ -172,6 +172,7 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
 <li class="toctree-l2"><a class="reference internal" href="30_Test_deep_learning_libs.html">Test deep learning libraries</a></li>
 </ul>
 </li>
@@ -416,6 +417,7 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-helper-and-show-image">import helper and show image</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-deconvolution-libraries">Import deconvolution libraries</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-clij2">Deconvolve with clij2</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-tnia-cupy">Deconvolve with tnia-cupy</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-the-deconvolution-result-with-stackview">Look at the deconvolution result with stackview</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-redlionfish">Deconvolve with redlionfish</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#view-data-in-napari-and-ask-questions">View data in Napari and ask questions</a></li>
@@ -466,12 +468,13 @@ document.write(`
     
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+    <span class="kn">from</span> <span class="nn">tnia.deconvolution.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy_cp</span>
     <span class="n">cupy_found</span><span class="o">=</span><span class="kc">True</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;cupy found&#39;</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">cupy_found</span><span class="o">=</span><span class="kc">False</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;!cupy NOT found&#39;</span><span class="p">)</span>
-    
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
     
 </pre></div>
@@ -492,7 +495,7 @@ cupy found
 <ol class="arabic simple">
 <li><p>Get images and models from this link <a class="reference external" href="https://www.dropbox.com/scl/fo/yc5jaoj3ap936dqqy8urc/h?rlkey=ho8vp2nbvprzyltytryj9demp&amp;amp;dl=0">https://www.dropbox.com/scl/fo/yc5jaoj3ap936dqqy8urc/h?rlkey=ho8vp2nbvprzyltytryj9demp&amp;dl=0</a></p></li>
 <li><p>Place both the <code class="docutils literal notranslate"><span class="pre">data</span></code> and <code class="docutils literal notranslate"><span class="pre">models</span></code> folders beside the <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder.</p></li>
-<li><p>Use imread to verify you can open the image, then print the size of the image and verify it is is <code class="docutils literal notranslate"><span class="pre">(128,256,256)</span></code></p></li>
+<li><p>Use imread to verify you can open the image, then print the size of the image and verify it is <code class="docutils literal notranslate"><span class="pre">(128,256,256)</span></code></p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -538,7 +541,7 @@ cupy found
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;Image&#39;)
 </pre></div>
 </div>
-<img alt="../_images/121691ad5ae451764b7302c356b509c1acffaf21f86fc19b3601a82862fcb703.png" src="../_images/121691ad5ae451764b7302c356b509c1acffaf21f86fc19b3601a82862fcb703.png" />
+<img alt="../_images/c45ab39f3b8ecfa7fc7bb47ffd8c72f36f6afa4efae80ed93e1fc8ab7b0d8f04.png" src="../_images/c45ab39f3b8ecfa7fc7bb47ffd8c72f36f6afa4efae80ed93e1fc8ab7b0d8f04.png" />
 </div>
 </div>
 </section>
@@ -555,7 +558,7 @@ cupy found
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4bbfb76e56dd4e93aaef0d58ac3869d6", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5e688330beb04a789984c1e8dbb13233", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 </section>
 <section id="import-helper-and-show-image">
@@ -576,7 +579,7 @@ cupy found
 stackview available
 </pre></div>
 </div>
-<img alt="../_images/bbdeea7bd9e018ebdb5481fe4343be3a071c48ea2b25230152dead5c6045d196.png" src="../_images/bbdeea7bd9e018ebdb5481fe4343be3a071c48ea2b25230152dead5c6045d196.png" />
+<img alt="../_images/0ccb5f181dbf875c658b1f281e4f16faf6156db7cb6939d0c385a7ede532753d.png" src="../_images/0ccb5f181dbf875c658b1f281e4f16faf6156db7cb6939d0c385a7ede532753d.png" />
 </div>
 </div>
 </section>
@@ -588,7 +591,6 @@ stackview available
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">clij2fft.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy_nc</span>
     <span class="n">clij2_rl_found</span><span class="o">=</span><span class="kc">True</span>
-    
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">clij2_rl_found</span><span class="o">=</span><span class="kc">False</span>
 <span class="k">try</span><span class="p">:</span>
@@ -596,15 +598,23 @@ stackview available
     <span class="n">redlionfish_rl_found</span><span class="o">=</span><span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">redlionfish_rl_found</span><span class="o">=</span><span class="kc">False</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">tnia.deconvolution.richardson_lucy</span> <span class="kn">import</span> <span class="n">richardson_lucy_cp</span>
+    <span class="n">tnia_rl_cupy_found</span><span class="o">=</span><span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">tnia_rl_cupy_found</span><span class="o">=</span><span class="kc">False</span>
     
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;clij2 rl found&#39;</span><span class="p">,</span><span class="n">clij2_rl_found</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;redlionfish rl found&#39;</span><span class="p">,</span><span class="n">redlionfish_rl_found</span><span class="p">)</span>    
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;tnia rl cupy found&#39;</span><span class="p">,</span><span class="n">tnia_rl_cupy_found</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>clij2 rl found True
 redlionfish rl found True
+tnia rl cupy found True
 </pre></div>
 </div>
 </div>
@@ -625,13 +635,28 @@ redlionfish rl found True
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>get lib
-
-Richardson Lucy Started
-0 10 20 30 40 50 60 70 80 90 
-Richardson Lucy Finished
+calling convcorr 0 0
 </pre></div>
 </div>
-<img alt="../_images/a54d6f20ac356ea9c370bbd2c6cc95b1a7fc0e1231b9d6a86c8a380e8ae48119.png" src="../_images/a54d6f20ac356ea9c370bbd2c6cc95b1a7fc0e1231b9d6a86c8a380e8ae48119.png" />
+<img alt="../_images/baa7531c96dfd58f8cfbbed0d337b0d1d942758137425b33914754f8753f7f8f.png" src="../_images/baa7531c96dfd58f8cfbbed0d337b0d1d942758137425b33914754f8753f7f8f.png" />
+</div>
+</div>
+</section>
+<section id="deconvolve-with-tnia-cupy">
+<h1>Deconvolve with tnia-cupy<a class="headerlink" href="#deconvolve-with-tnia-cupy" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">tnia_rl_cupy_found</span><span class="p">:</span>
+    <span class="n">decon_tnia</span><span class="o">=</span><span class="n">richardson_lucy_cp</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">psf</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">show_xyz_slice_center</span><span class="p">(</span><span class="n">decon_tnia</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 10 20 30 40 50 60 70 80 90 
+</pre></div>
+</div>
+<img alt="../_images/1512b705649a6899f953c8aa59ed9ffb67dadacf72f1de86e0dce592a99476ab.png" src="../_images/1512b705649a6899f953c8aa59ed9ffb67dadacf72f1de86e0dce592a99476ab.png" />
 </div>
 </div>
 </section>
@@ -644,7 +669,7 @@ Richardson Lucy Finished
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "761a35f864024b4c9932ea3e94c003eb", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "755b82f97bc44f33aec2cd6a54f1c977", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 </section>
 <section id="deconvolve-with-redlionfish">
@@ -667,7 +692,7 @@ Richardson Lucy Finished
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4d58a41aeb6b704c884de6d85360ea27fc000f635b7cf6d573bb12fba19df500.png" src="../_images/4d58a41aeb6b704c884de6d85360ea27fc000f635b7cf6d573bb12fba19df500.png" />
+<img alt="../_images/7e691f30d31e49d78b0e878398ea0be3b3e3dcf18dbb5d8559a2e0b56f0a8065.png" src="../_images/7e691f30d31e49d78b0e878398ea0be3b3e3dcf18dbb5d8559a2e0b56f0a8065.png" />
 </div>
 </div>
 </section>
@@ -687,7 +712,7 @@ Richardson Lucy Finished
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;truth&#39; at 0x2169d6abfa0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Image layer &#39;truth&#39; at 0x1d228e14bb0&gt;
 </pre></div>
 </div>
 </div>
@@ -768,6 +793,7 @@ Richardson Lucy Finished
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-helper-and-show-image">import helper and show image</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-deconvolution-libraries">Import deconvolution libraries</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-clij2">Deconvolve with clij2</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-tnia-cupy">Deconvolve with tnia-cupy</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#look-at-the-deconvolution-result-with-stackview">Look at the deconvolution result with stackview</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deconvolve-with-redlionfish">Deconvolve with redlionfish</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#view-data-in-napari-and-ask-questions">View data in Napari and ask questions</a></li>
