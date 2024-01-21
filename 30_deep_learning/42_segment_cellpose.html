@@ -1,0 +1,965 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Segment with a cellpose network &#8212; My Jupyter Book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '30_deep_learning/42_segment_cellpose';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.jpeg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploring the Intersection of Deconvolution, GPU Computing, and Deep Learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../10_intro/05_Module1.html">Module 1: Course preparation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/10_Mambaforge_devbio.html">Mambaforge and devbio-napari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/15_Dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/18_Get_data.html">Get test data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/20_Test_deconvolution_libs.html">Test deconvolution imports</a></li>
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../10_intro/30_Test_deep_learning_libs.html">Test deep learning libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../20_deconvolution/0_intro_to_decon.html">Module 2: Deconvolution</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/20_cupy_forward.html">Forward modelling</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/30_Nuclei_Deconvolution_Compare_to_Truth.html">Nuclei Deconvolution and Compare intensities to ground truth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/80_extract_psf.html">A Notebook showing ‘reverse Deconvolution’ a.k.a. PSF Distilling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20_deconvolution/90_decon_systems_design.html">Deconvolution Systems Design</a></li>
+
+
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="10_Introduction.html">Module3: Deep Learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="15_training_data.html">Creating training data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_training_data_cytopacq.html">Creating training data from cytopacq simulated nuclei images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_restore_trivial.html">Train and restore with trivial conv net</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="25_train_care.html">Train a CARE conv net</a></li>
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="28_restore_care.html">Care restoration (prediction)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="30_train_stardist.html">Train a stardist neural network for segmentation</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="35_segment_stardist.html">Segment with stardist model</a></li>
+
+
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../90_notes/10_notes.html">Collaborative Assignment</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../90_notes/20_notes.html">Second set of notes</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/True-North-Intelligent-Algorithms/deconvolution-gpu-dl-course/issues/new?title=Issue%20on%20page%20%2F30_deep_learning/42_segment_cellpose.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/30_deep_learning/42_segment_cellpose.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Segment with a cellpose network</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Segment with a cellpose network</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-data">Load Data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-models">Load models</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-each">Apply each</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="segment-with-a-cellpose-network">
+<h1>Segment with a cellpose network<a class="headerlink" href="#segment-with-a-cellpose-network" title="Permalink to this heading">#</a></h1>
+<p>In this notebook we use a default (‘cyto2’) and custom trained cellpose network on a sample with simulated beads of different size and intensity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span><span class="p">,</span> <span class="n">imsave</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xyz_slice</span><span class="p">,</span> <span class="n">show_xyz_max</span>
+<span class="kn">from</span> <span class="nn">cellpose</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">io</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">decon_helper</span> <span class="k">as</span> <span class="nn">dh</span>
+<span class="kn">from</span> <span class="nn">tnia.plotting.plt_helper</span> <span class="kn">import</span> <span class="n">random_label_cmap</span>
+<span class="n">colormap</span><span class="o">=</span><span class="n">random_label_cmap</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-data">
+<h1>Load Data<a class="headerlink" href="#load-data" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;../../data/deep learning testing/inputs/spheres2.tif&#39;</span><span class="p">]</span>
+
+<span class="n">inputs</span><span class="o">=</span><span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">input_name</span> <span class="ow">in</span> <span class="n">input_names</span><span class="p">:</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">input_name</span><span class="p">)</span>
+    <span class="n">nmin</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">nmax</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span><span class="o">-</span><span class="n">nmin</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nmax</span> <span class="o">-</span> <span class="n">nmin</span><span class="p">)</span>
+    <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="n">dh</span><span class="o">.</span><span class="n">show_xyz_slice</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s1">&#39;tnia&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ca60eae3e336b54703f011292fd5b69a39325bf02d482190e56b451cfd3ec1cd.png" src="../_images/ca60eae3e336b54703f011292fd5b69a39325bf02d482190e56b451cfd3ec1cd.png" />
+</div>
+</div>
+</section>
+<section id="load-models">
+<h1>Load models<a class="headerlink" href="#load-models" title="Permalink to this heading">#</a></h1>
+<p>Load the cellpose model that we trained for simulated beads and the cyto2 model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parent_dl_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;../../models&#39;</span>
+<span class="n">dl_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;../../models&#39;</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dl_path</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;models&#39;</span><span class="p">)</span>
+<span class="c1"># start logger (to see training across epochs)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">logger_setup</span><span class="p">()</span>
+
+<span class="n">models_collection</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">model_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># DEFINE CELLPOSE MODEL (without size model)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CellposeModel</span><span class="p">(</span><span class="n">gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pretrained_model</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span><span class="s1">&#39;models&#39;</span><span class="p">,</span><span class="s1">&#39;cellpose_try&#39;</span><span class="p">))</span>
+<span class="n">models_collection</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="n">model_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;custom&#39;</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CellposeModel</span><span class="p">(</span><span class="n">gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;cyto2&#39;</span><span class="p">)</span>
+<span class="n">models_collection</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="n">model_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;cyto2&#39;</span><span class="p">)</span>
+<span class="c1">#rint(os.path.join(model_path,&#39;models&#39;,&#39;cellpose_model1&#39;))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>creating new log file
+2024-01-20 18:29:26,952 [INFO] WRITING LOG OUTPUT TO C:\Users\bnort\.cellpose\run.log
+2024-01-20 18:29:26,954 [INFO] 
+cellpose version: 	2.2.3 
+platform:       	win32 
+python version: 	3.9.16 
+torch version:  	2.1.2+cpu
+2024-01-20 18:29:26,955 [INFO] &gt;&gt;&gt;&gt; loading model ../../models\models\models\cellpose_try
+2024-01-20 18:29:26,956 [INFO] TORCH CUDA version not installed/working.
+2024-01-20 18:29:26,957 [INFO] &gt;&gt;&gt;&gt; using CPU
+2024-01-20 18:29:27,086 [INFO] &gt;&gt;&gt;&gt; model diam_mean =  30.000 (ROIs rescaled to this size during training)
+2024-01-20 18:29:27,087 [INFO] &gt;&gt;&gt;&gt; model diam_labels =  15.622 (mean diameter of training ROIs)
+2024-01-20 18:29:27,093 [INFO] &gt;&gt; cyto2 &lt;&lt; model set to be used
+2024-01-20 18:29:27,095 [INFO] TORCH CUDA version not installed/working.
+2024-01-20 18:29:27,096 [INFO] &gt;&gt;&gt;&gt; using CPU
+2024-01-20 18:29:27,221 [INFO] &gt;&gt;&gt;&gt; model diam_mean =  30.000 (ROIs rescaled to this size during training)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="apply-each">
+<h1>Apply each<a class="headerlink" href="#apply-each" title="Permalink to this heading">#</a></h1>
+<p>The below code block is set up to also be able to test different diameters.  Right now I use a diameter of 30 (the diameter the cyto model is reported to have been trained at).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diameters</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">]</span>
+
+<span class="n">masks</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">diameter</span> <span class="ow">in</span> <span class="n">diameters</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models_collection</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">diameter</span><span class="o">=</span><span class="n">diameter</span><span class="p">,</span> <span class="n">do_3D</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">anisotropy</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">flow_threshold</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">cellprob_threshold</span><span class="o">=-</span><span class="mf">0.8</span> <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#mask = model.eval(inputs[0], channels=[0,1,2], do_3D=True, anisotropy=3,flow_threshold=0.8, cellprob_threshold=-0.8 )[0]</span>
+        <span class="n">masks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-01-20 18:39:54,068 [INFO] multi-stack tiff read in as having 86 planes 1 channels
+2024-01-20 18:39:54,402 [INFO] running YX: 86 planes of size (256, 256)
+2024-01-20 18:39:54,426 [INFO] 0%|          | 0/11 [00:00&lt;?, ?it/s]
+2024-01-20 18:39:57,096 [INFO] 9%|9         | 1/11 [00:02&lt;00:26,  2.67s/it]
+2024-01-20 18:39:59,554 [INFO] 18%|#8        | 2/11 [00:05&lt;00:22,  2.54s/it]
+2024-01-20 18:40:02,246 [INFO] 27%|##7       | 3/11 [00:07&lt;00:20,  2.61s/it]
+2024-01-20 18:40:04,928 [INFO] 36%|###6      | 4/11 [00:10&lt;00:18,  2.64s/it]
+2024-01-20 18:40:07,530 [INFO] 45%|####5     | 5/11 [00:13&lt;00:15,  2.63s/it]
+2024-01-20 18:40:10,042 [INFO] 55%|#####4    | 6/11 [00:15&lt;00:12,  2.59s/it]
+2024-01-20 18:40:12,615 [INFO] 64%|######3   | 7/11 [00:18&lt;00:10,  2.58s/it]
+2024-01-20 18:40:15,245 [INFO] 73%|#######2  | 8/11 [00:20&lt;00:07,  2.60s/it]
+2024-01-20 18:40:17,875 [INFO] 82%|########1 | 9/11 [00:23&lt;00:05,  2.61s/it]
+2024-01-20 18:40:20,171 [INFO] 91%|######### | 10/11 [00:25&lt;00:02,  2.51s/it]
+2024-01-20 18:40:22,710 [INFO] 100%|##########| 11/11 [00:28&lt;00:00,  2.52s/it]
+2024-01-20 18:40:22,711 [INFO] 100%|##########| 11/11 [00:28&lt;00:00,  2.57s/it]
+2024-01-20 18:40:22,865 [INFO] running ZY: 256 planes of size (86, 256)
+2024-01-20 18:40:22,930 [INFO] 0%|          | 0/32 [00:00&lt;?, ?it/s]
+2024-01-20 18:40:25,532 [INFO] 3%|3         | 1/32 [00:02&lt;01:20,  2.60s/it]
+2024-01-20 18:40:28,192 [INFO] 6%|6         | 2/32 [00:05&lt;01:19,  2.64s/it]
+2024-01-20 18:40:30,779 [INFO] 9%|9         | 3/32 [00:07&lt;01:15,  2.61s/it]
+2024-01-20 18:40:33,268 [INFO] 12%|#2        | 4/32 [00:10&lt;01:11,  2.56s/it]
+2024-01-20 18:40:35,833 [INFO] 16%|#5        | 5/32 [00:12&lt;01:09,  2.56s/it]
+2024-01-20 18:40:38,307 [INFO] 19%|#8        | 6/32 [00:15&lt;01:05,  2.53s/it]
+2024-01-20 18:40:40,982 [INFO] 22%|##1       | 7/32 [00:18&lt;01:04,  2.58s/it]
+2024-01-20 18:40:43,383 [INFO] 25%|##5       | 8/32 [00:20&lt;01:00,  2.52s/it]
+2024-01-20 18:40:46,001 [INFO] 28%|##8       | 9/32 [00:23&lt;00:58,  2.55s/it]
+2024-01-20 18:40:48,441 [INFO] 31%|###1      | 10/32 [00:25&lt;00:55,  2.52s/it]
+2024-01-20 18:40:50,928 [INFO] 34%|###4      | 11/32 [00:27&lt;00:52,  2.51s/it]
+2024-01-20 18:40:53,376 [INFO] 38%|###7      | 12/32 [00:30&lt;00:49,  2.49s/it]
+2024-01-20 18:40:55,968 [INFO] 41%|####      | 13/32 [00:33&lt;00:47,  2.52s/it]
+2024-01-20 18:40:58,377 [INFO] 44%|####3     | 14/32 [00:35&lt;00:44,  2.49s/it]
+2024-01-20 18:41:00,945 [INFO] 47%|####6     | 15/32 [00:38&lt;00:42,  2.51s/it]
+2024-01-20 18:41:03,374 [INFO] 50%|#####     | 16/32 [00:40&lt;00:39,  2.49s/it]
+2024-01-20 18:41:06,048 [INFO] 53%|#####3    | 17/32 [00:43&lt;00:38,  2.54s/it]
+2024-01-20 18:41:08,516 [INFO] 56%|#####6    | 18/32 [00:45&lt;00:35,  2.52s/it]
+2024-01-20 18:41:11,131 [INFO] 59%|#####9    | 19/32 [00:48&lt;00:33,  2.55s/it]
+2024-01-20 18:41:13,643 [INFO] 62%|######2   | 20/32 [00:50&lt;00:30,  2.54s/it]
+2024-01-20 18:41:16,176 [INFO] 66%|######5   | 21/32 [00:53&lt;00:27,  2.54s/it]
+2024-01-20 18:41:18,655 [INFO] 69%|######8   | 22/32 [00:55&lt;00:25,  2.52s/it]
+2024-01-20 18:41:21,198 [INFO] 72%|#######1  | 23/32 [00:58&lt;00:22,  2.53s/it]
+2024-01-20 18:41:23,768 [INFO] 75%|#######5  | 24/32 [01:00&lt;00:20,  2.54s/it]
+2024-01-20 18:41:26,200 [INFO] 78%|#######8  | 25/32 [01:03&lt;00:17,  2.51s/it]
+2024-01-20 18:41:28,884 [INFO] 81%|########1 | 26/32 [01:05&lt;00:15,  2.56s/it]
+2024-01-20 18:41:31,308 [INFO] 84%|########4 | 27/32 [01:08&lt;00:12,  2.52s/it]
+2024-01-20 18:41:33,923 [INFO] 88%|########7 | 28/32 [01:10&lt;00:10,  2.55s/it]
+2024-01-20 18:41:36,337 [INFO] 91%|######### | 29/32 [01:13&lt;00:07,  2.51s/it]
+2024-01-20 18:41:38,893 [INFO] 94%|#########3| 30/32 [01:15&lt;00:05,  2.52s/it]
+2024-01-20 18:41:41,372 [INFO] 97%|#########6| 31/32 [01:18&lt;00:02,  2.51s/it]
+2024-01-20 18:41:43,950 [INFO] 100%|##########| 32/32 [01:21&lt;00:00,  2.53s/it]
+2024-01-20 18:41:43,952 [INFO] 100%|##########| 32/32 [01:21&lt;00:00,  2.53s/it]
+2024-01-20 18:41:44,361 [INFO] running ZX: 256 planes of size (86, 256)
+2024-01-20 18:41:44,430 [INFO] 0%|          | 0/32 [00:00&lt;?, ?it/s]
+2024-01-20 18:41:46,899 [INFO] 3%|3         | 1/32 [00:02&lt;01:16,  2.47s/it]
+2024-01-20 18:41:49,376 [INFO] 6%|6         | 2/32 [00:04&lt;01:14,  2.47s/it]
+2024-01-20 18:41:52,074 [INFO] 9%|9         | 3/32 [00:07&lt;01:14,  2.58s/it]
+2024-01-20 18:41:54,519 [INFO] 12%|#2        | 4/32 [00:10&lt;01:10,  2.52s/it]
+2024-01-20 18:41:57,086 [INFO] 16%|#5        | 5/32 [00:12&lt;01:08,  2.54s/it]
+2024-01-20 18:41:59,619 [INFO] 19%|#8        | 6/32 [00:15&lt;01:05,  2.54s/it]
+2024-01-20 18:42:02,273 [INFO] 22%|##1       | 7/32 [00:17&lt;01:04,  2.58s/it]
+2024-01-20 18:42:04,921 [INFO] 25%|##5       | 8/32 [00:20&lt;01:02,  2.60s/it]
+2024-01-20 18:42:07,361 [INFO] 28%|##8       | 9/32 [00:22&lt;00:58,  2.55s/it]
+2024-01-20 18:42:09,883 [INFO] 31%|###1      | 10/32 [00:25&lt;00:55,  2.54s/it]
+2024-01-20 18:42:12,356 [INFO] 34%|###4      | 11/32 [00:27&lt;00:52,  2.52s/it]
+2024-01-20 18:42:14,899 [INFO] 38%|###7      | 12/32 [00:30&lt;00:50,  2.53s/it]
+2024-01-20 18:42:17,347 [INFO] 41%|####      | 13/32 [00:32&lt;00:47,  2.50s/it]
+2024-01-20 18:42:19,795 [INFO] 44%|####3     | 14/32 [00:35&lt;00:44,  2.49s/it]
+2024-01-20 18:42:22,250 [INFO] 47%|####6     | 15/32 [00:37&lt;00:42,  2.48s/it]
+2024-01-20 18:42:24,654 [INFO] 50%|#####     | 16/32 [00:40&lt;00:39,  2.45s/it]
+2024-01-20 18:42:27,126 [INFO] 53%|#####3    | 17/32 [00:42&lt;00:36,  2.46s/it]
+2024-01-20 18:42:29,620 [INFO] 56%|#####6    | 18/32 [00:45&lt;00:34,  2.47s/it]
+2024-01-20 18:42:32,241 [INFO] 59%|#####9    | 19/32 [00:47&lt;00:32,  2.52s/it]
+2024-01-20 18:42:34,833 [INFO] 62%|######2   | 20/32 [00:50&lt;00:30,  2.54s/it]
+2024-01-20 18:42:37,210 [INFO] 66%|######5   | 21/32 [00:52&lt;00:27,  2.49s/it]
+2024-01-20 18:42:39,895 [INFO] 69%|######8   | 22/32 [00:55&lt;00:25,  2.55s/it]
+2024-01-20 18:42:42,313 [INFO] 72%|#######1  | 23/32 [00:57&lt;00:22,  2.51s/it]
+2024-01-20 18:42:44,783 [INFO] 75%|#######5  | 24/32 [01:00&lt;00:19,  2.50s/it]
+2024-01-20 18:42:47,251 [INFO] 78%|#######8  | 25/32 [01:02&lt;00:17,  2.49s/it]
+2024-01-20 18:42:49,831 [INFO] 81%|########1 | 26/32 [01:05&lt;00:15,  2.52s/it]
+2024-01-20 18:42:52,193 [INFO] 84%|########4 | 27/32 [01:07&lt;00:12,  2.47s/it]
+2024-01-20 18:42:54,775 [INFO] 88%|########7 | 28/32 [01:10&lt;00:10,  2.50s/it]
+2024-01-20 18:42:57,274 [INFO] 91%|######### | 29/32 [01:12&lt;00:07,  2.50s/it]
+2024-01-20 18:42:59,812 [INFO] 94%|#########3| 30/32 [01:15&lt;00:05,  2.51s/it]
+2024-01-20 18:43:02,305 [INFO] 97%|#########6| 31/32 [01:17&lt;00:02,  2.51s/it]
+2024-01-20 18:43:04,808 [INFO] 100%|##########| 32/32 [01:20&lt;00:00,  2.51s/it]
+2024-01-20 18:43:04,809 [INFO] 100%|##########| 32/32 [01:20&lt;00:00,  2.51s/it]
+2024-01-20 18:43:05,100 [INFO] network run in 191.00s
+2024-01-20 18:43:06,953 [INFO] masks created in 1.85s
+2024-01-20 18:43:07,721 [INFO] multi-stack tiff read in as having 86 planes 1 channels
+2024-01-20 18:43:08,047 [INFO] running YX: 86 planes of size (256, 256)
+2024-01-20 18:43:08,071 [INFO] 0%|          | 0/11 [00:00&lt;?, ?it/s]
+2024-01-20 18:43:10,723 [INFO] 9%|9         | 1/11 [00:02&lt;00:26,  2.65s/it]
+2024-01-20 18:43:13,271 [INFO] 18%|#8        | 2/11 [00:05&lt;00:23,  2.59s/it]
+2024-01-20 18:43:15,834 [INFO] 27%|##7       | 3/11 [00:07&lt;00:20,  2.58s/it]
+2024-01-20 18:43:18,347 [INFO] 36%|###6      | 4/11 [00:10&lt;00:17,  2.55s/it]
+2024-01-20 18:43:20,894 [INFO] 45%|####5     | 5/11 [00:12&lt;00:15,  2.55s/it]
+2024-01-20 18:43:23,501 [INFO] 55%|#####4    | 6/11 [00:15&lt;00:12,  2.57s/it]
+2024-01-20 18:43:25,981 [INFO] 64%|######3   | 7/11 [00:17&lt;00:10,  2.54s/it]
+2024-01-20 18:43:28,582 [INFO] 73%|#######2  | 8/11 [00:20&lt;00:07,  2.56s/it]
+2024-01-20 18:43:31,116 [INFO] 82%|########1 | 9/11 [00:23&lt;00:05,  2.55s/it]
+2024-01-20 18:43:33,759 [INFO] 91%|######### | 10/11 [00:25&lt;00:02,  2.58s/it]
+2024-01-20 18:43:36,151 [INFO] 100%|##########| 11/11 [00:28&lt;00:00,  2.52s/it]
+2024-01-20 18:43:36,152 [INFO] 100%|##########| 11/11 [00:28&lt;00:00,  2.55s/it]
+2024-01-20 18:43:36,305 [INFO] running ZY: 256 planes of size (86, 256)
+2024-01-20 18:43:36,375 [INFO] 0%|          | 0/32 [00:00&lt;?, ?it/s]
+2024-01-20 18:43:38,969 [INFO] 3%|3         | 1/32 [00:02&lt;01:20,  2.59s/it]
+2024-01-20 18:43:41,541 [INFO] 6%|6         | 2/32 [00:05&lt;01:17,  2.58s/it]
+2024-01-20 18:43:44,182 [INFO] 9%|9         | 3/32 [00:07&lt;01:15,  2.61s/it]
+2024-01-20 18:43:46,787 [INFO] 12%|#2        | 4/32 [00:10&lt;01:12,  2.61s/it]
+2024-01-20 18:43:49,223 [INFO] 16%|#5        | 5/32 [00:12&lt;01:08,  2.55s/it]
+2024-01-20 18:43:51,864 [INFO] 19%|#8        | 6/32 [00:15&lt;01:07,  2.58s/it]
+2024-01-20 18:43:54,300 [INFO] 22%|##1       | 7/32 [00:17&lt;01:03,  2.53s/it]
+2024-01-20 18:43:56,937 [INFO] 25%|##5       | 8/32 [00:20&lt;01:01,  2.56s/it]
+2024-01-20 18:43:59,350 [INFO] 28%|##8       | 9/32 [00:22&lt;00:57,  2.52s/it]
+2024-01-20 18:44:01,976 [INFO] 31%|###1      | 10/32 [00:25&lt;00:56,  2.55s/it]
+2024-01-20 18:44:04,467 [INFO] 34%|###4      | 11/32 [00:28&lt;00:53,  2.53s/it]
+2024-01-20 18:44:06,966 [INFO] 38%|###7      | 12/32 [00:30&lt;00:50,  2.52s/it]
+2024-01-20 18:44:09,494 [INFO] 41%|####      | 13/32 [00:33&lt;00:47,  2.52s/it]
+2024-01-20 18:44:12,093 [INFO] 44%|####3     | 14/32 [00:35&lt;00:45,  2.55s/it]
+2024-01-20 18:44:14,648 [INFO] 47%|####6     | 15/32 [00:38&lt;00:43,  2.55s/it]
+2024-01-20 18:44:17,228 [INFO] 50%|#####     | 16/32 [00:40&lt;00:40,  2.56s/it]
+2024-01-20 18:44:19,780 [INFO] 53%|#####3    | 17/32 [00:43&lt;00:38,  2.56s/it]
+2024-01-20 18:44:22,228 [INFO] 56%|#####6    | 18/32 [00:45&lt;00:35,  2.52s/it]
+2024-01-20 18:44:24,681 [INFO] 59%|#####9    | 19/32 [00:48&lt;00:32,  2.50s/it]
+2024-01-20 18:44:27,259 [INFO] 62%|######2   | 20/32 [00:50&lt;00:30,  2.53s/it]
+2024-01-20 18:44:29,887 [INFO] 66%|######5   | 21/32 [00:53&lt;00:28,  2.56s/it]
+2024-01-20 18:44:32,472 [INFO] 69%|######8   | 22/32 [00:56&lt;00:25,  2.56s/it]
+2024-01-20 18:44:34,984 [INFO] 72%|#######1  | 23/32 [00:58&lt;00:22,  2.55s/it]
+2024-01-20 18:44:37,606 [INFO] 75%|#######5  | 24/32 [01:01&lt;00:20,  2.57s/it]
+2024-01-20 18:44:40,266 [INFO] 78%|#######8  | 25/32 [01:03&lt;00:18,  2.60s/it]
+2024-01-20 18:44:42,965 [INFO] 81%|########1 | 26/32 [01:06&lt;00:15,  2.63s/it]
+2024-01-20 18:44:45,478 [INFO] 84%|########4 | 27/32 [01:09&lt;00:12,  2.59s/it]
+2024-01-20 18:44:48,128 [INFO] 88%|########7 | 28/32 [01:11&lt;00:10,  2.61s/it]
+2024-01-20 18:44:50,697 [INFO] 91%|######### | 29/32 [01:14&lt;00:07,  2.60s/it]
+2024-01-20 18:44:53,244 [INFO] 94%|#########3| 30/32 [01:16&lt;00:05,  2.58s/it]
+2024-01-20 18:44:55,837 [INFO] 97%|#########6| 31/32 [01:19&lt;00:02,  2.59s/it]
+2024-01-20 18:44:58,253 [INFO] 100%|##########| 32/32 [01:21&lt;00:00,  2.53s/it]
+2024-01-20 18:44:58,254 [INFO] 100%|##########| 32/32 [01:21&lt;00:00,  2.56s/it]
+2024-01-20 18:44:58,665 [INFO] running ZX: 256 planes of size (86, 256)
+2024-01-20 18:44:58,749 [INFO] 0%|          | 0/32 [00:00&lt;?, ?it/s]
+2024-01-20 18:45:01,371 [INFO] 3%|3         | 1/32 [00:02&lt;01:21,  2.62s/it]
+2024-01-20 18:45:03,965 [INFO] 6%|6         | 2/32 [00:05&lt;01:18,  2.61s/it]
+2024-01-20 18:45:06,420 [INFO] 9%|9         | 3/32 [00:07&lt;01:13,  2.54s/it]
+2024-01-20 18:45:08,975 [INFO] 12%|#2        | 4/32 [00:10&lt;01:11,  2.54s/it]
+2024-01-20 18:45:11,429 [INFO] 16%|#5        | 5/32 [00:12&lt;01:07,  2.51s/it]
+2024-01-20 18:45:13,998 [INFO] 19%|#8        | 6/32 [00:15&lt;01:05,  2.53s/it]
+2024-01-20 18:45:16,468 [INFO] 22%|##1       | 7/32 [00:17&lt;01:02,  2.51s/it]
+2024-01-20 18:45:19,042 [INFO] 25%|##5       | 8/32 [00:20&lt;01:00,  2.53s/it]
+2024-01-20 18:45:21,525 [INFO] 28%|##8       | 9/32 [00:22&lt;00:57,  2.52s/it]
+2024-01-20 18:45:24,121 [INFO] 31%|###1      | 10/32 [00:25&lt;00:55,  2.54s/it]
+2024-01-20 18:45:26,571 [INFO] 34%|###4      | 11/32 [00:27&lt;00:52,  2.51s/it]
+2024-01-20 18:45:29,137 [INFO] 38%|###7      | 12/32 [00:30&lt;00:50,  2.53s/it]
+2024-01-20 18:45:31,786 [INFO] 41%|####      | 13/32 [00:33&lt;00:48,  2.57s/it]
+2024-01-20 18:45:34,293 [INFO] 44%|####3     | 14/32 [00:35&lt;00:45,  2.55s/it]
+2024-01-20 18:45:36,806 [INFO] 47%|####6     | 15/32 [00:38&lt;00:43,  2.54s/it]
+2024-01-20 18:45:39,251 [INFO] 50%|#####     | 16/32 [00:40&lt;00:40,  2.51s/it]
+2024-01-20 18:45:41,671 [INFO] 53%|#####3    | 17/32 [00:42&lt;00:37,  2.48s/it]
+2024-01-20 18:45:44,186 [INFO] 56%|#####6    | 18/32 [00:45&lt;00:34,  2.49s/it]
+2024-01-20 18:45:46,817 [INFO] 59%|#####9    | 19/32 [00:48&lt;00:32,  2.53s/it]
+2024-01-20 18:45:49,257 [INFO] 62%|######2   | 20/32 [00:50&lt;00:30,  2.51s/it]
+2024-01-20 18:45:51,786 [INFO] 66%|######5   | 21/32 [00:53&lt;00:27,  2.51s/it]
+2024-01-20 18:45:54,350 [INFO] 69%|######8   | 22/32 [00:55&lt;00:25,  2.53s/it]
+2024-01-20 18:45:56,859 [INFO] 72%|#######1  | 23/32 [00:58&lt;00:22,  2.52s/it]
+2024-01-20 18:45:59,392 [INFO] 75%|#######5  | 24/32 [01:00&lt;00:20,  2.53s/it]
+2024-01-20 18:46:01,843 [INFO] 78%|#######8  | 25/32 [01:03&lt;00:17,  2.50s/it]
+2024-01-20 18:46:04,318 [INFO] 81%|########1 | 26/32 [01:05&lt;00:14,  2.49s/it]
+2024-01-20 18:46:06,917 [INFO] 84%|########4 | 27/32 [01:08&lt;00:12,  2.53s/it]
+2024-01-20 18:46:09,385 [INFO] 88%|########7 | 28/32 [01:10&lt;00:10,  2.51s/it]
+2024-01-20 18:46:11,963 [INFO] 91%|######### | 29/32 [01:13&lt;00:07,  2.53s/it]
+2024-01-20 18:46:14,445 [INFO] 94%|#########3| 30/32 [01:15&lt;00:05,  2.52s/it]
+2024-01-20 18:46:17,000 [INFO] 97%|#########6| 31/32 [01:18&lt;00:02,  2.53s/it]
+2024-01-20 18:46:19,610 [INFO] 100%|##########| 32/32 [01:20&lt;00:00,  2.55s/it]
+2024-01-20 18:46:19,611 [INFO] 100%|##########| 32/32 [01:20&lt;00:00,  2.53s/it]
+2024-01-20 18:46:19,895 [INFO] network run in 192.14s
+2024-01-20 18:46:22,090 [INFO] masks created in 2.19s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tnia.plotting.projections</span> <span class="kn">import</span> <span class="n">show_xy_zy_slice_center</span><span class="p">,</span> <span class="n">show_xy_zy_max</span>
+
+<span class="k">for</span> <span class="n">mask</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">masks</span><span class="p">,</span> <span class="n">model_names</span><span class="p">):</span>
+    <span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_slice_center</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="n">colormap</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">mask</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">masks</span><span class="p">,</span> <span class="n">model_names</span><span class="p">):</span>
+    <span class="n">fig</span><span class="o">=</span><span class="n">show_xy_zy_max</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="n">colormap</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a77c8ae21cf68a8bf80683e08b3c8646e0fff3f06137a16f02ecb061045946f5.png" src="../_images/a77c8ae21cf68a8bf80683e08b3c8646e0fff3f06137a16f02ecb061045946f5.png" />
+<img alt="../_images/330364f5feccafc98def423d3f5f617ac8055ee587b5dbe87ceb6a8b4ca40a26.png" src="../_images/330364f5feccafc98def423d3f5f617ac8055ee587b5dbe87ceb6a8b4ca40a26.png" />
+<img alt="../_images/077207f5b158b79fba7d3d29c9d81a4f712cb3876372ce478cf4ab2d4a3d7323.png" src="../_images/077207f5b158b79fba7d3d29c9d81a4f712cb3876372ce478cf4ab2d4a3d7323.png" />
+<img alt="../_images/72a96baf7024c66b074db4fc42dc7c123dd2f56950d674befa1daf86ebebf134.png" src="../_images/72a96baf7024c66b074db4fc42dc7c123dd2f56950d674befa1daf86ebebf134.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#diameters = [5, 25, 100, 30]</span>
+
+<span class="kn">import</span> <span class="nn">napari</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">napari</span><span class="o">.</span><span class="n">Viewer</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">masks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;mask&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">diameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="c1">#viewer.add_labels(masks[1], name=&#39;mask&#39;+str(diameters[1]))</span>
+<span class="c1">#viewer.add_labels(masks[2], name=&#39;mask&#39;+str(diameters[2]))</span>
+<span class="c1">#viewer.add_labels(masks[3], name=&#39;mask&#39;+str(diameters[2]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-01-20 17:48:45,466 [ERROR] napari.manifest -&gt; &#39;napari-hello&#39; could not be imported: Cannot find module &#39;napari_plugins&#39; declared in entrypoint: &#39;napari_plugins:napari.yaml&#39;
+2024-01-20 17:48:48,590 [INFO] No OpenGL_accelerate module loaded: No module named &#39;OpenGL_accelerate&#39;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Labels layer &#39;mask30&#39; at 0x198a09933a0&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+<span class="n">out_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;../../outputs/cellpose&quot;</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_path</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">mask</span><span class="p">,</span> <span class="n">diameter</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">masks</span><span class="p">,</span> <span class="n">diameters</span><span class="p">):</span>
+    <span class="n">imsave</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="s1">&#39;cellpose_mask&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">diameter</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.tif&#39;</span><span class="p">),</span> <span class="n">mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint16&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on method train in module cellpose.models:
+
+train(train_data, train_labels, train_files=None, test_data=None, test_labels=None, test_files=None, channels=None, normalize=True, save_path=None, save_every=100, save_each=False, learning_rate=0.2, n_epochs=500, momentum=0.9, SGD=True, weight_decay=1e-05, batch_size=8, nimg_per_epoch=None, rescale=True, min_train_masks=5, model_name=None) method of cellpose.models.CellposeModel instance
+    train network with images train_data 
+    
+    Parameters
+    ------------------
+    
+    train_data: list of arrays (2D or 3D)
+        images for training
+    
+    train_labels: list of arrays (2D or 3D)
+        labels for train_data, where 0=no masks; 1,2,...=mask labels
+        can include flows as additional images
+    
+    train_files: list of strings
+        file names for images in train_data (to save flows for future runs)
+    
+    test_data: list of arrays (2D or 3D)
+        images for testing
+    
+    test_labels: list of arrays (2D or 3D)
+        labels for test_data, where 0=no masks; 1,2,...=mask labels; 
+        can include flows as additional images
+    
+    test_files: list of strings
+        file names for images in test_data (to save flows for future runs)
+    
+    channels: list of ints (default, None)
+        channels to use for training
+    
+    normalize: bool (default, True)
+        normalize data so 0.0=1st percentile and 1.0=99th percentile of image intensities in each channel
+    
+    save_path: string (default, None)
+        where to save trained model, if None it is not saved
+    
+    save_every: int (default, 100)
+        save network every [save_every] epochs
+    
+    learning_rate: float or list/np.ndarray (default, 0.2)
+        learning rate for training, if list, must be same length as n_epochs
+    
+    n_epochs: int (default, 500)
+        how many times to go through whole training set during training
+    
+    weight_decay: float (default, 0.00001)
+    
+    SGD: bool (default, True) 
+        use SGD as optimization instead of RAdam
+    
+    batch_size: int (optional, default 8)
+        number of 224x224 patches to run simultaneously on the GPU
+        (can make smaller or bigger depending on GPU memory usage)
+    
+    nimg_per_epoch: int (optional, default None)
+        minimum number of images to train on per epoch, 
+        with a small training set (&lt; 8 images) it may help to set to 8
+    
+    rescale: bool (default, True)
+        whether or not to rescale images to diam_mean during training, 
+        if True it assumes you will fit a size model after training or resize your images accordingly,
+        if False it will try to train the model to be scale-invariant (works worse)
+    
+    min_train_masks: int (default, 5)
+        minimum number of masks an image must have to use in training set
+    
+    model_name: str (default, None)
+        name of network, otherwise saved with name as params + training start time
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./30_deep_learning"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Segment with a cellpose network</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-data">Load Data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#load-models">Load models</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-each">Apply each</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: This work can be reused under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> license unless mentioned otherwise.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
